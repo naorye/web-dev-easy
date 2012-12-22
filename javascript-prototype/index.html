@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>JavaScript Prototype - Web Development is Easy!</title>
+  <meta name="author" content="NaorYe">
+
+  
+  <meta name="description" content="I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you are want to be an &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://naorye.github.com/web-dev-easy/javascript-prototype/">
+  <link href="/web-dev-easy/favicon.png" rel="icon">
+  <link href="/web-dev-easy/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/web-dev-easy/javascripts/modernizr-2.0.js"></script>
+  <script src="/web-dev-easy/javascripts/ender.js"></script>
+  <script src="/web-dev-easy/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/web-dev-easy/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/web-dev-easy/">Web Development is Easy!</a></h1>
+  
+    <h2>frameworks, tools and tips for web developers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/web-dev-easy/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="mailto:naorye@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:naorye.github.com/web-dev-easy" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/web-dev-easy/">Home</a></li>
+    <li><a href="/web-dev-easy/blog/posts">Posts</a></li>
+    <!--<li><a href="/web-dev-easy/blog/ask-a-question">Ask a Question</a></li>-->
+    <li><a href="/web-dev-easy/blog/about-me">About Me</a></li>
+    <li><a href="/web-dev-easy/blog/contact-me">Contact Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">JavaScript Prototype</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-13T10:49:17+02:00" pubdate data-updated="true">Nov 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you are want to be an expert web developers.</p>
+
+<h2>Prototype-Based Language</h2>
+
+<p>This part might confuse you a little but believe me that after some examples coming next everything will be clear. So, stop the chit chat and let&#8217;s dive into the JavaScript engine!</p>
+
+<p>JavaScript is an object oriented language, but unlike all the <a href="http://en.wikipedia.org/wiki/Class-based_programming">class-based languages</a> (C++, JAVA, C#, &#8230;) JavaScript is <a href="http://en.wikipedia.org/wiki/Prototype-based_programming">prototype-based language</a>. In class-based languages we write classes which can be organized into hierarchy and so advance code reuse. In prototype-based languages there is no distinction between classes and objects. An object is used as a template for creating a new object. In addition, an object&#8217;s set of properties can be extended either at creation time or at run time. This way prototype-based language furthering code reuse. There are more differences between class-based and prototype-based languages but this is enough for now.</p>
+
+<p>Let&#8217;s instantiate a new object. In order to do it we have to define an object constructor and then simply use the &#8220;new&#8221; keyword:</p>
+
+<pre><code>function baseObj() {
+}
+var ins = new baseObj();
+</code></pre>
+
+<h2>JavaScript&#8217;s Prototype</h2>
+
+<p>In JavaScript, as we mentioned before, we can add properties to an object even after its creation:</p>
+
+<pre><code>function animal(){
+}
+var cat = new animal();
+cat.color = "Green";
+</code></pre>
+
+<p>It is important to notice that the color property is added only to the cat instance. Other instances of animal will not contain the color property. But, there are times where we want to add a property to all the instances of an object. Each animal has a color and not only cats, therefore color property is relevant to all instances of animal. That&#8217;s where the prototype object of JavaScript comes in.</p>
+
+<p>In JavaScript, each object has a property called &#8220;prototype&#8221;. An object&#8217;s prototype allows us adding properties to all instances of that object. For example:</p>
+
+<pre><code>var frog = new animal();
+console.log(frog.color); // frog doesn't have color yet
+
+animal.prototype.color = "Green";
+var dog = new animal();
+console.log(dog.color); // will log "Green"
+console.log(frog.color); // will log also "Green"
+</code></pre>
+
+<p>This adds and initialize the color property to every present and future animal instances.</p>
+
+<p>Similar to properties, we can add methods and reflects all the instances:</p>
+
+<pre><code>animal.prototype.run = function() {
+    console.log("I am running!");
+}
+dog.run(); // will log "I am running!"
+</code></pre>
+
+<p>This functionality allows us to do very useful things like extending the behavior of an Array and add a method that gets an element and removes it from the array:</p>
+
+<pre><code>Array.prototype.remove = function(elem) {
+    var index = this.indexOf(elem);
+    if (index &gt;= 0) {
+        this.splice(index, 1);
+    }
+}
+var arr = [1, 2, 3, 4, 5];
+arr.remove(4); // will keep the array to be [1, 2, 3, 5]
+</code></pre>
+
+<p>In this example I used the &#8220;this&#8221; keyword inside the method. Keep in mind that &#8220;this&#8221; refer to the object that calls the method. In this example when calling arr.remove(4), &#8220;this&#8221; refer to arr.</p>
+
+<h2>The Object Constructor Way</h2>
+
+<p>Besides the prototype approach, another way to define properties and methods is by doing it inside the object constructor:</p>
+
+<pre><code>function animal() {
+    this.color = "Green";
+    this.run = function() {
+        console.log("I am running!");
+    }
+}
+var mouse = new animal();
+mouse.run(); // will log "I am running!"
+</code></pre>
+
+<p>This code results the same object structure as the prototype approach. Each instance of animal will have the color property and the run method.</p>
+
+<p>This approach might seem more readable and convenient but actually is not always recommended, especially when adding many methods. The main advantage of this approach is that you can make a use of local variables defined inside the object constructor:</p>
+
+<pre><code>function animal() {
+    var runAlready = false;
+    this.color = "Green";
+    this.run = function() {
+        if (!runAlready) {}
+            console.log("I am running!");
+        } else {
+            console.log("I am tired!");
+        }
+    }
+}
+</code></pre>
+
+<p>If you don&#8217;t need to use local variables defined inside the object constructor, then there is no reason to use this approach and using prototype is better. That is because if you are going to create lots of animals, a new set of methods will be created and held in different instance each time the animal constructor is called. In the prototype approach, all the instances will share one set of methods and therefore less memory.</p>
+
+<p>You can also use combined approach whereby methods that uses private local constructor variables are defined inside the constructor while other methods are added using the prototype:</p>
+
+<pre><code>function animal() {
+    var runAlready = false;
+    this.run = function() {
+        if (!runAlready) {}
+            console.log("I am running!");
+        } else {
+            console.log("I am tired!");
+        }
+    }
+}
+animal.prototype.color = "Green";
+animal.prototype.hide = function() {
+    console.log("I am hiding!");
+}
+
+var horse = new animal();
+horse.run(); // will log "I am running!"
+horse.hide(); // will log "I am hiding!"
+</code></pre>
+
+<h2>Conclusion</h2>
+
+<p>With this article we understood the meaning of prototype-based language, we saw how we can use the prototype property in order to add properties and methods to all instances of an object. We even saw a practical example of extending Array&#8217;s behavior! :) I demonstrated another way to add properties using the object constructor and explained its drawback.</p>
+
+<p>If you wish to read more about the differences between class-based languages and prototype-based languages, dig in details about prototype and inheritance, I highly recommend to read Mozilla&#8217;s <a href="https://developer.mozilla.org/en-US/docs/Core_JavaScript_1.5_Guide/Details_of_the_Object_Model">&#8220;Details of the object model&#8221;</a> guide.</p>
+
+<p>I really enjoyed writing this article and I hope you enjoyed even more to read it.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">NaorYe</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-13T10:49:17+02:00" pubdate data-updated="true">Nov 13<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/web-dev-easy/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://naorye.github.com/web-dev-easy/javascript-prototype/" data-via="" data-counturl="http://naorye.github.com/web-dev-easy/javascript-prototype/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/web-dev-easy/backbone-singleton/" title="Previous Post: Backbone Singleton">&laquo; Backbone Singleton</a>
+      
+      
+        <a class="basic-alignment right" href="/web-dev-easy/backbone-history-pushstate-option/" title="Next Post: Backbone history pushState option">Backbone history pushState option &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/web-dev-easy/backbone-history-pushstate-option/">Backbone history pushState option</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/javascript-prototype/">JavaScript Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/backbone-singleton/">Backbone Singleton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/function-duplication-inside-an-object/">Function Duplication Inside an Object</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - NaorYe -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

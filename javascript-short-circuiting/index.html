@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Web Development is Easy!</title>
+  <title>Enhanced usage of JavaScript && and || Operators - Web Development is Easy!</title>
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="this is ask a question page Tweet Recent Posts Backbone history pushState option JavaScript Prototype Backbone Singleton Function Duplication Inside &hellip;">
+  <meta name="description" content="Sometimes I need to use &#8220;if&#8221; statements just to be sure a variable is not &#8220;null&#8221;: var a = getObj(); //if "a" is not zero, not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://naorye.github.com/web-dev-easy/blog/ask-a-question/">
+  <link rel="canonical" href="http://naorye.github.com/web-dev-easy/javascript-short-circuiting/">
   <link href="/web-dev-easy/favicon.png" rel="icon">
   <link href="/web-dev-easy/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/web-dev-easy/javascripts/modernizr-2.0.js"></script>
@@ -68,24 +68,122 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
-  this is ask a question page
+  <header>
+    
+      <h1 class="entry-title">Enhanced Usage of JavaScript && and || Operators</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
   
-    <footer>
+
+
+<time datetime="2012-09-14T18:32:24+03:00" pubdate data-updated="true">Sep 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Sometimes I need to use &#8220;if&#8221; statements just to be sure a variable is not &#8220;null&#8221;:</p>
+
+<pre><code>var a = getObj();
+
+//if "a" is not zero, not "null" and also defined, then do something.
+if (a) { 
+    doSomething();
+}
+</code></pre>
+
+<p>Other times I need to use &#8220;if&#8221;s in order to assign non-&#8220;null&#8221; value into a variable:</p>
+
+<pre><code>var a = getIdOrNull();
+var id = -1;
+
+//if "a" is not zero, not "null" and also defined, then set the id.
+//Otherwise keep it "-1".
+if (a) { 
+    id = a;
+}
+</code></pre>
+
+<p>It appears that there is a way to shorten and optimize this code using the &amp;&amp; and || operators, and it called <a href="http://en.wikipedia.org/wiki/Short-circuit_evaluation">&#8220;short-circuiting&#8221;</a>. The idea behind this lays in the way the JavaScript enging works. For the &amp;&amp; operator, expressions are executed until the first &#8220;false&#8221; value. For the || operator, expressions are executed until the first &#8220;true&#8221; value. Another thing that helps us here is the fact that &#8220;null&#8221; and &#8220;undefined&#8221; are treated as &#8220;false&#8221; and other than that are treated as &#8220;true&#8221; (except zero).</p>
+
+<p>Finally, the first case can be written as:</p>
+
+<pre><code>a &amp;&amp; doSomething();
+</code></pre>
+
+<p>This starts with &#8220;a&#8221; and if it&#8217;s value is true (not zero, not &#8220;null&#8221; and also defined) the JS engine continues and executes doSomething().</p>
+
+<p>The second case can be written as:</p>
+
+<pre><code>var id = a || -1;
+</code></pre>
+
+<p>This starts with &#8220;a&#8221; and if it is false (zero, &#8220;null&#8221; or &#8220;undefined&#8221;) the JS engine continues and set &#8220;-1&#8221; into the id variable.</p>
+
+<p>This can make your JavaScript code shorter, cleaner and easier to understand.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-      
-        <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://naorye.github.com/web-dev-easy/blog/ask-a-question/index.html" data-via="" data-counturl="http://naorye.github.com/web-dev-easy/blog/ask-a-question/index.html" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">NaorYe</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-14T18:32:24+03:00" pubdate data-updated="true">Sep 14<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/web-dev-easy/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://naorye.github.com/web-dev-easy/javascript-short-circuiting/" data-via="" data-counturl="http://naorye.github.com/web-dev-easy/javascript-short-circuiting/" >Tweet</a>
   
   
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+      
+        <a class="basic-alignment right" href="/web-dev-easy/cascading-autocompletes-using-jquery-ui/" title="Next Post: Cascading Autocompletes using jQuery UI">Cascading Autocompletes using jQuery UI &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
 </div>

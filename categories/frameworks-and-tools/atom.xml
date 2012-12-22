@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Frameworks and Tools | Web Development is Easy!]]></title>
+  <link href="http://naorye.github.com/web-dev-easy/categories/frameworks-and-tools/atom.xml" rel="self"/>
+  <link href="http://naorye.github.com/web-dev-easy/"/>
+  <updated>2012-12-22T21:05:42+02:00</updated>
+  <id>http://naorye.github.com/web-dev-easy/</id>
+  <author>
+    <name><![CDATA[NaorYe]]></name>
+    <email><![CDATA[mailto:naorye@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Yeoman Review]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/yeoman-review/"/>
+    <updated>2012-09-17T05:47:52+03:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/yeoman-review</id>
+    <content type="html"><![CDATA[<p>Today I was informed about <a href="http://www.yeoman.io">Yeoman</a> which is (according to Yeoman website) a new set of tools, libraries and workflows that can help developers to quickly build beautiful, compelling web. I decided to check this out.
+Notice that Yeoman is working only under iOS and Linux, so if you are a Windows user I wholeheartedly recommend <a href="http://www.ubuntu.com/">Ubuntu</a>. In order to install Yeoman open Terminal and execute the following command:</p>
+
+<pre><code>$ curl -L get.yeoman.io | bash
+</code></pre>
+
+<p>At first, Yeoman verifies the existence of all it's dependencies (more info about that <a href="https://github.com/yeoman/yeoman/wiki/Manual-Install">here</a>) and asks you to install what does not exists.
+It takes some time to complete installing all the missing dependencies (in case you don't have them), an automatic installer would save a lot of time, but once you got them you are ready to use Yeoman!</p>
+
+<p><a href="http://www.webdeveasy.com/yeoman_review/yeoman_requirements.png"><img src="http://www.webdeveasy.com/wp-content/uploads/2012/09/yeoman_requirements.png" alt="Yeoman Requirements" /></a></p>
+
+<p>In order to create a new app, execute the command:</p>
+
+<pre><code>$ yeoman init
+</code></pre>
+
+<p>Yeoman will ask about the libraries you wish to include in the new app and then, initialize it according to the selection. Yeoman is integrated with <a href="http://github.com/twitter/bower">Twitter Bower</a>: “Bower is a package manager for the web. Bower lets you easily install assets such as images, CSS and JavaScript, and manages dependencies for you”. That way Yeoman knows to take the latest updated version of a desired library (such as <a href="http://http://jquery.com/">jQuery</a>, <a href="http://emberjs.com/">ember</a>, <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> and many more). Along the new application, Yeoman also creates unit tests using <a href="http://visionmedia.github.com/mocha/">mocha</a>. After easily initialize your app you are ready to open your favorite text editor/IDE and start writing your new startup.</p>
+
+<p>One nice feature Yeoman has is the "changes watcher". Whenever you like to see preview of your development you can execute the following command:</p>
+
+<pre><code>$ yeoman server
+</code></pre>
+
+<p>This command launches the app in the browser and starts watching for changes. Each change you'll do in your code (markup, JavaScript or CSS) will refresh the preview and be reflected in your browser immediately. There are many more nice features in Yeoman but I think now it is your time to check things up.</p>
+
+<p>In this article I tried to get you introduced to Yeoman and explained a little bit about it's abilities. You can find more information at the Yeoman website. Hope you'll find this article useful, feel free to ask any question you have.</p>
+]]></content>
+  </entry>
+  
+</feed>

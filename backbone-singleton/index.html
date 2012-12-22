@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Backbone Singleton - Web Development is Easy!</title>
+  <meta name="author" content="NaorYe">
+
+  
+  <meta name="description" content="Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://naorye.github.com/web-dev-easy/backbone-singleton/">
+  <link href="/web-dev-easy/favicon.png" rel="icon">
+  <link href="/web-dev-easy/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/web-dev-easy/javascripts/modernizr-2.0.js"></script>
+  <script src="/web-dev-easy/javascripts/ender.js"></script>
+  <script src="/web-dev-easy/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/web-dev-easy/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/web-dev-easy/">Web Development is Easy!</a></h1>
+  
+    <h2>frameworks, tools and tips for web developers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/web-dev-easy/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="mailto:naorye@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:naorye.github.com/web-dev-easy" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/web-dev-easy/">Home</a></li>
+    <li><a href="/web-dev-easy/blog/posts">Posts</a></li>
+    <!--<li><a href="/web-dev-easy/blog/ask-a-question">Ask a Question</a></li>-->
+    <li><a href="/web-dev-easy/blog/about-me">About Me</a></li>
+    <li><a href="/web-dev-easy/blog/contact-me">Contact Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Backbone Singleton</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-05T19:13:36+02:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone and RequieJS. While the first way is simpler and more intuitive, the second allows us more flexibility.</strong></p>
+
+<h2>Simple Singleton:</h2>
+
+<p>I am working on a little application using Backbone.js and RequireJS. The application lets the user making searches by a keyword.
+Thinking of the model, I realized that I need a model that will hold the keyword and since the keyword is single in the application, it should be a singleton.
+Because I am working with RequireJS, in order to simulate a singleton, I created a module that will return an instance of the Keword model.</p>
+
+<pre><code>define([ 'backbone' ], function( Backbone ) {
+    var KeywordModel = Backbone.Model.extend({
+        defaults: {
+            keyword: ''
+        }
+    });
+
+    return new KeywordModel;
+});
+</code></pre>
+
+<p>This way whenever I want to bind the Keyword single instance, all I have to do is just add keyword.js as a dependency:</p>
+
+<pre><code>define([
+    'backbone',
+    'models/keyword'
+], function( Backbone, keywordModel ) {
+    var SearchView = Backbone.View.extend({
+        el: '#search'
+        events: {
+            'change': 'setModel'
+        },
+        initialize: function() {
+            keywordModel.on( 'change: keyword', this.render, this );
+        },
+        render: function() {
+            var keyword = keywordModel.get('keyword');
+            this.$el.val(keyword);
+        },
+        setModel: function() {
+            var keyword = this.$el.val();
+            keywordModel.set({ keyword: keyword });
+        }
+    });
+
+    return SearchView;
+});
+</code></pre>
+
+<h2>Desire to make history:</h2>
+
+<p>Now, lets assume that now I want to store searches history (each history record contains only the keyword).
+Obviously this means that I have to use a collection, but which model shall I use? I cannot use KeywordModel since I don&#8217;t have access to its definition. Any time I&#8217;ll ask for keyword.js all I get is the model instance and not it&#8217;s definition.
+One solution is to create a new model and return its definition, but this solution is undesirable since we make unnecessary duplication.
+In order to solve this issue we have to remember that <a href="http://backbonejs.org/#Model-extend">Backbone model&#8217;s extend function</a> can get an optional property called &#8220;classProperties&#8221;. These set of properties can be seen as static properties that are related to the class and not to the instance. Therefore our model can be:</p>
+
+<pre><code>define([ 'backbone' ], function( Backbone ) {
+    var KeywordModel = Backbone.Model.extend({
+        defaults: {
+            keyword: ''
+        }
+    }, {
+        singleton: null,
+        getAppKeyword: function() {
+            KeywordModel.singleton =
+                KeywordModel.singleton || new KeywordModel;
+            return KeywordModel.singleton;
+        }
+    });
+
+    return KeywordModel;
+});
+</code></pre>
+
+<p>And in this way, if I add keyword.js as a dependency I get the definition and also can retrieve the singleton by calling KeywordModel.getAppKeyword(). Here is the collection of KeywordModel models:</p>
+
+<pre><code>define([
+    'backbone',
+    'models/keyword'
+], function( Backbone, KeywordModel ) {
+    var KeywordsCollection = Backbone.Collection.extend({
+        model: KeywordModel,
+        initialize: function() {
+            this.appKeyword = KeywordModel.getAppKeyword();
+            appKeyword.on( 'change: keyword', this.pushCopy, this );
+        },
+        pushCopy: function() {
+            var clone = this.appKeyword.clone();
+            this.push(clone );
+        }
+    });
+    return new KeywordsCollection;
+});
+</code></pre>
+
+<p>Any time the model&#8217;s keyword changes, a copy of the application keyword is added to the collection.</p>
+
+<p><strong>Thanks for reading!</strong></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">NaorYe</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-05T19:13:36+02:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/web-dev-easy/categories/backbone-js/'>Backbone.js</a>, <a class='category' href='/web-dev-easy/categories/javascript/'>JavaScript</a>, <a class='category' href='/web-dev-easy/categories/requirejs/'>RequireJS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://naorye.github.com/web-dev-easy/backbone-singleton/" data-via="" data-counturl="http://naorye.github.com/web-dev-easy/backbone-singleton/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/web-dev-easy/function-duplication-inside-an-object/" title="Previous Post: Function Duplication Inside an Object">&laquo; Function Duplication Inside an Object</a>
+      
+      
+        <a class="basic-alignment right" href="/web-dev-easy/javascript-prototype/" title="Next Post: JavaScript Prototype">JavaScript Prototype &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/web-dev-easy/backbone-history-pushstate-option/">Backbone history pushState option</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/javascript-prototype/">JavaScript Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/backbone-singleton/">Backbone Singleton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/function-duplication-inside-an-object/">Function Duplication Inside an Object</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - NaorYe -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

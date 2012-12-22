@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>jQuery Plugin Pattern - Web Development is Easy!</title>
+  <meta name="author" content="NaorYe">
+
+  
+  <meta name="description" content="jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://naorye.github.com/web-dev-easy/jquery-plugin-pattern/">
+  <link href="/web-dev-easy/favicon.png" rel="icon">
+  <link href="/web-dev-easy/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/web-dev-easy/javascripts/modernizr-2.0.js"></script>
+  <script src="/web-dev-easy/javascripts/ender.js"></script>
+  <script src="/web-dev-easy/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/web-dev-easy/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/web-dev-easy/">Web Development is Easy!</a></h1>
+  
+    <h2>frameworks, tools and tips for web developers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/web-dev-easy/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="mailto:naorye@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:naorye.github.com/web-dev-easy" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/web-dev-easy/">Home</a></li>
+    <li><a href="/web-dev-easy/blog/posts">Posts</a></li>
+    <!--<li><a href="/web-dev-easy/blog/ask-a-question">Ask a Question</a></li>-->
+    <li><a href="/web-dev-easy/blog/about-me">About Me</a></li>
+    <li><a href="/web-dev-easy/blog/contact-me">Contact Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">jQuery Plugin Pattern</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-02T22:07:46+02:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts of your web application. This article will explain the basics of jQuery plugin and guide you how to create a simple jQuery plugin.</p>
+
+<p>I distinguish between two types of of jQuery plugins:</p>
+
+<ul>
+<li><p>Plugin that works on element. For example, a plugin that converts <select> element to an autocomplete. Such plugin is working on the select element. This kind of plugin is actually extention to the jQuery prototype (or $.fn):</p>
+
+<p>$.fn.myPlugin = function() {</p>
+
+<pre><code>... //plugin content
+</code></pre>
+
+<p>}</p></li>
+</ul>
+
+
+<p> Invocation of such plugins looks like:</p>
+
+<pre><code>$('#my-elem').myPlugin();
+</code></pre>
+
+<ul>
+<li><p>Plugin that doesn&#8217;t work on element. <a href="http://docs.jquery.com/Utilities">The utilities of jQuery</a> are good examples for such plugin. They are actually functions that located in the jQuery object (or $):</p>
+
+<p>$.myPlugin = function() {</p>
+
+<pre><code>... //plugin content
+</code></pre>
+
+<p>}</p></li>
+</ul>
+
+
+<p>Invocation of such plugins looks like:</p>
+
+<pre><code>$.myPlugin();
+</code></pre>
+
+<p>Both types of plugins can get data as input, make DOM manipulation, make calculations, let the consumer interact them and much more.</p>
+
+<h2>Limit The Scope</h2>
+
+<p>Usually when writing jQuery plugin (or any JavaScript code), it is a good idea to limit it&#8217;s scope. This way you can prevent access to private variables and functions. In addition, using scopes may helping prevent naming conflicts. In order to limit the scope of your jQuery plugin, wrap it with a function and invoke it. For example:</p>
+
+<pre><code>(function() {
+    $.fn.myPlugin = function() {
+        ... //plugin content
+    }
+})();
+</code></pre>
+
+<p>This is called <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">Immediately-Invoked Function Expression (IIFE)</a>.</p>
+
+<h2>The Dollar Sign</h2>
+
+<p>The dollar sign ($) is a synonym to the jQuery library. It is shorter and look better then the &#8220;jQuery&#8221; word. Because of that, there are many other libraries that make a use the dollar sign as a synonym. So, we have to be sure our plugin doesn&#8217;t collide with other libraries. Therefore passing jQuery as a parameter to the IIFE is a best practice:</p>
+
+<pre><code>(function($) {
+    $.fn.myPlugin = function() { // Here we sure $ is jQuery
+        ... // Plugin content
+    }
+})(jQuery);
+</code></pre>
+
+<h2>Plugin Parameters and Defaults</h2>
+
+<p>We can pass parameters to our plugin when calling it:
+$(&#8216;#elem&#8217;).myPlugin(param1, param2, param3);
+But, sometimes our plugin will have a lot of parameters (<a href="http://www.trirand.com/blog/">jqGrid</a> plugin has more then 20) and some of them might be optionals. For this reason we wrap all the parameters in an object. For example, assume our plugin gets parameters &#8220;name&#8221;, &#8220;address&#8221; and &#8220;color&#8221;, we will define our plugin:</p>
+
+<pre><code>$.fn.myPlugin = function(options) { ... }
+</code></pre>
+
+<p>and for calling it:</p>
+
+<pre><code>$('#elem').myPlugin( {
+    name: 'Naor',
+    address: 'Jerusalem',
+    color: 'Green'
+} );
+</code></pre>
+
+<p>This way the consumer can supply only the parameters she wants. But this leads to another problem. What if the plugin need the color parameter which wasn&#8217;t supplied? The solution is simple. All we have to do is to make a defaults to the parameters:</p>
+
+<pre><code>(function($) {
+    $.fn.myPlugin = function(options) {
+        options = $.extend({
+            name: 'no-name',
+            address: 'none',
+            color: 'white'
+        }, options);
+        ... // The rest of the plugin
+    }
+})(jQuery);
+</code></pre>
+
+<p>This way we support many options with optional parameters. In case we want to force the consumer pass some parameters, we can use the old way for the compulsory parameters and an &#8220;options&#8221; object for the optionals:</p>
+
+<pre><code>// param1 is compulsory
+$.fn.myPlugin = function(param1, options) { ... }
+</code></pre>
+
+<h2>The <em>this</em> Expression</h2>
+
+<p>Inside a plugin definition there is a different meaning to the <em>this</em> expression. There is a difference between the two plugin types and I will explain the meaning of the <em>this</em> expression using examples:</p>
+
+<h3>The <em>this</em> Expression for plugins that do not work on an element</h3>
+
+<pre><code>﻿&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt; 
+        &lt;title&gt;jQuery Plugins&lt;/title&gt;
+        &lt;script type="text/javascript" src="jquery-1.8.0.min.js"&gt;&lt;/script&gt;
+        &lt;script type="text/javascript"&gt;
+            (function($) {
+                $.myPlugin = function() {
+                    // Here this represents the jQuery object
+                    return $ === this;
+                };
+            })(jQuery);
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Is &lt;i&gt;this&lt;/i&gt; equals jQuery? &lt;span id="isEqual" /&gt;
+        &lt;script type="text/javascript"&gt;
+            $(function() {
+                $('#isEqual').text($.myPlugin());
+            });
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Notice that inside a plugin, <em>this</em> is equal to jQuery.
+You can watch this example <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/this1.htm">here</a>.</p>
+
+<h3>The <em>this</em> Expression for plugins that do work on an element</h3>
+
+<pre><code>﻿&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt; 
+        &lt;title&gt;jQuery Plugins&lt;/title&gt;
+        &lt;script type="text/javascript" src="jquery-1.8.0.min.js"&gt;&lt;/script&gt;
+        &lt;script type="text/javascript"&gt;
+            (function($) {
+                $.fn.myPlugin = function(text) {
+                    // Here this is a reference to the actaul jQuery
+                    // element the plugin works on.
+                    this.each(function() {
+                        var current = $(this);
+                        var elemType = current.prop('tagName').toLowerCase();
+                        switch(elemType)  {
+                            case 'input':
+                                current.val(text);
+                                break;
+                            case 'select':
+                                current.empty().append('&lt;option&gt;' + text + '&lt;/option&gt;');
+                                break;
+                            case 'span':
+                                current.text(text);
+                                break;
+                        }
+
+                    });
+                };
+            })(jQuery);
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Choose text: &lt;input type="text" id="my-text" /&gt;
+        &lt;button id="my-button"&gt;Press here&lt;/button&gt;
+        &lt;br/&gt;
+        Span: &lt;span class="target"&gt;&lt;/span&gt; &lt;br/&gt;
+        Text input: &lt;input type="text" class="target" /&gt; &lt;br/&gt;
+        Select: &lt;select class="target"&gt;&lt;/select&gt;
+        &lt;script type="text/javascript"&gt;
+            $(function() {
+                $('#my-button').click(function() {
+                    var text = $('#my-text').val();
+                    $('.target').myPlugin(text);
+                });
+            });
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Notice that <em>this</em> is a reference to the main element that the plugin works on. Sometimes, like in this example, the jQuery element represents more then one DOM element and we have to iterate each one of them in order to effect all of the DOM elements. In this example each DOM element is different element and so different treatment.
+You can watch this example <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/this2.htm">here</a>.</p>
+
+<h2>jQuery Chaining Principal</h2>
+
+<p><strong>jQuery Chaining Principal is relevant only to plugins that do work on an element.</strong>
+I believe you&#8217;ve seen this syntax before:</p>
+
+<pre><code>$('#elem').addClass('active').val('some value').prop('disabled', true);
+</code></pre>
+
+<p>Keep in mind that the consumer can actually write:</p>
+
+<pre><code>$('#elem').addClass('active');
+$('#elem').val('some value');
+$('#elem').prop('disabled', true);
+</code></pre>
+
+<p>But the first syntax looks better, easier to understand and more effective (no need to search for &#8216;#elem&#8217; a few times). This is made possible due to the jQuery chaining principal. Each jQuery method or plugin returns the element that it works on:</p>
+
+<pre><code>(function($) {
+    $.fn.myPlugin = function(options) {
+        ...
+        ...
+        &lt;b&gt;return this;&lt;/b&gt;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Keep in mind that inside the plugin scope, the <em>this</em> expression referenced to the element itself.</p>
+
+<h2>Consumer interface</h2>
+
+<p>Up to now we saw a plugin structure wrapped in IIFE, with $ as jQuery and with compulsory/optional parameters. We undertsood the <em>this</em> expression inside a plugin and saw the chaining principal in action. Now we need to see how to create an interface so the consumer can interact with the plugin. I&#8217;ll do it separately for each plugin type.</p>
+
+<h3>Plugin that doesn&#8217;t work on element</h3>
+
+<p>The first plugin doesn&#8217;t work on element, it gets positions and a text as parameters and displays the text on the specified position:</p>
+
+<pre><code>(function($) {
+    $.float = function(posX, posY, text) {
+        $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
+            left: posX,
+            top: posY,
+            position: 'absolute'
+        });
+    }   
+})(jQuery);
+</code></pre>
+
+<p>Now we want to allow the consumer to move the text to a new position and to remove it. Let&#8217;s write a methods:</p>
+
+<pre><code>(function($) {
+    function changePosition(elem, posX, posY) {
+        elem.css({
+            left: posX,
+            top: posY
+        });
+    }
+
+    function remove(elem) {
+        elem.remove();
+    }
+
+    $.float = function(posX, posY, text) {
+        $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
+            left: posX,
+            top: posY,
+            position: 'absolute'
+        });
+    }   
+})(jQuery);
+</code></pre>
+
+<p>Notice that the consumer doesn&#8217;t have an access to &#8220;changePosition&#8221; nor &#8220;remove&#8221; and she never holds the <div> element. So now we need to connect the consumer to the methods. In order to do it we make the &#8220;float&#8221; plugin return a &#8220;remote control&#8221; object:</p>
+
+<pre><code>(function($) {
+    function changePosition(elem, posX, posY) {
+        elem.css({
+            left: posX,
+            top: posY
+        });
+    }
+
+    function remove(elem) {
+        elem.remove();
+    }
+
+    $.float = function(posX, posY, text) {
+        var elem = $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
+            left: posX,
+            top: posY,
+            position: 'absolute'
+        });
+
+        return {
+            changePosition: function(posX, posY) {
+                changePosition(elem, posX, posY);
+            },
+            remove: function() { remove(elem); }
+        };
+    }   
+})(jQuery);
+</code></pre>
+
+<p>Now, whenever the consumer will invoke $.float(..) she will get a &#8220;remote control&#8221; object with the interface we want to provide, and in order to use it:</p>
+
+<pre><code>var control = $.float('100px', '100px', 'Hello!');
+control.changePosition('200px', '200px');
+</code></pre>
+
+<p>Live example for the float plugin you can find <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/float.htm">here</a>.</p>
+
+<h3>Plugin that does work on element</h3>
+
+<p>The second plugin does work on element. It works on an <input> element and gets two parameters: <ul> selector and a number &#8220;N&#8221;. Whenever the input&#8217;s value changes, the <ul> gets filled with &#8220;N&#8221; items containing the value:</p>
+
+<pre><code>(function($) {
+    $.fn.compose = function(options) {
+        options = $.extend({
+            number: 2,
+            ul: null
+        }, options);
+
+        this.change(function() {
+            if (options.ul !== null) {
+                var value = $(this).val();
+                var ul = $(options.ul).empty();
+                for(var i=0;i&lt;options.number;i++) {
+                    ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
+                }           
+            }
+        });
+
+        return this;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Now we want to allow the consumer to change the number parameter. Again, let&#8217;s write a method:</p>
+
+<pre><code>(function($) {
+    $.fn.compose = function(options) {
+        options = $.extend({
+            number: 2,
+            ul: null
+        }, options);
+
+        function setNumber(number) {
+            options.number = number;
+        }
+
+        this.change(function() {
+            if (options.ul !== null) {
+                var value = $(this).val();
+                var ul = $(options.ul).empty();
+                for(var i=0;i&lt;options.number;i++) {
+                    ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
+                }           
+            }
+        });
+
+        return this;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Like the first plugin type example, the consumer doesn&#8217;t have an access to &#8220;setNumber&#8221; method. Unlike the first plugin type example, here we cannot return a &#8220;remote control&#8221; object. Due to jQuery chaining principal we have to return &#8220;this&#8221;. For solve this we use the <a href="http://api.jquery.com/jQuery.data/">jQuery.data()</a> method. This method allows us attach key-value data to an element. For example, $(&#8216;#elem&#8217;).data(&#8216;my-color&#8217;, &#8216;Green&#8217;); attaches the &#8220;my-color = Green&#8221; key-value to the element. In order to get the value of &#8220;my-color&#8221; all we have to do is: $(&#8216;#elem&#8217;).data(&#8216;obj&#8217;) and we get &#8220;Green&#8221;.
+So we use the jQuery.data() method to attach the &#8220;remote control&#8221; object to the element. We will use the name of the plugin &#8220;compose&#8221; as a key:</p>
+
+<pre><code>(function($) {
+    $.fn.compose = function(options) {
+        options = $.extend({
+            number: 2,
+            ul: null
+        }, options);
+
+        function setNumber(number) {
+            options.number = number;
+        }
+
+        this.change(function() {
+            if (options.ul !== null) {
+                var value = $(this).val();
+                var ul = $(options.ul).empty();
+                for(var i=0;i&lt;options.number;i++) {
+                    ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
+                }           
+            }
+        });
+
+        this.data('compose', {
+            setNumber: setNumber
+        });
+
+        return this;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Now, in order to change the number</p>
+
+<pre><code>$('#elem').compose({
+    number: 3,
+    ul: '#ul'
+});
+
+$('#elem').data('compose').setNumber(8);
+</code></pre>
+
+<p>And then the input&#8217;s value will appear 8 times.
+Live example for the compose plugin you can find <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/compose.htm">here</a>.</p>
+
+<h2>Summary</h2>
+
+<p>In this article I presented two jQuery plugin types and their structure (IIFE wrap and jQuery injection as $), I explained how to add compulsory and optional parameters, demonstrated the meaning of the <em>this</em> expression and described the jQuery chaining principal. At the end I also presented a way of letting the consumer interact the plugins.</p>
+
+<h3>Template of plugin the does not work on an element</h3>
+
+<pre><code>(function($) {
+    $.extend($, {
+        pluginName: function(param, options) {
+            options = $.extend({
+                // Options Defaults
+            }, options);
+
+
+            return {
+                // Plugin interface object
+            };
+        }
+    });     
+})(jQuery);
+</code></pre>
+
+<h3>Template of plugin the does work on an element</h3>
+
+<pre><code>// jQuery plugin template for plugin that does work on element
+(function($) {
+    $.extend($.fn, {
+        pluginName: function(param, options) {
+            options = $.extend({
+                // Options Defaults
+            }, options);
+
+            this.each(function() {
+                // Operations for each DOM element
+            }).data('pluginName', {
+                // Plugin interface object
+            });
+
+            return this;
+        }
+    });     
+})(jQuery);
+</code></pre>
+
+<p>I hope you find this post useful, and if you have any question, don&#8217;t hesitate to ask!
+<a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/jquery-plugin-pattern.zip">Here</a> you can find all the examples of this post and the plugins templates.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">NaorYe</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-02T22:07:46+02:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/web-dev-easy/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://naorye.github.com/web-dev-easy/jquery-plugin-pattern/" data-via="" data-counturl="http://naorye.github.com/web-dev-easy/jquery-plugin-pattern/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/web-dev-easy/style-your-jquery-ui-tabs/" title="Previous Post: Style Your jQuery-UI Tabs">&laquo; Style Your jQuery-UI Tabs</a>
+      
+      
+        <a class="basic-alignment right" href="/web-dev-easy/function-duplication-inside-an-object/" title="Next Post: Function Duplication Inside an Object">Function Duplication Inside an Object &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/web-dev-easy/backbone-history-pushstate-option/">Backbone history pushState option</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/javascript-prototype/">JavaScript Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/backbone-singleton/">Backbone Singleton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/function-duplication-inside-an-object/">Function Duplication Inside an Object</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - NaorYe -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

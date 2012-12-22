@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://naorye.github.com/web-dev-easy/atom.xml" rel="self"/>
   <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2012-12-18T00:49:12+02:00</updated>
+  <updated>2012-12-22T21:05:42+02:00</updated>
   <id>http://naorye.github.com/web-dev-easy/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,5 +12,1249 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Backbone history pushState option]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/backbone-history-pushstate-option/"/>
+    <updated>2012-12-05T20:10:00+02:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/backbone-history-pushstate-option</id>
+    <content type="html"><![CDATA[<p>If you are using Backbone, you probably noticed <a href="http://backbonejs.org/#History-start">Backbone.history.start();</a> function. This command starts the monitoring on hashchange events, and dispatching routes. This function can get as option an indication whether you would like to use HTML5 pushState support:</p>
+
+<pre><code>Backbone.history.start({pushState: true/false});
+</code></pre>
+
+<p>It is important to understand the behaviour in each case:</p>
+
+<ul>
+<li><p>When {pushState: false} is used (the default behaviour), calling <a href="http://backbonejs.org/#Router-navigate">router.navigate(&#8220;shop&#8221;)</a> will update the url using the hash sign and it will look like www.myblog.com/index.html#shop.</p></li>
+<li><p>When using {pushState: true}, calling router.navigate(&#8220;shop&#8221;) will use the HTML5 pushState support and the url will look like  www.myblog.com/shop.</p></li>
+</ul>
+
+
+<p>Keep in mind that both settings of course do not refresh the page.</p>
+
+<p>Hope you will find this info useful!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript Prototype]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/javascript-prototype/"/>
+    <updated>2012-11-13T10:49:17+02:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/javascript-prototype</id>
+    <content type="html"><![CDATA[<p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you are want to be an expert web developers.</p>
+
+<h2>Prototype-Based Language</h2>
+
+<p>This part might confuse you a little but believe me that after some examples coming next everything will be clear. So, stop the chit chat and let&#8217;s dive into the JavaScript engine!</p>
+
+<p>JavaScript is an object oriented language, but unlike all the <a href="http://en.wikipedia.org/wiki/Class-based_programming">class-based languages</a> (C++, JAVA, C#, &#8230;) JavaScript is <a href="http://en.wikipedia.org/wiki/Prototype-based_programming">prototype-based language</a>. In class-based languages we write classes which can be organized into hierarchy and so advance code reuse. In prototype-based languages there is no distinction between classes and objects. An object is used as a template for creating a new object. In addition, an object&#8217;s set of properties can be extended either at creation time or at run time. This way prototype-based language furthering code reuse. There are more differences between class-based and prototype-based languages but this is enough for now.</p>
+
+<p>Let&#8217;s instantiate a new object. In order to do it we have to define an object constructor and then simply use the &#8220;new&#8221; keyword:</p>
+
+<pre><code>function baseObj() {
+}
+var ins = new baseObj();
+</code></pre>
+
+<h2>JavaScript&#8217;s Prototype</h2>
+
+<p>In JavaScript, as we mentioned before, we can add properties to an object even after its creation:</p>
+
+<pre><code>function animal(){
+}
+var cat = new animal();
+cat.color = "Green";
+</code></pre>
+
+<p>It is important to notice that the color property is added only to the cat instance. Other instances of animal will not contain the color property. But, there are times where we want to add a property to all the instances of an object. Each animal has a color and not only cats, therefore color property is relevant to all instances of animal. That&#8217;s where the prototype object of JavaScript comes in.</p>
+
+<p>In JavaScript, each object has a property called &#8220;prototype&#8221;. An object&#8217;s prototype allows us adding properties to all instances of that object. For example:</p>
+
+<pre><code>var frog = new animal();
+console.log(frog.color); // frog doesn't have color yet
+
+animal.prototype.color = "Green";
+var dog = new animal();
+console.log(dog.color); // will log "Green"
+console.log(frog.color); // will log also "Green"
+</code></pre>
+
+<p>This adds and initialize the color property to every present and future animal instances.</p>
+
+<p>Similar to properties, we can add methods and reflects all the instances:</p>
+
+<pre><code>animal.prototype.run = function() {
+    console.log("I am running!");
+}
+dog.run(); // will log "I am running!"
+</code></pre>
+
+<p>This functionality allows us to do very useful things like extending the behavior of an Array and add a method that gets an element and removes it from the array:</p>
+
+<pre><code>Array.prototype.remove = function(elem) {
+    var index = this.indexOf(elem);
+    if (index &gt;= 0) {
+        this.splice(index, 1);
+    }
+}
+var arr = [1, 2, 3, 4, 5];
+arr.remove(4); // will keep the array to be [1, 2, 3, 5]
+</code></pre>
+
+<p>In this example I used the &#8220;this&#8221; keyword inside the method. Keep in mind that &#8220;this&#8221; refer to the object that calls the method. In this example when calling arr.remove(4), &#8220;this&#8221; refer to arr.</p>
+
+<h2>The Object Constructor Way</h2>
+
+<p>Besides the prototype approach, another way to define properties and methods is by doing it inside the object constructor:</p>
+
+<pre><code>function animal() {
+    this.color = "Green";
+    this.run = function() {
+        console.log("I am running!");
+    }
+}
+var mouse = new animal();
+mouse.run(); // will log "I am running!"
+</code></pre>
+
+<p>This code results the same object structure as the prototype approach. Each instance of animal will have the color property and the run method.</p>
+
+<p>This approach might seem more readable and convenient but actually is not always recommended, especially when adding many methods. The main advantage of this approach is that you can make a use of local variables defined inside the object constructor:</p>
+
+<pre><code>function animal() {
+    var runAlready = false;
+    this.color = "Green";
+    this.run = function() {
+        if (!runAlready) {}
+            console.log("I am running!");
+        } else {
+            console.log("I am tired!");
+        }
+    }
+}
+</code></pre>
+
+<p>If you don&#8217;t need to use local variables defined inside the object constructor, then there is no reason to use this approach and using prototype is better. That is because if you are going to create lots of animals, a new set of methods will be created and held in different instance each time the animal constructor is called. In the prototype approach, all the instances will share one set of methods and therefore less memory.</p>
+
+<p>You can also use combined approach whereby methods that uses private local constructor variables are defined inside the constructor while other methods are added using the prototype:</p>
+
+<pre><code>function animal() {
+    var runAlready = false;
+    this.run = function() {
+        if (!runAlready) {}
+            console.log("I am running!");
+        } else {
+            console.log("I am tired!");
+        }
+    }
+}
+animal.prototype.color = "Green";
+animal.prototype.hide = function() {
+    console.log("I am hiding!");
+}
+
+var horse = new animal();
+horse.run(); // will log "I am running!"
+horse.hide(); // will log "I am hiding!"
+</code></pre>
+
+<h2>Conclusion</h2>
+
+<p>With this article we understood the meaning of prototype-based language, we saw how we can use the prototype property in order to add properties and methods to all instances of an object. We even saw a practical example of extending Array&#8217;s behavior! :) I demonstrated another way to add properties using the object constructor and explained its drawback.</p>
+
+<p>If you wish to read more about the differences between class-based languages and prototype-based languages, dig in details about prototype and inheritance, I highly recommend to read Mozilla&#8217;s <a href="https://developer.mozilla.org/en-US/docs/Core_JavaScript_1.5_Guide/Details_of_the_Object_Model">&#8220;Details of the object model&#8221;</a> guide.</p>
+
+<p>I really enjoyed writing this article and I hope you enjoyed even more to read it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Backbone Singleton]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/backbone-singleton/"/>
+    <updated>2012-11-05T19:13:36+02:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/backbone-singleton</id>
+    <content type="html"><![CDATA[<p><strong>Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone and RequieJS. While the first way is simpler and more intuitive, the second allows us more flexibility.</strong></p>
+
+<h2>Simple Singleton:</h2>
+
+<p>I am working on a little application using Backbone.js and RequireJS. The application lets the user making searches by a keyword.
+Thinking of the model, I realized that I need a model that will hold the keyword and since the keyword is single in the application, it should be a singleton.
+Because I am working with RequireJS, in order to simulate a singleton, I created a module that will return an instance of the Keword model.</p>
+
+<pre><code>define([ 'backbone' ], function( Backbone ) {
+    var KeywordModel = Backbone.Model.extend({
+        defaults: {
+            keyword: ''
+        }
+    });
+
+    return new KeywordModel;
+});
+</code></pre>
+
+<p>This way whenever I want to bind the Keyword single instance, all I have to do is just add keyword.js as a dependency:</p>
+
+<pre><code>define([
+    'backbone',
+    'models/keyword'
+], function( Backbone, keywordModel ) {
+    var SearchView = Backbone.View.extend({
+        el: '#search'
+        events: {
+            'change': 'setModel'
+        },
+        initialize: function() {
+            keywordModel.on( 'change: keyword', this.render, this );
+        },
+        render: function() {
+            var keyword = keywordModel.get('keyword');
+            this.$el.val(keyword);
+        },
+        setModel: function() {
+            var keyword = this.$el.val();
+            keywordModel.set({ keyword: keyword });
+        }
+    });
+
+    return SearchView;
+});
+</code></pre>
+
+<h2>Desire to make history:</h2>
+
+<p>Now, lets assume that now I want to store searches history (each history record contains only the keyword).
+Obviously this means that I have to use a collection, but which model shall I use? I cannot use KeywordModel since I don&#8217;t have access to its definition. Any time I&#8217;ll ask for keyword.js all I get is the model instance and not it&#8217;s definition.
+One solution is to create a new model and return its definition, but this solution is undesirable since we make unnecessary duplication.
+In order to solve this issue we have to remember that <a href="http://backbonejs.org/#Model-extend">Backbone model&#8217;s extend function</a> can get an optional property called &#8220;classProperties&#8221;. These set of properties can be seen as static properties that are related to the class and not to the instance. Therefore our model can be:</p>
+
+<pre><code>define([ 'backbone' ], function( Backbone ) {
+    var KeywordModel = Backbone.Model.extend({
+        defaults: {
+            keyword: ''
+        }
+    }, {
+        singleton: null,
+        getAppKeyword: function() {
+            KeywordModel.singleton =
+                KeywordModel.singleton || new KeywordModel;
+            return KeywordModel.singleton;
+        }
+    });
+
+    return KeywordModel;
+});
+</code></pre>
+
+<p>And in this way, if I add keyword.js as a dependency I get the definition and also can retrieve the singleton by calling KeywordModel.getAppKeyword(). Here is the collection of KeywordModel models:</p>
+
+<pre><code>define([
+    'backbone',
+    'models/keyword'
+], function( Backbone, KeywordModel ) {
+    var KeywordsCollection = Backbone.Collection.extend({
+        model: KeywordModel,
+        initialize: function() {
+            this.appKeyword = KeywordModel.getAppKeyword();
+            appKeyword.on( 'change: keyword', this.pushCopy, this );
+        },
+        pushCopy: function() {
+            var clone = this.appKeyword.clone();
+            this.push(clone );
+        }
+    });
+    return new KeywordsCollection;
+});
+</code></pre>
+
+<p>Any time the model&#8217;s keyword changes, a copy of the application keyword is added to the collection.</p>
+
+<p><strong>Thanks for reading!</strong></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Function Duplication Inside an Object]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/function-duplication-inside-an-object/"/>
+    <updated>2012-10-22T16:31:25+02:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/function-duplication-inside-an-object</id>
+    <content type="html"><![CDATA[<p>Assuming I have the following object:</p>
+
+<pre><code>var opts = {
+    change: function() {
+        alert('selected');
+    },
+    select: function() {
+        alert('selected');
+    }
+};
+</code></pre>
+
+<p>This object has duplication of a function. Such scenario is common when the object represents an options for a plugin. In this particular plugin, whenever the user invoke the change and the select events, an alert will show up.
+Let&#8217;s try to find solution to this code duplication:</p>
+
+<ul>
+<li></li>
+</ul>
+
+
+<h2>Try 1 - Using this.change</h2>
+
+<pre><code>            var opts = {
+                change: function() {
+                    alert('selected');
+                },
+                select: this.change
+            };
+
+
+
+    This code will assign 'undefined' value in opts.select since 'this' doesn't represent the object itself but the context of the declaraion (probably 'window'). Thus invoking opts.select() will actually return:
+
+
+
+            TypeError: opts.select is not a function.
+</code></pre>
+
+<ul>
+<li></li>
+</ul>
+
+
+<h2>Try 2 - Using the opts itself</h2>
+
+<pre><code>            var opts = {
+                change: function() {
+                    alert('selected');
+                },
+                select: opts.change
+            };
+
+
+
+    This code will throw this exception since opts not yet assigned:
+
+
+
+            TypeError: opts is undefined
+
+
+
+    First the object is created and then its value is assigned to opts.
+</code></pre>
+
+<ul>
+<li></li>
+</ul>
+
+
+<h2>Try 3 - Using a function</h2>
+
+<pre><code>            var opts = {
+                change: function() {
+                    alert('selected');
+                },
+                select: function() {
+                    opts.change();
+                }
+            };
+
+
+
+    This code will work fine and opts.select() will show the alert, since at the invocation time of opts.select() the opts variable is already assigned.
+</code></pre>
+
+<ul>
+<li></li>
+</ul>
+
+
+<h2>Try 4 - Separation</h2>
+
+<pre><code>    This is my preferred solution for this.
+
+
+
+            function hanldeSelected() {
+                alert('selected');
+            }
+            var opts = {
+                change: hanldeSelected,
+                select: hanldeSelected
+            };
+
+
+
+    This code will work fine but we have to keep on mind that in case hanldeSelected() uses 'this', the result of its invocation will depend on the context. for example:
+
+
+
+            function hanldeSelected() {
+                alert(this === window);
+            }
+            var opts = {
+                change: hanldeSelected,
+                select: hanldeSelected
+            };
+            opts.change();     // This will alert 'false' since the context is opts
+            hanldeSelected(); // This will alert 'true' since the context is 'window'
+</code></pre>
+
+<p>Hope this helps!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[jQuery Plugin Pattern]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/jquery-plugin-pattern/"/>
+    <updated>2012-10-02T22:07:46+02:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/jquery-plugin-pattern</id>
+    <content type="html"><![CDATA[<p>jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts of your web application. This article will explain the basics of jQuery plugin and guide you how to create a simple jQuery plugin.</p>
+
+<p>I distinguish between two types of of jQuery plugins:</p>
+
+<ul>
+<li><p>Plugin that works on element. For example, a plugin that converts <select> element to an autocomplete. Such plugin is working on the select element. This kind of plugin is actually extention to the jQuery prototype (or $.fn):</p>
+
+<p>$.fn.myPlugin = function() {</p>
+
+<pre><code>... //plugin content
+</code></pre>
+
+<p>}</p></li>
+</ul>
+
+
+<p> Invocation of such plugins looks like:</p>
+
+<pre><code>$('#my-elem').myPlugin();
+</code></pre>
+
+<ul>
+<li><p>Plugin that doesn&#8217;t work on element. <a href="http://docs.jquery.com/Utilities">The utilities of jQuery</a> are good examples for such plugin. They are actually functions that located in the jQuery object (or $):</p>
+
+<p>$.myPlugin = function() {</p>
+
+<pre><code>... //plugin content
+</code></pre>
+
+<p>}</p></li>
+</ul>
+
+
+<p>Invocation of such plugins looks like:</p>
+
+<pre><code>$.myPlugin();
+</code></pre>
+
+<p>Both types of plugins can get data as input, make DOM manipulation, make calculations, let the consumer interact them and much more.</p>
+
+<h2>Limit The Scope</h2>
+
+<p>Usually when writing jQuery plugin (or any JavaScript code), it is a good idea to limit it&#8217;s scope. This way you can prevent access to private variables and functions. In addition, using scopes may helping prevent naming conflicts. In order to limit the scope of your jQuery plugin, wrap it with a function and invoke it. For example:</p>
+
+<pre><code>(function() {
+    $.fn.myPlugin = function() {
+        ... //plugin content
+    }
+})();
+</code></pre>
+
+<p>This is called <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">Immediately-Invoked Function Expression (IIFE)</a>.</p>
+
+<h2>The Dollar Sign</h2>
+
+<p>The dollar sign ($) is a synonym to the jQuery library. It is shorter and look better then the &#8220;jQuery&#8221; word. Because of that, there are many other libraries that make a use the dollar sign as a synonym. So, we have to be sure our plugin doesn&#8217;t collide with other libraries. Therefore passing jQuery as a parameter to the IIFE is a best practice:</p>
+
+<pre><code>(function($) {
+    $.fn.myPlugin = function() { // Here we sure $ is jQuery
+        ... // Plugin content
+    }
+})(jQuery);
+</code></pre>
+
+<h2>Plugin Parameters and Defaults</h2>
+
+<p>We can pass parameters to our plugin when calling it:
+$(&#8216;#elem&#8217;).myPlugin(param1, param2, param3);
+But, sometimes our plugin will have a lot of parameters (<a href="http://www.trirand.com/blog/">jqGrid</a> plugin has more then 20) and some of them might be optionals. For this reason we wrap all the parameters in an object. For example, assume our plugin gets parameters &#8220;name&#8221;, &#8220;address&#8221; and &#8220;color&#8221;, we will define our plugin:</p>
+
+<pre><code>$.fn.myPlugin = function(options) { ... }
+</code></pre>
+
+<p>and for calling it:</p>
+
+<pre><code>$('#elem').myPlugin( {
+    name: 'Naor',
+    address: 'Jerusalem',
+    color: 'Green'
+} );
+</code></pre>
+
+<p>This way the consumer can supply only the parameters she wants. But this leads to another problem. What if the plugin need the color parameter which wasn&#8217;t supplied? The solution is simple. All we have to do is to make a defaults to the parameters:</p>
+
+<pre><code>(function($) {
+    $.fn.myPlugin = function(options) {
+        options = $.extend({
+            name: 'no-name',
+            address: 'none',
+            color: 'white'
+        }, options);
+        ... // The rest of the plugin
+    }
+})(jQuery);
+</code></pre>
+
+<p>This way we support many options with optional parameters. In case we want to force the consumer pass some parameters, we can use the old way for the compulsory parameters and an &#8220;options&#8221; object for the optionals:</p>
+
+<pre><code>// param1 is compulsory
+$.fn.myPlugin = function(param1, options) { ... }
+</code></pre>
+
+<h2>The <em>this</em> Expression</h2>
+
+<p>Inside a plugin definition there is a different meaning to the <em>this</em> expression. There is a difference between the two plugin types and I will explain the meaning of the <em>this</em> expression using examples:</p>
+
+<h3>The <em>this</em> Expression for plugins that do not work on an element</h3>
+
+<pre><code>﻿&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt; 
+        &lt;title&gt;jQuery Plugins&lt;/title&gt;
+        &lt;script type="text/javascript" src="jquery-1.8.0.min.js"&gt;&lt;/script&gt;
+        &lt;script type="text/javascript"&gt;
+            (function($) {
+                $.myPlugin = function() {
+                    // Here this represents the jQuery object
+                    return $ === this;
+                };
+            })(jQuery);
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Is &lt;i&gt;this&lt;/i&gt; equals jQuery? &lt;span id="isEqual" /&gt;
+        &lt;script type="text/javascript"&gt;
+            $(function() {
+                $('#isEqual').text($.myPlugin());
+            });
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Notice that inside a plugin, <em>this</em> is equal to jQuery.
+You can watch this example <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/this1.htm">here</a>.</p>
+
+<h3>The <em>this</em> Expression for plugins that do work on an element</h3>
+
+<pre><code>﻿&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt; 
+        &lt;title&gt;jQuery Plugins&lt;/title&gt;
+        &lt;script type="text/javascript" src="jquery-1.8.0.min.js"&gt;&lt;/script&gt;
+        &lt;script type="text/javascript"&gt;
+            (function($) {
+                $.fn.myPlugin = function(text) {
+                    // Here this is a reference to the actaul jQuery
+                    // element the plugin works on.
+                    this.each(function() {
+                        var current = $(this);
+                        var elemType = current.prop('tagName').toLowerCase();
+                        switch(elemType)  {
+                            case 'input':
+                                current.val(text);
+                                break;
+                            case 'select':
+                                current.empty().append('&lt;option&gt;' + text + '&lt;/option&gt;');
+                                break;
+                            case 'span':
+                                current.text(text);
+                                break;
+                        }
+
+                    });
+                };
+            })(jQuery);
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Choose text: &lt;input type="text" id="my-text" /&gt;
+        &lt;button id="my-button"&gt;Press here&lt;/button&gt;
+        &lt;br/&gt;
+        Span: &lt;span class="target"&gt;&lt;/span&gt; &lt;br/&gt;
+        Text input: &lt;input type="text" class="target" /&gt; &lt;br/&gt;
+        Select: &lt;select class="target"&gt;&lt;/select&gt;
+        &lt;script type="text/javascript"&gt;
+            $(function() {
+                $('#my-button').click(function() {
+                    var text = $('#my-text').val();
+                    $('.target').myPlugin(text);
+                });
+            });
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Notice that <em>this</em> is a reference to the main element that the plugin works on. Sometimes, like in this example, the jQuery element represents more then one DOM element and we have to iterate each one of them in order to effect all of the DOM elements. In this example each DOM element is different element and so different treatment.
+You can watch this example <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/this2.htm">here</a>.</p>
+
+<h2>jQuery Chaining Principal</h2>
+
+<p><strong>jQuery Chaining Principal is relevant only to plugins that do work on an element.</strong>
+I believe you&#8217;ve seen this syntax before:</p>
+
+<pre><code>$('#elem').addClass('active').val('some value').prop('disabled', true);
+</code></pre>
+
+<p>Keep in mind that the consumer can actually write:</p>
+
+<pre><code>$('#elem').addClass('active');
+$('#elem').val('some value');
+$('#elem').prop('disabled', true);
+</code></pre>
+
+<p>But the first syntax looks better, easier to understand and more effective (no need to search for &#8216;#elem&#8217; a few times). This is made possible due to the jQuery chaining principal. Each jQuery method or plugin returns the element that it works on:</p>
+
+<pre><code>(function($) {
+    $.fn.myPlugin = function(options) {
+        ...
+        ...
+        &lt;b&gt;return this;&lt;/b&gt;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Keep in mind that inside the plugin scope, the <em>this</em> expression referenced to the element itself.</p>
+
+<h2>Consumer interface</h2>
+
+<p>Up to now we saw a plugin structure wrapped in IIFE, with $ as jQuery and with compulsory/optional parameters. We undertsood the <em>this</em> expression inside a plugin and saw the chaining principal in action. Now we need to see how to create an interface so the consumer can interact with the plugin. I&#8217;ll do it separately for each plugin type.</p>
+
+<h3>Plugin that doesn&#8217;t work on element</h3>
+
+<p>The first plugin doesn&#8217;t work on element, it gets positions and a text as parameters and displays the text on the specified position:</p>
+
+<pre><code>(function($) {
+    $.float = function(posX, posY, text) {
+        $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
+            left: posX,
+            top: posY,
+            position: 'absolute'
+        });
+    }   
+})(jQuery);
+</code></pre>
+
+<p>Now we want to allow the consumer to move the text to a new position and to remove it. Let&#8217;s write a methods:</p>
+
+<pre><code>(function($) {
+    function changePosition(elem, posX, posY) {
+        elem.css({
+            left: posX,
+            top: posY
+        });
+    }
+
+    function remove(elem) {
+        elem.remove();
+    }
+
+    $.float = function(posX, posY, text) {
+        $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
+            left: posX,
+            top: posY,
+            position: 'absolute'
+        });
+    }   
+})(jQuery);
+</code></pre>
+
+<p>Notice that the consumer doesn&#8217;t have an access to &#8220;changePosition&#8221; nor &#8220;remove&#8221; and she never holds the <div> element. So now we need to connect the consumer to the methods. In order to do it we make the &#8220;float&#8221; plugin return a &#8220;remote control&#8221; object:</p>
+
+<pre><code>(function($) {
+    function changePosition(elem, posX, posY) {
+        elem.css({
+            left: posX,
+            top: posY
+        });
+    }
+
+    function remove(elem) {
+        elem.remove();
+    }
+
+    $.float = function(posX, posY, text) {
+        var elem = $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
+            left: posX,
+            top: posY,
+            position: 'absolute'
+        });
+
+        return {
+            changePosition: function(posX, posY) {
+                changePosition(elem, posX, posY);
+            },
+            remove: function() { remove(elem); }
+        };
+    }   
+})(jQuery);
+</code></pre>
+
+<p>Now, whenever the consumer will invoke $.float(..) she will get a &#8220;remote control&#8221; object with the interface we want to provide, and in order to use it:</p>
+
+<pre><code>var control = $.float('100px', '100px', 'Hello!');
+control.changePosition('200px', '200px');
+</code></pre>
+
+<p>Live example for the float plugin you can find <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/float.htm">here</a>.</p>
+
+<h3>Plugin that does work on element</h3>
+
+<p>The second plugin does work on element. It works on an <input> element and gets two parameters: <ul> selector and a number &#8220;N&#8221;. Whenever the input&#8217;s value changes, the <ul> gets filled with &#8220;N&#8221; items containing the value:</p>
+
+<pre><code>(function($) {
+    $.fn.compose = function(options) {
+        options = $.extend({
+            number: 2,
+            ul: null
+        }, options);
+
+        this.change(function() {
+            if (options.ul !== null) {
+                var value = $(this).val();
+                var ul = $(options.ul).empty();
+                for(var i=0;i&lt;options.number;i++) {
+                    ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
+                }           
+            }
+        });
+
+        return this;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Now we want to allow the consumer to change the number parameter. Again, let&#8217;s write a method:</p>
+
+<pre><code>(function($) {
+    $.fn.compose = function(options) {
+        options = $.extend({
+            number: 2,
+            ul: null
+        }, options);
+
+        function setNumber(number) {
+            options.number = number;
+        }
+
+        this.change(function() {
+            if (options.ul !== null) {
+                var value = $(this).val();
+                var ul = $(options.ul).empty();
+                for(var i=0;i&lt;options.number;i++) {
+                    ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
+                }           
+            }
+        });
+
+        return this;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Like the first plugin type example, the consumer doesn&#8217;t have an access to &#8220;setNumber&#8221; method. Unlike the first plugin type example, here we cannot return a &#8220;remote control&#8221; object. Due to jQuery chaining principal we have to return &#8220;this&#8221;. For solve this we use the <a href="http://api.jquery.com/jQuery.data/">jQuery.data()</a> method. This method allows us attach key-value data to an element. For example, $(&#8216;#elem&#8217;).data(&#8216;my-color&#8217;, &#8216;Green&#8217;); attaches the &#8220;my-color = Green&#8221; key-value to the element. In order to get the value of &#8220;my-color&#8221; all we have to do is: $(&#8216;#elem&#8217;).data(&#8216;obj&#8217;) and we get &#8220;Green&#8221;.
+So we use the jQuery.data() method to attach the &#8220;remote control&#8221; object to the element. We will use the name of the plugin &#8220;compose&#8221; as a key:</p>
+
+<pre><code>(function($) {
+    $.fn.compose = function(options) {
+        options = $.extend({
+            number: 2,
+            ul: null
+        }, options);
+
+        function setNumber(number) {
+            options.number = number;
+        }
+
+        this.change(function() {
+            if (options.ul !== null) {
+                var value = $(this).val();
+                var ul = $(options.ul).empty();
+                for(var i=0;i&lt;options.number;i++) {
+                    ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
+                }           
+            }
+        });
+
+        this.data('compose', {
+            setNumber: setNumber
+        });
+
+        return this;
+    }
+})(jQuery);
+</code></pre>
+
+<p>Now, in order to change the number</p>
+
+<pre><code>$('#elem').compose({
+    number: 3,
+    ul: '#ul'
+});
+
+$('#elem').data('compose').setNumber(8);
+</code></pre>
+
+<p>And then the input&#8217;s value will appear 8 times.
+Live example for the compose plugin you can find <a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/compose.htm">here</a>.</p>
+
+<h2>Summary</h2>
+
+<p>In this article I presented two jQuery plugin types and their structure (IIFE wrap and jQuery injection as $), I explained how to add compulsory and optional parameters, demonstrated the meaning of the <em>this</em> expression and described the jQuery chaining principal. At the end I also presented a way of letting the consumer interact the plugins.</p>
+
+<h3>Template of plugin the does not work on an element</h3>
+
+<pre><code>(function($) {
+    $.extend($, {
+        pluginName: function(param, options) {
+            options = $.extend({
+                // Options Defaults
+            }, options);
+
+
+            return {
+                // Plugin interface object
+            };
+        }
+    });     
+})(jQuery);
+</code></pre>
+
+<h3>Template of plugin the does work on an element</h3>
+
+<pre><code>// jQuery plugin template for plugin that does work on element
+(function($) {
+    $.extend($.fn, {
+        pluginName: function(param, options) {
+            options = $.extend({
+                // Options Defaults
+            }, options);
+
+            this.each(function() {
+                // Operations for each DOM element
+            }).data('pluginName', {
+                // Plugin interface object
+            });
+
+            return this;
+        }
+    });     
+})(jQuery);
+</code></pre>
+
+<p>I hope you find this post useful, and if you have any question, don&#8217;t hesitate to ask!
+<a href="http://www.webdeveasy.com/demos/jquery-plugin-pattern/jquery-plugin-pattern.zip">Here</a> you can find all the examples of this post and the plugins templates.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Style Your jQuery-UI Tabs]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/style-your-jquery-ui-tabs/"/>
+    <updated>2012-09-22T20:11:31+03:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/style-your-jquery-ui-tabs</id>
+    <content type="html"><![CDATA[<p>This article will explain and guide you step by step how to style your jQuery-UI tabs and make them look like this:
+<img src="http://www.webdeveasy.com/wp-content/uploads/2012/09/style-your-jquery-ui-tabs-sample.png" alt="" />
+<a href="http://www.webdeveasy.com/demos/style-your-jquery-ui-tabs/style-tabs.htm">Demo here</a>.</p>
+
+<p>For this example you will need <a href="http://www.jquery.com">jQuery</a> and <a href="http://www.jqueryui.com">jQuery-UI</a> for the <a href="http://jqueryui.com/demos/tabs/">tabs plugin</a>. There are many ways to use the tabs plugin and here I will use one of those methods.</p>
+
+<h2>jQuery UI Tabs Markup</h2>
+
+<pre><code>The tabs plugin gets a parent element that contains an unordered list (&lt;ul&gt;). Each item (&lt;li&gt;) in the list represents a tab and contains an anchor (&lt;a&gt;) with a link to the data container div. For example:
+
+
+
+&lt;div id="tabsContainer"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#firstTab"&gt;First Tab&lt;a/&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#secondTab"&gt;Second Tab&lt;a/&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#thirdTab"&gt;Third Tab&lt;a/&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div id="firstTab"&gt;
+        Content for the first tab
+    &lt;/div&gt;
+    &lt;div id="secondTab"&gt;
+        Content for the second tab
+    &lt;/div&gt;
+    &lt;div id="thirdTab"&gt;
+        Content for the third tab
+    &lt;/div&gt;
+&lt;/div&gt;
+
+
+
+As you can see the parent element ("div#tabsContainer") also contains the data containers. Each anchor has a reference to the id of the data container it represents. This way the tabs plugin knows for each tab which div to display.
+</code></pre>
+
+<h2>Our Tabs Markup</h2>
+
+<pre><code>This is our example's structure:
+
+
+&lt;div id=quot;simpleTabsquot;&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#facebook"&gt;Facebook&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#twitter"&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+        ......
+        ......
+    &lt;/ul&gt;
+    &lt;div id="facebook"&gt;
+        content about Facebook here 
+    &lt;/div&gt;
+    &lt;div id="twitter"&gt;
+        content about Twitter here
+    &lt;/div&gt;
+    ......
+    ......
+&lt;/div&gt;
+
+
+Because this is not the final markup, I summarized and didn't put the whole code. As you can see I created a parent div with unordered list and data containers in it. When running the tabs plugin on the code above I'll get regular tabs as you can see [here](http://www.webdeveasy.com/demos/style-your-jquery-ui-tabs/no-style-tabs.htm).
+When the tabs plugin generates the tabs, it makes manipulation on the DOM elements. After generating it, the DOM looks like this:
+
+
+
+&lt;div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="simpleTabs"&gt;
+    &lt;ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"&gt;
+        &lt;li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"&gt;
+            &lt;a href="#facebook"&gt;Facebook&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="ui-state-default ui-corner-top"&gt;
+            &lt;a href="#twitter"&gt;Twitter&lt;/a&gt;
+        &lt;/li&gt;
+        ......
+        ......
+    &lt;/ul&gt;
+    &lt;div class="ui-tabs-panel ui-widget-content ui-corner-bottom" id="facebook"&gt;
+        content about Facebook here 
+    &lt;/div&gt;
+    &lt;div class="ui-tabs-panel ui-widget-content ui-corner-bottom" id="twitter"&gt;
+        content about Twitter here 
+    &lt;/div&gt;
+    ......
+    ......
+&lt;/div&gt;
+
+
+
+The tabs plugin added a few classes to the elements. This is something important to know and we use this when we change styles. Now we want each tab to contain an icon and a text. Therefore we will add a div inside each anchor and it will hold the text and the icon as a background image. Notice that HTML5 allows wrapping of block-level elements like &lt;div&gt;s with basic &lt;a&gt; element. Now, each list item looks like:
+
+
+&lt;li&gt;&lt;a href="#facebook"&gt;&lt;div&gt;Facebook&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;;
+</code></pre>
+
+<h2>Css and Tabs Style</h2>
+
+<pre><code>Now we are going to change the styles of our tabs. Our web application might use the tabs plugin more than once, and probably different tabs in our application will have different styles designs. For this reason we want to separate the design of the current tabs by adding a class to the parent element:
+
+
+&lt;div id="tabsWithStyle" class="style-tabs"&gt;
+
+
+This way each tabs with the "style-tabs" class will share the same style and other tabs can have different styles.
+As we saw before, the tabs plugin has changed the DOM and added some classes. Those classes and syles are defined in the jQuery-UI css file and in order to change the appearance of our tabs we need to change them. Changing the original jQuery-UI css file might distort the page since those classes are used in many ways and in many other jQuery-UI plugins. In addition, changing the original css file will prevent replacing the jQuery-UI theme because the changes might get lost. Therfore the changes will be made in our style.css file.
+Remember the wrapper divs we added inside each anchor? Now is the time to give them background. Each div will get an "icon" class that defines width and font and maniplates the positions of the text and the icon image:
+
+
+.style-tabs.ui-tabs .ui-tabs-nav li .icon { 
+    color: #787878; background-position: center 3px; padding-top: 40px;
+    font-weight: bold; font-size: 12px; text-align: center; width: 80px;
+}
+
+
+In addition, each tab's div has a different icon image and therefore a different icon image class.
+</code></pre>
+
+<h2>Complete CSS File</h2>
+
+<pre><code>.facebook-icon { background: url(images/facebook.png) no-repeat; height: 32px; width: 32px; }
+.twitter-icon { background: url(images/twitter1.png) no-repeat; height: 32px; width: 32px; }
+.linkedin-icon { background: url(images/linkedin.png) no-repeat; height: 32px; width: 32px; }
+.google-icon { background: url(images/google.png) no-repeat; height: 32px; width: 32px; }
+.wikipedia-icon { background: url(images/wikipedia.png) no-repeat; height: 32px; width: 32px; }
+.picasa-icon { background: url(images/picasa.png) no-repeat; height: 32px; width: 32px; }
+
+.style-tabs.ui-widget-content { background: none; width: 480px; }
+.style-tabs.ui-tabs,
+.style-tabs.ui-tabs .ui-tabs-nav li a,
+.style-tabs.ui-tabs .ui-tabs-nav {
+    padding: 0;
+}
+.style-tabs.ui-tabs .ui-tabs-panel { padding: 5px; }
+.style-tabs.ui-tabs .ui-widget-header { 
+    border: none; background: url(images/TabMenu.png) repeat; height: 74px; width: 100%;
+}
+.style-tabs.ui-tabs .ui-corner-all { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
+.style-tabs.ui-tabs .ui-tabs-nav li { position: relative; height: 100%; cursor: pointer; margin: 0; top: 0; }
+.style-tabs.ui-tabs .ui-widget-header .ui-state-default { background: none; border: none; }
+.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected,
+.style-tabs.ui-tabs .ui-tabs-nav li:hover {
+    background: url(images/SelectedMiddle.png) repeat;
+}
+.style-tabs.ui-tabs .ui-tabs-nav li .icon {
+    color: #787878; background-position: center 3px; padding-top: 40px;
+    font-weight: bold; font-size: 12px; text-align: center; width: 80px;
+}
+.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected .icon,
+.style-tabs.ui-tabs .ui-tabs-nav li:hover .icon { 
+    color: #414141;
+}
+.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected .icon:before,
+.style-tabs.ui-tabs .ui-tabs-nav li:hover .icon:before {
+    content: url(images/SelectedSides.png); position: absolute; right: 0; top: 0;
+}
+.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected .icon:after,
+.style-tabs.ui-tabs .ui-tabs-nav li:hover .icon:after {
+    content: url(images/SelectedSides.png); position: absolute; left: 0; top: 0;
+}
+.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
+
+
+
+    Notice that those classes are based on the generated markup and this is how I know which classes to change. Among the changes, those styles also:
+</code></pre>
+
+<ol>
+<li><p>Set fixed width to the tabs container.</p></li>
+<li><p>Define tab hover style to look like selected tab.</p></li>
+<li><p>Use the &#8220;:before&#8221; and &#8220;:after&#8221; <a href="http://www.w3schools.com/css/css_pseudo_elements.asp">pseudo elements</a> in order to put an image before and after selected tab.</p></li>
+</ol>
+
+
+<h2>Complete Markup:</h2>
+
+<pre><code>&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt; 
+        &lt;title&gt;www.webdeveasy.com example - Style Your jQuery-UI tabs&lt;/title&gt;       
+        &lt;script type="text/javascript" src="js/jquery-1.8.0.min.js"&gt;&lt;/script&gt;
+        &lt;script type="text/javascript" src="js/js/jquery-ui-1.8.23.custom.min.js"&gt;&lt;/script&gt;
+        &lt;link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.23.custom.css" /&gt;
+        &lt;link rel="stylesheet" type="text/css" href="css/style.css" /&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="tabsWithStyle" class="style-tabs"&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="#facebook"&gt;&lt;div class="icon facebook-icon"&gt;Facebook&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#twitter"&gt;&lt;div class="icon twitter-icon"&gt;Twitter&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#linkedin"&gt;&lt;div class="icon linkedin-icon"&gt;LinkedIn&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#google"&gt;&lt;div class="icon google-icon"&gt;GooglePlus&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#wikipedia"&gt;&lt;div class="icon wikipedia-icon"&gt;Wikipedia&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#picasa"&gt;&lt;div class="icon picasa-icon"&gt;Picasa&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;div id="facebook"&gt;
+                content about Facebook here 
+            &lt;/div&gt;
+            &lt;div id="twitter"&gt;
+                content about Twitter here
+            &lt;/div&gt;
+            &lt;div id="linkedin"&gt;
+                content about LinkedIn here
+            &lt;/div&gt;
+            &lt;div id="google"&gt;
+                content about Google Plus here
+            &lt;/div&gt;
+            &lt;div id="wikipedia"&gt;
+                content about Wikipedia here
+            &lt;/div&gt;
+            &lt;div id="picasa"&gt;
+                content about Picasa here
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;script type="text/javascript"&gt;
+            $(function() {
+                $('#tabsWithStyle').tabs();
+            });
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>That&#8217;s all! have fun and don&#8217;t hesitate to leave your comment!</p>
+
+<p>Source files to download <a href="http://www.webdeveasy.com/demos/style-your-jquery-ui-tabs/style-jquery-ui-tabs.zip">here</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Yeoman Review]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/yeoman-review/"/>
+    <updated>2012-09-17T05:47:52+03:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/yeoman-review</id>
+    <content type="html"><![CDATA[<p>Today I was informed about <a href="http://www.yeoman.io">Yeoman</a> which is (according to Yeoman website) a new set of tools, libraries and workflows that can help developers to quickly build beautiful, compelling web. I decided to check this out.
+Notice that Yeoman is working only under iOS and Linux, so if you are a Windows user I wholeheartedly recommend <a href="http://www.ubuntu.com/">Ubuntu</a>. In order to install Yeoman open Terminal and execute the following command:</p>
+
+<pre><code>$ curl -L get.yeoman.io | bash
+</code></pre>
+
+<p>At first, Yeoman verifies the existence of all it&#8217;s dependencies (more info about that <a href="https://github.com/yeoman/yeoman/wiki/Manual-Install">here</a>) and asks you to install what does not exists.
+It takes some time to complete installing all the missing dependencies (in case you don&#8217;t have them), an automatic installer would save a lot of time, but once you got them you are ready to use Yeoman!</p>
+
+<p><a href="http://www.webdeveasy.com/yeoman_review/yeoman_requirements.png"><img src="http://www.webdeveasy.com/wp-content/uploads/2012/09/yeoman_requirements.png" alt="Yeoman Requirements" /></a></p>
+
+<p>In order to create a new app, execute the command:</p>
+
+<pre><code>$ yeoman init
+</code></pre>
+
+<p>Yeoman will ask about the libraries you wish to include in the new app and then, initialize it according to the selection. Yeoman is integrated with <a href="http://github.com/twitter/bower">Twitter Bower</a>: “Bower is a package manager for the web. Bower lets you easily install assets such as images, CSS and JavaScript, and manages dependencies for you”. That way Yeoman knows to take the latest updated version of a desired library (such as <a href="http://http://jquery.com/">jQuery</a>, <a href="http://emberjs.com/">ember</a>, <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> and many more). Along the new application, Yeoman also creates unit tests using <a href="http://visionmedia.github.com/mocha/">mocha</a>. After easily initialize your app you are ready to open your favorite text editor/IDE and start writing your new startup.</p>
+
+<p>One nice feature Yeoman has is the &#8220;changes watcher&#8221;. Whenever you like to see preview of your development you can execute the following command:</p>
+
+<pre><code>$ yeoman server
+</code></pre>
+
+<p>This command launches the app in the browser and starts watching for changes. Each change you&#8217;ll do in your code (markup, JavaScript or CSS) will refresh the preview and be reflected in your browser immediately. There are many more nice features in Yeoman but I think now it is your time to check things up.</p>
+
+<p>In this article I tried to get you introduced to Yeoman and explained a little bit about it&#8217;s abilities. You can find more information at the Yeoman website. Hope you&#8217;ll find this article useful, feel free to ask any question you have.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cascading Autocompletes using jQuery UI]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/cascading-autocompletes-using-jquery-ui/"/>
+    <updated>2012-09-14T18:34:42+03:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/cascading-autocompletes-using-jquery-ui</id>
+    <content type="html"><![CDATA[<p>Yesterday I got a new requirement for the application I am working on.
+I had several <a href="http://jqueryui.com/demos/autocomplete">jQuery UI autocompletes</a> and I needed to add cascading functionality. This means that each autocomplete in the group affects the following autocomple&#8217;s possible values. If there is no value selected in the first autocomplete - the next autocomplete must be disabled. When the user selects a value on the first autocomplete - the next autocomplete becomes enabled.</p>
+
+<p>After searching the web I realized that the best option for me is to write my own jQuery plugin that manages the autocompletes cascading.
+The plugin gets as input a sequence of jQuery UI auocomplete elements and adds the cascading functionality. The idea under my plugin is to override each autocomplete&#8217;s change and select events, and enable or disable the next autocomplete in the sequence according to the selected value.</p>
+
+<p>Here is the code:</p>
+
+<pre><code>(function($) {
+    $.fn.extend({
+        cascade: function(child) {
+            var parent = this;
+            var isChildActivate = true;
+
+            function activateChild() {
+                child
+                    .prop('disabled', false)
+                    .removeClass('disabled');
+                if (child.autocomplete) {
+                    child.autocomplete('enable');
+                }
+                isChildActivate = true;
+            }
+
+            function deactivateChild() {
+                child
+                    .prop('disabled', true)
+                    .val('')
+                    .addClass('disabled');
+                if (child.autocomplete) {
+                    child.autocomplete('disable');
+                }
+                isChildActivate = false;
+            }
+
+            function eventOverride(originalEvent) {
+                return function(event, ui) {
+                    if (ui.item == null &amp;&amp; isChildActivate) {
+                        deactivateChild();
+                    } else if (ui.item != null &amp;&amp; !isChildActivate) {
+                        activateChild();
+                    }
+                    if (typeof originalEvent === 'function') {
+                        originalEvent.apply(this, [event, ui]);
+                    }
+                };
+            }
+
+            if (parent.autocomplete) {
+                var originalChange = parent.autocomplete('option', 'change');
+                var originalSelect = parent.autocomplete('option', 'select');
+                parent.autocomplete('option', 'change', eventOverride(originalChange));
+
+                parent.autocomplete('option', 'select', eventOverride(originalSelect));
+            }
+
+            deactivateChild();
+
+            return parent;
+        }
+    });
+    $.extend({
+        cascadingAutocompletes: function(autocompletes) {
+            for (var i = 0; i &lt; autocompletes.length - 1; i++) {
+                var parent = $(autocompletes[i]);
+                var child = $(autocompletes[i + 1]);
+                if (autocompletes[i]) {
+                    parent.cascade(child);
+                }
+            }
+        }
+    });
+})(jQuery);
+</code></pre>
+
+<p>Usage example:</p>
+
+<pre><code>$.cascadingAutocompletes(['#country', '#city', '#street']);
+</code></pre>
+
+<p>Hope this helps!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Enhanced usage of JavaScript && and || Operators]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/javascript-short-circuiting/"/>
+    <updated>2012-09-14T18:32:24+03:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/javascript-short-circuiting</id>
+    <content type="html"><![CDATA[<p>Sometimes I need to use &#8220;if&#8221; statements just to be sure a variable is not &#8220;null&#8221;:</p>
+
+<pre><code>var a = getObj();
+
+//if "a" is not zero, not "null" and also defined, then do something.
+if (a) { 
+    doSomething();
+}
+</code></pre>
+
+<p>Other times I need to use &#8220;if&#8221;s in order to assign non-&#8220;null&#8221; value into a variable:</p>
+
+<pre><code>var a = getIdOrNull();
+var id = -1;
+
+//if "a" is not zero, not "null" and also defined, then set the id.
+//Otherwise keep it "-1".
+if (a) { 
+    id = a;
+}
+</code></pre>
+
+<p>It appears that there is a way to shorten and optimize this code using the &amp;&amp; and || operators, and it called <a href="http://en.wikipedia.org/wiki/Short-circuit_evaluation">&#8220;short-circuiting&#8221;</a>. The idea behind this lays in the way the JavaScript enging works. For the &amp;&amp; operator, expressions are executed until the first &#8220;false&#8221; value. For the || operator, expressions are executed until the first &#8220;true&#8221; value. Another thing that helps us here is the fact that &#8220;null&#8221; and &#8220;undefined&#8221; are treated as &#8220;false&#8221; and other than that are treated as &#8220;true&#8221; (except zero).</p>
+
+<p>Finally, the first case can be written as:</p>
+
+<pre><code>a &amp;&amp; doSomething();
+</code></pre>
+
+<p>This starts with &#8220;a&#8221; and if it&#8217;s value is true (not zero, not &#8220;null&#8221; and also defined) the JS engine continues and executes doSomething().</p>
+
+<p>The second case can be written as:</p>
+
+<pre><code>var id = a || -1;
+</code></pre>
+
+<p>This starts with &#8220;a&#8221; and if it is false (zero, &#8220;null&#8221; or &#8220;undefined&#8221;) the JS engine continues and set &#8220;-1&#8221; into the id variable.</p>
+
+<p>This can make your JavaScript code shorter, cleaner and easier to understand.</p>
+]]></content>
+  </entry>
   
 </feed>

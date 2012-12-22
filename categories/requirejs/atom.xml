@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: RequireJS | Web Development is Easy!]]></title>
+  <link href="http://naorye.github.com/web-dev-easy/categories/requirejs/atom.xml" rel="self"/>
+  <link href="http://naorye.github.com/web-dev-easy/"/>
+  <updated>2012-12-22T21:05:42+02:00</updated>
+  <id>http://naorye.github.com/web-dev-easy/</id>
+  <author>
+    <name><![CDATA[NaorYe]]></name>
+    <email><![CDATA[mailto:naorye@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Backbone Singleton]]></title>
+    <link href="http://naorye.github.com/web-dev-easy/backbone-singleton/"/>
+    <updated>2012-11-05T19:13:36+02:00</updated>
+    <id>http://naorye.github.com/web-dev-easy/backbone-singleton</id>
+    <content type="html"><![CDATA[<p><strong>Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone and RequieJS. While the first way is simpler and more intuitive, the second allows us more flexibility.</strong></p>
+
+<h2>Simple Singleton:</h2>
+
+<p>I am working on a little application using Backbone.js and RequireJS. The application lets the user making searches by a keyword.
+Thinking of the model, I realized that I need a model that will hold the keyword and since the keyword is single in the application, it should be a singleton.
+Because I am working with RequireJS, in order to simulate a singleton, I created a module that will return an instance of the Keword model.</p>
+
+<pre><code>define([ 'backbone' ], function( Backbone ) {
+    var KeywordModel = Backbone.Model.extend({
+        defaults: {
+            keyword: ''
+        }
+    });
+
+    return new KeywordModel;
+});
+</code></pre>
+
+<p>This way whenever I want to bind the Keyword single instance, all I have to do is just add keyword.js as a dependency:</p>
+
+<pre><code>define([
+    'backbone',
+    'models/keyword'
+], function( Backbone, keywordModel ) {
+    var SearchView = Backbone.View.extend({
+        el: '#search'
+        events: {
+            'change': 'setModel'
+        },
+        initialize: function() {
+            keywordModel.on( 'change: keyword', this.render, this );
+        },
+        render: function() {
+            var keyword = keywordModel.get('keyword');
+            this.$el.val(keyword);
+        },
+        setModel: function() {
+            var keyword = this.$el.val();
+            keywordModel.set({ keyword: keyword });
+        }
+    });
+
+    return SearchView;
+});
+</code></pre>
+
+<h2>Desire to make history:</h2>
+
+<p>Now, lets assume that now I want to store searches history (each history record contains only the keyword).
+Obviously this means that I have to use a collection, but which model shall I use? I cannot use KeywordModel since I don't have access to its definition. Any time I'll ask for keyword.js all I get is the model instance and not it's definition.
+One solution is to create a new model and return its definition, but this solution is undesirable since we make unnecessary duplication.
+In order to solve this issue we have to remember that <a href="http://backbonejs.org/#Model-extend">Backbone model's extend function</a> can get an optional property called "classProperties". These set of properties can be seen as static properties that are related to the class and not to the instance. Therefore our model can be:</p>
+
+<pre><code>define([ 'backbone' ], function( Backbone ) {
+    var KeywordModel = Backbone.Model.extend({
+        defaults: {
+            keyword: ''
+        }
+    }, {
+        singleton: null,
+        getAppKeyword: function() {
+            KeywordModel.singleton =
+                KeywordModel.singleton || new KeywordModel;
+            return KeywordModel.singleton;
+        }
+    });
+
+    return KeywordModel;
+});
+</code></pre>
+
+<p>And in this way, if I add keyword.js as a dependency I get the definition and also can retrieve the singleton by calling KeywordModel.getAppKeyword(). Here is the collection of KeywordModel models:</p>
+
+<pre><code>define([
+    'backbone',
+    'models/keyword'
+], function( Backbone, KeywordModel ) {
+    var KeywordsCollection = Backbone.Collection.extend({
+        model: KeywordModel,
+        initialize: function() {
+            this.appKeyword = KeywordModel.getAppKeyword();
+            appKeyword.on( 'change: keyword', this.pushCopy, this );
+        },
+        pushCopy: function() {
+            var clone = this.appKeyword.clone();
+            this.push(clone );
+        }
+    });
+    return new KeywordsCollection;
+});
+</code></pre>
+
+<p>Any time the model's keyword changes, a copy of the application keyword is added to the collection.</p>
+
+<p><strong>Thanks for reading!</strong></p>
+]]></content>
+  </entry>
+  
+</feed>
