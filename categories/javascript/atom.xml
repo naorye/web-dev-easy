@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://naorye.github.com/web-dev-easy/categories/javascript/atom.xml" rel="self"/>
   <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2012-12-22T21:20:31+02:00</updated>
+  <updated>2012-12-23T01:14:48+02:00</updated>
   <id>http://naorye.github.com/web-dev-easy/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -18,7 +18,12 @@
     <link href="http://naorye.github.com/web-dev-easy/backbone-history-pushstate-option/"/>
     <updated>2012-12-05T20:10:00+02:00</updated>
     <id>http://naorye.github.com/web-dev-easy/backbone-history-pushstate-option</id>
-    <content type="html"><![CDATA[<p>If you are using Backbone, you probably noticed <a href="http://backbonejs.org/#History-start">Backbone.history.start();</a> function. This command starts the monitoring on hashchange events, and dispatching routes. This function can get as option an indication whether you would like to use HTML5 pushState support:</p>
+    <content type="html"><![CDATA[<p>If you are using Backbone, you probably noticed <a href="http://backbonejs.org/#History-start">Backbone.history.start();</a> function. This command starts the monitoring on hashchange events, and dispatching routes.</p>
+
+<!-- more -->
+
+
+<p>This function can get as option an indication whether you would like to use HTML5 pushState support:</p>
 
 <pre><code>Backbone.history.start({pushState: true/false});
 </code></pre>
@@ -42,7 +47,10 @@
     <link href="http://naorye.github.com/web-dev-easy/javascript-prototype/"/>
     <updated>2012-11-13T10:49:17+02:00</updated>
     <id>http://naorye.github.com/web-dev-easy/javascript-prototype</id>
-    <content type="html"><![CDATA[<p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you are want to be an expert web developers.</p>
+    <content type="html"><![CDATA[<p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you want to be an expert web developers. This article will explain you about it.</p>
+
+<!-- more -->
+
 
 <h2>Prototype-Based Language</h2>
 
@@ -176,6 +184,9 @@ horse.hide(); // will log "I am hiding!"
     <id>http://naorye.github.com/web-dev-easy/backbone-singleton</id>
     <content type="html"><![CDATA[<p><strong>Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone and RequieJS. While the first way is simpler and more intuitive, the second allows us more flexibility.</strong></p>
 
+<!-- more -->
+
+
 <h2>Simple Singleton:</h2>
 
 <p>I am working on a little application using Backbone.js and RequireJS. The application lets the user making searches by a keyword.
@@ -278,7 +289,10 @@ In order to solve this issue we have to remember that <a href="http://backbonejs
     <link href="http://naorye.github.com/web-dev-easy/function-duplication-inside-an-object/"/>
     <updated>2012-10-22T16:31:25+02:00</updated>
     <id>http://naorye.github.com/web-dev-easy/function-duplication-inside-an-object</id>
-    <content type="html"><![CDATA[<p>Assuming I have the following object:</p>
+    <content type="html"><![CDATA[<!-- more -->
+
+
+<p>Assuming I have the following object:</p>
 
 <pre><code>var opts = {
     change: function() {
@@ -410,6 +424,9 @@ Let's try to find solution to this code duplication:</p>
     <updated>2012-10-02T22:07:46+02:00</updated>
     <id>http://naorye.github.com/web-dev-easy/jquery-plugin-pattern</id>
     <content type="html"><![CDATA[<p>jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts of your web application. This article will explain the basics of jQuery plugin and guide you how to create a simple jQuery plugin.</p>
+
+<!-- more -->
+
 
 <p>I distinguish between two types of of jQuery plugins:</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Frameworks and Tools | Web Development is Easy!]]></title>
   <link href="http://naorye.github.com/web-dev-easy/categories/frameworks-and-tools/atom.xml" rel="self"/>
   <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2012-12-22T21:20:31+02:00</updated>
+  <updated>2012-12-23T01:14:48+02:00</updated>
   <id>http://naorye.github.com/web-dev-easy/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -18,8 +18,12 @@
     <link href="http://naorye.github.com/web-dev-easy/yeoman-review/"/>
     <updated>2012-09-17T05:47:52+03:00</updated>
     <id>http://naorye.github.com/web-dev-easy/yeoman-review</id>
-    <content type="html"><![CDATA[<p>Today I was informed about <a href="http://www.yeoman.io">Yeoman</a> which is (according to Yeoman website) a new set of tools, libraries and workflows that can help developers to quickly build beautiful, compelling web. I decided to check this out.
-Notice that Yeoman is working only under iOS and Linux, so if you are a Windows user I wholeheartedly recommend <a href="http://www.ubuntu.com/">Ubuntu</a>. In order to install Yeoman open Terminal and execute the following command:</p>
+    <content type="html"><![CDATA[<p>Today I was informed about <a href="http://www.yeoman.io">Yeoman</a> which is (according to Yeoman website) a new set of tools, libraries and workflows that can help developers to quickly build beautiful, compelling web. I decided to check this out.</p>
+
+<!-- more -->
+
+
+<p>Notice that Yeoman is working only under iOS and Linux, so if you are a Windows user I wholeheartedly recommend <a href="http://www.ubuntu.com/">Ubuntu</a>. In order to install Yeoman open Terminal and execute the following command:</p>
 
 <pre><code>$ curl -L get.yeoman.io | bash
 </code></pre>

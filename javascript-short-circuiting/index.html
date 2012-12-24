@@ -5,11 +5,17 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Enhanced usage of JavaScript && and || Operators - Web Development is Easy!</title>
+  <title>JavaScript Short Circuiting - Web Development is Easy!</title>
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="Sometimes I need to use &#8220;if&#8221; statements just to be sure a variable is not &#8220;null&#8221;: var a = getObj(); //if "a" is not zero, not &hellip;">
+  <meta name="description" content="Sometimes I need to use &#8220;if&#8221; statements just to be sure a variable is not &#8220;null&#8221;: 1
+2
+3
+4
+5
+6
+var a = getObj(); //if &quot;a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Enhanced Usage of JavaScript && and || Operators</h1>
+      <h1 class="entry-title">JavaScript Short Circuiting</h1>
     
     
       <p class="meta">
@@ -95,41 +101,65 @@
   </header>
 
 
-<div class="entry-content"><p>Sometimes I need to use &#8220;if&#8221; statements just to be sure a variable is not &#8220;null&#8221;:</p>
+<div class="entry-content"><!-- more -->
 
-<pre><code>var a = getObj();
 
-//if "a" is not zero, not "null" and also defined, then do something.
-if (a) { 
-    doSomething();
-}
-</code></pre>
+<p>Sometimes I need to use &#8220;if&#8221; statements just to be sure a variable is not &#8220;null&#8221;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">getObj</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//if &quot;a&quot; is not zero, not &quot;null&quot; and also defined, then do something.</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">doSomething</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Other times I need to use &#8220;if&#8221;s in order to assign non-&#8220;null&#8221; value into a variable:</p>
 
-<pre><code>var a = getIdOrNull();
-var id = -1;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">getIdOrNull</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//if &quot;a&quot; is not zero, not &quot;null&quot; and also defined, then set the id.</span>
+</span><span class='line'><span class="c1">//Otherwise keep it &quot;-1&quot;.</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">id</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-//if "a" is not zero, not "null" and also defined, then set the id.
-//Otherwise keep it "-1".
-if (a) { 
-    id = a;
-}
-</code></pre>
 
-<p>It appears that there is a way to shorten and optimize this code using the &amp;&amp; and || operators, and it called <a href="http://en.wikipedia.org/wiki/Short-circuit_evaluation">&#8220;short-circuiting&#8221;</a>. The idea behind this lays in the way the JavaScript enging works. For the &amp;&amp; operator, expressions are executed until the first &#8220;false&#8221; value. For the || operator, expressions are executed until the first &#8220;true&#8221; value. Another thing that helps us here is the fact that &#8220;null&#8221; and &#8220;undefined&#8221; are treated as &#8220;false&#8221; and other than that are treated as &#8220;true&#8221; (except zero).</p>
+<p>{% a _blank http://en.wikipedia.org/wiki/Short-circuit_evaluation short-circuiting %}
+It appears that there is a way to shorten and optimize this code using the &amp;&amp; and || operators, and it called <a href="http://en.wikipedia.org/wiki/Short-circuit_evaluation">&#8220;short-circuiting&#8221;</a>. The idea behind this lays in the way the JavaScript enging works. For the &amp;&amp; operator, expressions are executed until the first &#8220;false&#8221; value. For the || operator, expressions are executed until the first &#8220;true&#8221; value. Another thing that helps us here is the fact that &#8220;null&#8221; and &#8220;undefined&#8221; are treated as &#8220;false&#8221; and other than that are treated as &#8220;true&#8221; (except zero).</p>
 
 <p>Finally, the first case can be written as:</p>
 
-<pre><code>a &amp;&amp; doSomething();
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">a</span> <span class="o">&amp;&amp;</span> <span class="nx">doSomething</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>This starts with &#8220;a&#8221; and if it&#8217;s value is true (not zero, not &#8220;null&#8221; and also defined) the JS engine continues and executes doSomething().</p>
 
 <p>The second case can be written as:</p>
 
-<pre><code>var id = a || -1;
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">||</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>This starts with &#8220;a&#8221; and if it is false (zero, &#8220;null&#8221; or &#8220;undefined&#8221;) the JS engine continues and set &#8220;-1&#8221; into the id variable.</p>
 
@@ -212,6 +242,22 @@ if (a) {
     
       <li class="post">
         <a href="/web-dev-easy/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/style-your-jquery-ui-tabs/">Style Your jQuery-UI Tabs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/yeoman-review/">Yeoman Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/cascading-autocompletes-using-jquery-ui/">Cascading Autocompletes using jQuery UI</a>
+      </li>
+    
+      <li class="post">
+        <a href="/web-dev-easy/javascript-short-circuiting/">JavaScript Short Circuiting</a>
       </li>
     
   </ul>
