@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://naorye.github.com/web-dev-easy/categories/javascript/atom.xml" rel="self"/>
   <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2013-01-12T15:35:15+02:00</updated>
+  <updated>2013-01-12T18:29:55+02:00</updated>
   <id>http://naorye.github.com/web-dev-easy/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -726,87 +726,156 @@ I had several <a href="http://jqueryui.com/demos/autocomplete">jQuery UI autocom
 <p>After searching the web I realized that the best option for me is to write my own jQuery plugin that manages the autocompletes cascading.
 The plugin gets as input a sequence of jQuery UI auocomplete elements and adds the cascading functionality. The idea under my plugin is to override each autocomplete's change and select events, and enable or disable the next autocomplete in the sequence according to the selected value.</p>
 
-<p>Here is the code:</p>
-
-<p>``` javascript cascadingAutocompletes plugin</p>
-
-<pre><code>(function($) {
-    $.fn.extend({
-        cascade: function(child) {
-            var parent = this;
-            var isChildActivate = true;
-
-            function activateChild() {
-                child
-                    .prop('disabled', false)
-                    .removeClass('disabled');
-                if (child.autocomplete) {
-                    child.autocomplete('enable');
-                }
-                isChildActivate = true;
-            }
-
-            function deactivateChild() {
-                child
-                    .prop('disabled', true)
-                    .val('')
-                    .addClass('disabled');
-                if (child.autocomplete) {
-                    child.autocomplete('disable');
-                }
-                isChildActivate = false;
-            }
-
-            function eventOverride(originalEvent) {
-                return function(event, ui) {
-                    if (ui.item == null &amp;&amp; isChildActivate) {
-                        deactivateChild();
-                    } else if (ui.item != null &amp;&amp; !isChildActivate) {
-                        activateChild();
-                    }
-                    if (typeof originalEvent === 'function') {
-                        originalEvent.apply(this, [event, ui]);
-                    }
-                };
-            }
-
-            if (parent.autocomplete) {
-                var originalChange = parent.autocomplete('option', 'change');
-                var originalSelect = parent.autocomplete('option', 'select');
-                parent.autocomplete('option', 'change', eventOverride(originalChange));
-
-                parent.autocomplete('option', 'select', eventOverride(originalSelect));
-            }
-
-            deactivateChild();
-
-            return parent;
-        }
-    });
-    $.extend({
-        cascadingAutocompletes: function(autocompletes) {
-            for (var i = 0; i &lt; autocompletes.length - 1; i++) {
-                var parent = $(autocompletes[i]);
-                var child = $(autocompletes[i + 1]);
-                if (autocompletes[i]) {
-                    parent.cascade(child);
-                }
-            }
-        }
-    });
-})(jQuery);
-</code></pre>
-
-<p>```</p>
+<p>Here is the code:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Cascading Autocompletes plugin</span> <a href='/code/cascading-autocompletes-plugin/jquery.cascading-autocompletes.js' target='_blank'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">activateChild</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">child</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">child</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">(</span><span class="s2">&quot;enable&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">deactivateChild</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">child</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">child</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">(</span><span class="s2">&quot;disable&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">subChild</span> <span class="o">=</span> <span class="nx">child</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;cascade-child&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">subChild</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">deactivateChild</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">subChild</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">eventOverride</span><span class="p">(</span><span class="nx">originalEvent</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">ui</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">isChildActivate</span> <span class="o">=</span> <span class="nx">child</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">)</span> <span class="o">===</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">ui</span><span class="p">.</span><span class="nx">item</span> <span class="o">&amp;&amp;</span> <span class="nx">isChildActivate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">deactivateChild</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">child</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">ui</span><span class="p">.</span><span class="nx">item</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">isChildActivate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">activateChild</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">child</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">originalEvent</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">originalEvent</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">ui</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">cascade</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">child</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">child</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">originalChange</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">(</span><span class="s2">&quot;option&quot;</span><span class="p">,</span> <span class="s2">&quot;change&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">originalSelect</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">(</span><span class="s2">&quot;option&quot;</span><span class="p">,</span> <span class="s2">&quot;select&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">parent</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;cascade-child&quot;</span><span class="p">,</span> <span class="nx">child</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">parent</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">(</span><span class="s2">&quot;option&quot;</span><span class="p">,</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="nx">eventOverride</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">originalChange</span><span class="p">));</span>
+</span><span class='line'>            <span class="nx">parent</span><span class="p">.</span><span class="nx">autocomplete</span><span class="p">(</span><span class="s2">&quot;option&quot;</span><span class="p">,</span> <span class="s2">&quot;select&quot;</span><span class="p">,</span> <span class="nx">eventOverride</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">originalSelect</span><span class="p">));</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">deactivateChild</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">child</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">parent</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$</span><span class="p">.</span><span class="nx">cascadingAutocompletes</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">autocompletes</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">autocompletes</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">autocompletes</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">$</span><span class="p">(</span><span class="nx">autocompletes</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">cascade</span><span class="p">(</span><span class="nx">autocompletes</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">})(</span><span class="nx">jQuery</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Usage example:</p>
 
-<p>``` javascript cascadingAutocompletes plugin usage</p>
+<p>``` javascript Cascading Autocompletes plugin Usage</p>
 
-<pre><code>$.cascadingAutocompletes(['#country', '#city', '#street']);
+<pre><code>$.cascadingAutocompletes(["#country", "#city", "#street"]);
 </code></pre>
 
 <p>```</p>
+
+<p><a href="/code/cascading-autocompletes-plugin/index.html">Demo Here</a>.</p>
 
 <p>Hope this helps!</p>
 ]]></content>
