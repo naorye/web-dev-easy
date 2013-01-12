@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Backbone.js | Web Development is Easy!]]></title>
   <link href="http://naorye.github.com/web-dev-easy/categories/backbone-js/atom.xml" rel="self"/>
   <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2012-12-23T01:14:48+02:00</updated>
+  <updated>2013-01-12T15:35:15+02:00</updated>
   <id>http://naorye.github.com/web-dev-easy/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,35 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Backbone history pushState option]]></title>
-    <link href="http://naorye.github.com/web-dev-easy/backbone-history-pushstate-option/"/>
-    <updated>2012-12-05T20:10:00+02:00</updated>
-    <id>http://naorye.github.com/web-dev-easy/backbone-history-pushstate-option</id>
-    <content type="html"><![CDATA[<p>If you are using Backbone, you probably noticed <a href="http://backbonejs.org/#History-start">Backbone.history.start();</a> function. This command starts the monitoring on hashchange events, and dispatching routes.</p>
-
-<!-- more -->
-
-
-<p>This function can get as option an indication whether you would like to use HTML5 pushState support:</p>
-
-<pre><code>Backbone.history.start({pushState: true/false});
-</code></pre>
-
-<p>It is important to understand the behaviour in each case:</p>
-
-<ul>
-<li><p>When {pushState: false} is used (the default behaviour), calling <a href="http://backbonejs.org/#Router-navigate">router.navigate("shop")</a> will update the url using the hash sign and it will look like www.myblog.com/index.html#shop.</p></li>
-<li><p>When using {pushState: true}, calling router.navigate("shop") will use the HTML5 pushState support and the url will look like  www.myblog.com/shop.</p></li>
-</ul>
-
-
-<p>Keep in mind that both settings of course do not refresh the page.</p>
-
-<p>Hope you will find this info useful!</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backbone Singleton]]></title>
