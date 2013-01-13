@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-01-13T10:14:58+02:00</updated>
+  <updated>2013-01-14T00:39:29+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -718,7 +718,7 @@ Live example for the compose plugin you can find <a href="http://www.webdeveasy.
     <updated>2012-09-14T18:34:42+03:00</updated>
     <id>http://webdeveasy.com/cascading-autocompletes-using-jquery-ui</id>
     <content type="html"><![CDATA[<p>Yesterday I got a new requirement for the application I am working on.
-I had several <a href="http://jqueryui.com/demos/autocomplete">jQuery UI autocompletes</a> and I needed to add cascading functionality. This means that each autocomplete in the group affects the following autocomple's possible values. If there is no value selected in the first autocomplete - the next autocomplete must be disabled. When the user selects a value on the first autocomplete - the next autocomplete becomes enabled.</p>
+I had several <a href="http://jqueryui.com/demos/autocomplete" target="_blank">jQuery UI autocompletes</a> and I needed to add cascading functionality. This means that each autocomplete in the group affects the following autocomple's possible values. If there is no value selected in the first autocomplete - the next autocomplete must be disabled. When the user selects a value on the first autocomplete - the next autocomplete becomes enabled.</p>
 
 <!-- more -->
 
@@ -875,7 +875,7 @@ The plugin gets as input a sequence of jQuery UI auocomplete elements and adds t
 
 <p>```</p>
 
-<p><a href="/code/cascading-autocompletes-plugin/index.html">Demo Here</a>.</p>
+<p><a href="/code/cascading-autocompletes-plugin/index.html" target="_blank">Demo Here</a>.</p>
 
 <p>Hope this helps!</p>
 ]]></content>

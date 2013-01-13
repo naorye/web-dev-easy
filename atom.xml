@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-01-13T10:14:58+02:00</updated>
+  <updated>2013-01-14T00:39:29+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -717,230 +717,451 @@ Live example for the compose plugin you can find <a href="http://www.webdeveasy.
     <link href="http://webdeveasy.com/style-your-jquery-ui-tabs/"/>
     <updated>2012-09-22T20:11:31+03:00</updated>
     <id>http://webdeveasy.com/style-your-jquery-ui-tabs</id>
-    <content type="html"><![CDATA[<p>This article will explain and guide you step by step how to style your jQuery-UI tabs and make them look like this: <br/>
-<img src="http://www.webdeveasy.com/wp-content/uploads/2012/09/style-your-jquery-ui-tabs-sample.png" alt="" /> <br/>
-<a href="http://www.webdeveasy.com/demos/style-your-jquery-ui-tabs/style-tabs.htm">Demo here</a>.</p>
+    <content type="html"><![CDATA[<p>This article will explain and guide you step by step how to style your jQuery-UI tabs and make them look like this:</p>
+
+<iframe src="../code/style-your-jquery-ui-tabs/style-tabs.html" width="100%"></iframe>
+
 
 <!-- more -->
 
 
-<p>For this example you will need <a href="http://www.jquery.com">jQuery</a> and <a href="http://www.jqueryui.com">jQuery-UI</a> for the <a href="http://jqueryui.com/demos/tabs/">tabs plugin</a>. There are many ways to use the tabs plugin and here I will use one of those methods.</p>
+<p>For this example you will need <a href="http://www.jquery.com" target="_blank">jQuery</a> and <a href="http://www.jqueryui.com" target="_blank">jQuery-UI</a> for the <a href="http://jqueryui.com/demos/tabs/" target="_blank">tabs plugin</a>. There are many ways to use the tabs plugin and here I will use one of those methods.</p>
 
 <h2>jQuery UI Tabs Markup</h2>
 
-<pre><code>The tabs plugin gets a parent element that contains an unordered list (&lt;ul&gt;). Each item (&lt;li&gt;) in the list represents a tab and contains an anchor (&lt;a&gt;) with a link to the data container div. For example:
+<p>The tabs plugin gets a parent element that contains an unordered list (&lt;ul&gt;). Each item in the list (&lt;li&gt;) represents a tab and contains an anchor (&lt;a&gt;) with a link to the data container div. For example:</p>
+
+<figure class='code'><figcaption><span>Tabs plugin structure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;tabsContainer&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#firstTab&quot;</span><span class="nt">&gt;</span>First Tab<span class="nt">&lt;a/&gt;&lt;/li&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#secondTab&quot;</span><span class="nt">&gt;</span>Second Tab<span class="nt">&lt;a/&gt;&lt;/li&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#thirdTab&quot;</span><span class="nt">&gt;</span>Third Tab<span class="nt">&lt;a/&gt;&lt;/li&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;firstTab&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      Content for the first tab
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;secondTab&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      Content for the second tab
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;thirdTab&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      Content for the third tab
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-
-&lt;div id="tabsContainer"&gt;
-    &lt;ul&gt;
-        &lt;li&gt;&lt;a href="#firstTab"&gt;First Tab&lt;a/&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href="#secondTab"&gt;Second Tab&lt;a/&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href="#thirdTab"&gt;Third Tab&lt;a/&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;div id="firstTab"&gt;
-        Content for the first tab
-    &lt;/div&gt;
-    &lt;div id="secondTab"&gt;
-        Content for the second tab
-    &lt;/div&gt;
-    &lt;div id="thirdTab"&gt;
-        Content for the third tab
-    &lt;/div&gt;
-&lt;/div&gt;
-
-
-
-As you can see the parent element ("div#tabsContainer") also contains the data containers. Each anchor has a reference to the id of the data container it represents. This way the tabs plugin knows for each tab which div to display.
-</code></pre>
+<p>As you can see the parent element (&#8220;div#tabsContainer&#8221;) also contains the data containers. Each anchor has a reference to the id of the data container it represents. This way the tabs plugin knows for each tab which div to display.</p>
 
 <h2>Our Tabs Markup</h2>
 
-<pre><code>This is our example's structure:
+<p>This is our example&#8217;s structure:</p>
+
+<figure class='code'><figcaption><span>Our example&#8217;s structure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;simpleTabs&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#facebook&quot;</span><span class="nt">&gt;</span>Facebook<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#twitter&quot;</span><span class="nt">&gt;</span>Twitter<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</span><span class='line'>      ......
+</span><span class='line'>      ......
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;facebook&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      content about Facebook here
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;twitter&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      content about Twitter here
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  ......
+</span><span class='line'>  ......
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-&lt;div id=quot;simpleTabsquot;&gt;
-    &lt;ul&gt;
-        &lt;li&gt;&lt;a href="#facebook"&gt;Facebook&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href="#twitter"&gt;Twitter&lt;/a&gt;&lt;/li&gt;
-        ......
-        ......
-    &lt;/ul&gt;
-    &lt;div id="facebook"&gt;
-        content about Facebook here 
-    &lt;/div&gt;
-    &lt;div id="twitter"&gt;
-        content about Twitter here
-    &lt;/div&gt;
-    ......
-    ......
-&lt;/div&gt;
+<p>Because this is not the final markup, I summarized and didn&#8217;t put the whole code. As you can see I created a parent div with unordered list and data containers in it. When running the tabs plugin on the code above I&#8217;ll get regular tabs as you can see:</p>
+
+<iframe src="../code/style-your-jquery-ui-tabs/no-style-tabs.html" width="100%"></iframe>
 
 
-Because this is not the final markup, I summarized and didn't put the whole code. As you can see I created a parent div with unordered list and data containers in it. When running the tabs plugin on the code above I'll get regular tabs as you can see [here](http://www.webdeveasy.com/demos/style-your-jquery-ui-tabs/no-style-tabs.htm).
-When the tabs plugin generates the tabs, it makes manipulation on the DOM elements. After generating it, the DOM looks like this:
+<p>When the tabs plugin generates the tabs, it makes manipulation on the HTML elements. After generating it, the HTML looks like similar to this:</p>
+
+<figure class='code'><figcaption><span>After applying tabs plugin</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;simpaleTabs&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-tabs ui-widget ui-widget-content ui-corner-all&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;ui-state-default ui-corner-top ui-tabs-active ui-state-active&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#facebook&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-tabs-anchor&quot;</span><span class="nt">&gt;</span>Facebook<span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;ui-state-default ui-corner-top&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#twitter&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-tabs-anchor&quot;</span><span class="nt">&gt;</span>Twitter<span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>        ......
+</span><span class='line'>        ......
+</span><span class='line'>    <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;facebook&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-tabs-panel ui-widget-content ui-corner-bottom&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        content about Facebook here
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;twitter&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-tabs-panel ui-widget-content ui-corner-bottom&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        content about Twitter here
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>The tabs plugin added a few classes to the elements. This is something important to know and we use this when we change styles. Now we want each tab to contain an icon and a text. Therefore we will add a div inside each anchor and it will hold the text and the icon as a background image. Notice that HTML5 allows wrapping of block-level elements like &lt;div&gt;s with basic &lt;a&gt; element. Now, each list item looks like:</p>
 
-&lt;div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="simpleTabs"&gt;
-    &lt;ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"&gt;
-        &lt;li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"&gt;
-            &lt;a href="#facebook"&gt;Facebook&lt;/a&gt;
-        &lt;/li&gt;
-        &lt;li class="ui-state-default ui-corner-top"&gt;
-            &lt;a href="#twitter"&gt;Twitter&lt;/a&gt;
-        &lt;/li&gt;
-        ......
-        ......
-    &lt;/ul&gt;
-    &lt;div class="ui-tabs-panel ui-widget-content ui-corner-bottom" id="facebook"&gt;
-        content about Facebook here 
-    &lt;/div&gt;
-    &lt;div class="ui-tabs-panel ui-widget-content ui-corner-bottom" id="twitter"&gt;
-        content about Twitter here 
-    &lt;/div&gt;
-    ......
-    ......
-&lt;/div&gt;
+<figure class='code'><figcaption><span>List item new look</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#facebook&quot;</span><span class="nt">&gt;&lt;div&gt;</span>Facebook<span class="nt">&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;</span>;
+</span></code></pre></td></tr></table></div></figure>
 
-
-
-The tabs plugin added a few classes to the elements. This is something important to know and we use this when we change styles. Now we want each tab to contain an icon and a text. Therefore we will add a div inside each anchor and it will hold the text and the icon as a background image. Notice that HTML5 allows wrapping of block-level elements like &lt;div&gt;s with basic &lt;a&gt; element. Now, each list item looks like:
-
-
-&lt;li&gt;&lt;a href="#facebook"&gt;&lt;div&gt;Facebook&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;;
-</code></pre>
 
 <h2>Css and Tabs Style</h2>
 
-<pre><code>Now we are going to change the styles of our tabs. Our web application might use the tabs plugin more than once, and probably different tabs in our application will have different styles designs. For this reason we want to separate the design of the current tabs by adding a class to the parent element:
+<p>Now we are going to change the styles of our tabs. Our web application might use the tabs plugin more than once, and probably different tabs in our application will have different styles designs. For this reason we want to separate the design of the current tabs by adding a class to the parent element:</p>
+
+<figure class='code'><figcaption><span>Add class to the parent element</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;tabsWithStyle&quot;</span> <span class="na">class=</span><span class="s">&quot;style-tabs&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-&lt;div id="tabsWithStyle" class="style-tabs"&gt;
+<p>This way each tabs with the &#8220;style-tabs&#8221; class will share the same style and other tabs can have different styles.</p>
+
+<p>As we saw before, the tabs plugin has changed the HTML and added some classes. Those classes and styles are defined in the jQuery-UI css file and in order to change the appearance of our tabs we need to change them. Changing the original jQuery-UI css file might distort the page since those classes are used in many ways and in many other jQuery-UI plugins. In addition, changing the original css file will prevent replacing the jQuery-UI theme because the changes might get lost. Therfore the changes will be made in our style.css file.</p>
+
+<p>Remember the wrapper divs we added inside each anchor? Now is the time to give them background. Each div will get an &#8220;icon&#8221; class that defines width and font and maniplates the positions of the text and the icon image:</p>
+
+<figure class='code'><figcaption><span>icon div style</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span> <span class="nc">.icon</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="m">#787878</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">background-position</span><span class="o">:</span> <span class="k">center</span> <span class="m">3px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding-top</span><span class="o">:</span> <span class="m">40px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">80px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-This way each tabs with the "style-tabs" class will share the same style and other tabs can have different styles.
-As we saw before, the tabs plugin has changed the DOM and added some classes. Those classes and syles are defined in the jQuery-UI css file and in order to change the appearance of our tabs we need to change them. Changing the original jQuery-UI css file might distort the page since those classes are used in many ways and in many other jQuery-UI plugins. In addition, changing the original css file will prevent replacing the jQuery-UI theme because the changes might get lost. Therfore the changes will be made in our style.css file.
-Remember the wrapper divs we added inside each anchor? Now is the time to give them background. Each div will get an "icon" class that defines width and font and maniplates the positions of the text and the icon image:
-
-
-.style-tabs.ui-tabs .ui-tabs-nav li .icon { 
-    color: #787878; background-position: center 3px; padding-top: 40px;
-    font-weight: bold; font-size: 12px; text-align: center; width: 80px;
-}
-
-
-In addition, each tab's div has a different icon image and therefore a different icon image class.
-</code></pre>
+<p>In addition, each tab&#8217;s div has a different icon image and therefore a different icon image class.</p>
 
 <h2>Complete CSS File</h2>
 
-<pre><code>.facebook-icon { background: url(images/facebook.png) no-repeat; height: 32px; width: 32px; }
-.twitter-icon { background: url(images/twitter1.png) no-repeat; height: 32px; width: 32px; }
-.linkedin-icon { background: url(images/linkedin.png) no-repeat; height: 32px; width: 32px; }
-.google-icon { background: url(images/google.png) no-repeat; height: 32px; width: 32px; }
-.wikipedia-icon { background: url(images/wikipedia.png) no-repeat; height: 32px; width: 32px; }
-.picasa-icon { background: url(images/picasa.png) no-repeat; height: 32px; width: 32px; }
+<figure class='code'><figcaption><span>Tabs Style</span> <a href='http://webdeveasy.com/code/style-your-jquery-ui-tabs/style.css' target='_blank'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="err">﻿</span><span class="nc">.facebook-icon</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/facebook.png)</span> <span class="k">no-repeat</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.twitter-icon</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/twitter.png)</span> <span class="k">no-repeat</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.linkedin-icon</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/linkedin.png)</span> <span class="k">no-repeat</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.google-icon</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/google.png)</span> <span class="k">no-repeat</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.wikipedia-icon</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/wikipedia.png)</span> <span class="k">no-repeat</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.picasa-icon</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/picasa.png)</span> <span class="k">no-repeat</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">480px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span> <span class="nt">a</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-panel</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-widget-header</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/TabMenu.png)</span> <span class="k">repeat</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">74px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-corner-all</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">cursor</span><span class="o">:</span> <span class="k">pointer</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-widget-header</span> <span class="nc">.ui-state-default</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nc">.ui-tabs-active</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nd">:hover</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background</span><span class="o">:</span> <span class="sx">url(images/SelectedMiddle.png)</span> <span class="k">repeat</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span> <span class="nc">.icon</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="m">#787878</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">background-position</span><span class="o">:</span> <span class="k">center</span> <span class="m">3px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding-top</span><span class="o">:</span> <span class="m">40px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">80px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nc">.ui-tabs-active</span> <span class="nc">.icon</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nd">:hover</span> <span class="nc">.icon</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="m">#414141</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nc">.ui-tabs-active</span> <span class="nc">.icon</span><span class="nd">:before</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nd">:hover</span> <span class="nc">.icon</span><span class="nd">:before</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">content</span><span class="o">:</span> <span class="sx">url(images/SelectedSides.png)</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">right</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nc">.ui-tabs-active</span> <span class="nc">.icon</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nd">:hover</span> <span class="nc">.icon</span><span class="nd">:after</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">content</span><span class="o">:</span> <span class="sx">url(images/SelectedSides.png)</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">left</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.style-tabs</span> <span class="nc">.ui-tabs-nav</span> <span class="nt">li</span><span class="nc">.ui-tabs-active</span> <span class="nt">a</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">cursor</span><span class="o">:</span> <span class="k">pointer</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-.style-tabs.ui-widget-content { background: none; width: 480px; }
-.style-tabs.ui-tabs,
-.style-tabs.ui-tabs .ui-tabs-nav li a,
-.style-tabs.ui-tabs .ui-tabs-nav {
-    padding: 0;
-}
-.style-tabs.ui-tabs .ui-tabs-panel { padding: 5px; }
-.style-tabs.ui-tabs .ui-widget-header { 
-    border: none; background: url(images/TabMenu.png) repeat; height: 74px; width: 100%;
-}
-.style-tabs.ui-tabs .ui-corner-all { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
-.style-tabs.ui-tabs .ui-tabs-nav li { position: relative; height: 100%; cursor: pointer; margin: 0; top: 0; }
-.style-tabs.ui-tabs .ui-widget-header .ui-state-default { background: none; border: none; }
-.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected,
-.style-tabs.ui-tabs .ui-tabs-nav li:hover {
-    background: url(images/SelectedMiddle.png) repeat;
-}
-.style-tabs.ui-tabs .ui-tabs-nav li .icon {
-    color: #787878; background-position: center 3px; padding-top: 40px;
-    font-weight: bold; font-size: 12px; text-align: center; width: 80px;
-}
-.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected .icon,
-.style-tabs.ui-tabs .ui-tabs-nav li:hover .icon { 
-    color: #414141;
-}
-.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected .icon:before,
-.style-tabs.ui-tabs .ui-tabs-nav li:hover .icon:before {
-    content: url(images/SelectedSides.png); position: absolute; right: 0; top: 0;
-}
-.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected .icon:after,
-.style-tabs.ui-tabs .ui-tabs-nav li:hover .icon:after {
-    content: url(images/SelectedSides.png); position: absolute; left: 0; top: 0;
-}
-.style-tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
+
+<p>Notice that those classes are based on the generated markup and this is how I know which classes to change. Among the changes, those styles also:</p>
+
+<ul>
+<li>Set fixed width to the tabs container</li>
+<li>Define tab hover style to look like selected tab</li>
+<li>Use the &#8220;:before&#8221; and &#8220;:after&#8221; <a href="https://developer.mozilla.org/en-US/docs/CSS/Pseudo-elements" target="_blank">pseudo elements</a> in order to put an image before and after selected tab</li>
+</ul>
 
 
+<h2>Complete Markup</h2>
 
-    Notice that those classes are based on the generated markup and this is how I know which classes to change. Among the changes, those styles also:
-</code></pre>
+<figure class='code'><figcaption><span>Tabs Style</span> <a href='http://webdeveasy.com/code/style-your-jquery-ui-tabs/style-tabs.html' target='_blank'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="err">﻿</span><span class="o">&lt;!</span><span class="nt">doctype</span> <span class="nt">html</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nt">html</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nt">head</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nt">title</span><span class="o">&gt;</span><span class="nt">Custom</span> <span class="nt">jQuery</span> <span class="nt">Tabs</span><span class="o">&lt;/</span><span class="nt">title</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nt">script</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nt">src</span><span class="o">=</span><span class="s2">&quot;../assets/js/libs/jquery.min.js&quot;</span><span class="o">&gt;&lt;/</span><span class="nt">script</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nt">script</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nt">src</span><span class="o">=</span><span class="s2">&quot;../assets/js/plugins/jquery-ui.min.js&quot;</span><span class="o">&gt;&lt;/</span><span class="nt">script</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;../assets/css/jquery-ui.css&quot;</span> <span class="o">/&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;style.css&quot;</span> <span class="o">/&gt;</span>
+</span><span class='line'>  <span class="o">&lt;/</span><span class="nt">head</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nt">body</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">id</span><span class="o">=</span><span class="s2">&quot;tabsWithStyle&quot;</span> <span class="nt">class</span><span class="o">=</span><span class="s2">&quot;style-tabs&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nt">ul</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;&lt;</span><span class="nt">a</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;#facebook&quot;</span><span class="o">&gt;&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s2">&quot;icon facebook-icon&quot;</span><span class="o">&gt;</span><span class="nt">Facebook</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;&lt;/</span><span class="nt">a</span><span class="o">&gt;&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;&lt;</span><span class="nt">a</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;#twitter&quot;</span><span class="o">&gt;&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s2">&quot;icon twitter-icon&quot;</span><span class="o">&gt;</span><span class="nt">Twitter</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;&lt;/</span><span class="nt">a</span><span class="o">&gt;&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;&lt;</span><span class="nt">a</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;#linkedin&quot;</span><span class="o">&gt;&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s2">&quot;icon linkedin-icon&quot;</span><span class="o">&gt;</span><span class="nt">LinkedIn</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;&lt;/</span><span class="nt">a</span><span class="o">&gt;&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;&lt;</span><span class="nt">a</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;#google&quot;</span><span class="o">&gt;&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s2">&quot;icon google-icon&quot;</span><span class="o">&gt;</span><span class="nt">GooglePlus</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;&lt;/</span><span class="nt">a</span><span class="o">&gt;&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;&lt;</span><span class="nt">a</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;#wikipedia&quot;</span><span class="o">&gt;&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s2">&quot;icon wikipedia-icon&quot;</span><span class="o">&gt;</span><span class="nt">Wikipedia</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;&lt;/</span><span class="nt">a</span><span class="o">&gt;&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="o">&lt;</span><span class="nt">li</span><span class="o">&gt;&lt;</span><span class="nt">a</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;#picasa&quot;</span><span class="o">&gt;&lt;</span><span class="nt">div</span> <span class="nt">class</span><span class="o">=</span><span class="s2">&quot;icon picasa-icon&quot;</span><span class="o">&gt;</span><span class="nt">Picasa</span><span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;&lt;/</span><span class="nt">a</span><span class="o">&gt;&lt;/</span><span class="nt">li</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;/</span><span class="nt">ul</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">id</span><span class="o">=</span><span class="s2">&quot;facebook&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="nt">content</span> <span class="nt">about</span> <span class="nt">Facebook</span> <span class="nt">here</span>
+</span><span class='line'>          <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">id</span><span class="o">=</span><span class="s2">&quot;twitter&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="nt">content</span> <span class="nt">about</span> <span class="nt">Twitter</span> <span class="nt">here</span>
+</span><span class='line'>          <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">id</span><span class="o">=</span><span class="s2">&quot;linkedin&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="nt">content</span> <span class="nt">about</span> <span class="nt">LinkedIn</span> <span class="nt">here</span>
+</span><span class='line'>          <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">id</span><span class="o">=</span><span class="s2">&quot;google&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="nt">content</span> <span class="nt">about</span> <span class="nt">Google</span> <span class="nt">Plus</span> <span class="nt">here</span>
+</span><span class='line'>          <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">id</span><span class="o">=</span><span class="s2">&quot;wikipedia&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="nt">content</span> <span class="nt">about</span> <span class="nt">Wikipedia</span> <span class="nt">here</span>
+</span><span class='line'>          <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="o">&lt;</span><span class="nt">div</span> <span class="nt">id</span><span class="o">=</span><span class="s2">&quot;picasa&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>              <span class="nt">content</span> <span class="nt">about</span> <span class="nt">Picasa</span> <span class="nt">here</span>
+</span><span class='line'>          <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;/</span><span class="nt">div</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nt">script</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>          <span class="err">$</span><span class="o">(</span><span class="nt">function</span><span class="o">()</span> <span class="p">{</span>
+</span><span class='line'>              <span class="err">$</span><span class="p">(</span><span class="s1">&#39;#tabsWithStyle&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tabs</span><span class="p">();</span>
+</span><span class='line'>          <span class="p">}</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">&lt;/</span><span class="nt">script</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;/</span><span class="nt">body</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="nt">html</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<ol>
-<li><p>Set fixed width to the tabs container.</p></li>
-<li><p>Define tab hover style to look like selected tab.</p></li>
-<li><p>Use the &#8220;:before&#8221; and &#8220;:after&#8221; <a href="http://www.w3schools.com/css/css_pseudo_elements.asp">pseudo elements</a> in order to put an image before and after selected tab.</p></li>
-</ol>
-
-
-<h2>Complete Markup:</h2>
-
-<pre><code>&lt;!doctype html&gt;
-&lt;html&gt;
-    &lt;head&gt; 
-        &lt;title&gt;www.webdeveasy.com example - Style Your jQuery-UI tabs&lt;/title&gt;       
-        &lt;script type="text/javascript" src="js/jquery-1.8.0.min.js"&gt;&lt;/script&gt;
-        &lt;script type="text/javascript" src="js/js/jquery-ui-1.8.23.custom.min.js"&gt;&lt;/script&gt;
-        &lt;link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.23.custom.css" /&gt;
-        &lt;link rel="stylesheet" type="text/css" href="css/style.css" /&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div id="tabsWithStyle" class="style-tabs"&gt;
-            &lt;ul&gt;
-                &lt;li&gt;&lt;a href="#facebook"&gt;&lt;div class="icon facebook-icon"&gt;Facebook&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href="#twitter"&gt;&lt;div class="icon twitter-icon"&gt;Twitter&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href="#linkedin"&gt;&lt;div class="icon linkedin-icon"&gt;LinkedIn&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href="#google"&gt;&lt;div class="icon google-icon"&gt;GooglePlus&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href="#wikipedia"&gt;&lt;div class="icon wikipedia-icon"&gt;Wikipedia&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href="#picasa"&gt;&lt;div class="icon picasa-icon"&gt;Picasa&lt;/div&gt;&lt;/a&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-            &lt;div id="facebook"&gt;
-                content about Facebook here 
-            &lt;/div&gt;
-            &lt;div id="twitter"&gt;
-                content about Twitter here
-            &lt;/div&gt;
-            &lt;div id="linkedin"&gt;
-                content about LinkedIn here
-            &lt;/div&gt;
-            &lt;div id="google"&gt;
-                content about Google Plus here
-            &lt;/div&gt;
-            &lt;div id="wikipedia"&gt;
-                content about Wikipedia here
-            &lt;/div&gt;
-            &lt;div id="picasa"&gt;
-                content about Picasa here
-            &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;script type="text/javascript"&gt;
-            $(function() {
-                $('#tabsWithStyle').tabs();
-            });
-        &lt;/script&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
 
 <p>That&#8217;s all! have fun and don&#8217;t hesitate to leave your comment!</p>
-
-<p>Source files to download <a href="http://www.webdeveasy.com/demos/style-your-jquery-ui-tabs/style-jquery-ui-tabs.zip">here</a>.</p>
 ]]></content>
   </entry>
   
@@ -950,7 +1171,7 @@ In addition, each tab's div has a different icon image and therefore a different
     <updated>2012-09-14T18:34:42+03:00</updated>
     <id>http://webdeveasy.com/cascading-autocompletes-using-jquery-ui</id>
     <content type="html"><![CDATA[<p>Yesterday I got a new requirement for the application I am working on.
-I had several <a href="http://jqueryui.com/demos/autocomplete">jQuery UI autocompletes</a> and I needed to add cascading functionality. This means that each autocomplete in the group affects the following autocomple&#8217;s possible values. If there is no value selected in the first autocomplete - the next autocomplete must be disabled. When the user selects a value on the first autocomplete - the next autocomplete becomes enabled.</p>
+I had several <a href="http://jqueryui.com/demos/autocomplete" target="_blank">jQuery UI autocompletes</a> and I needed to add cascading functionality. This means that each autocomplete in the group affects the following autocomple&#8217;s possible values. If there is no value selected in the first autocomplete - the next autocomplete must be disabled. When the user selects a value on the first autocomplete - the next autocomplete becomes enabled.</p>
 
 <!-- more -->
 
@@ -1107,7 +1328,7 @@ The plugin gets as input a sequence of jQuery UI auocomplete elements and adds t
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><a href="http://webdeveasy.com/code/cascading-autocompletes-plugin/index.html">Demo Here</a>.</p>
+<p><a href="http://webdeveasy.com/code/cascading-autocompletes-plugin/index.html" target="_blank">Demo Here</a>.</p>
 
 <p>Hope this helps!</p>
 ]]></content>
