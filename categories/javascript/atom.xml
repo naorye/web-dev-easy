@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-01-14T00:45:08+02:00</updated>
+  <updated>2013-01-14T00:47:45+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -875,10 +875,7 @@ The plugin gets as input a sequence of jQuery UI auocomplete elements and adds t
 
 <p>```</p>
 
-<p>Demonstration:</p>
-
-<iframe src="../code/cascading-autocompletes-plugin/index.html" width="100%"></iframe>
-
+<p><a href="/code/cascading-autocompletes-plugin/index.html" target="_blank">Demo Here</a>.</p>
 
 <p>Hope this helps!</p>
 ]]></content>
