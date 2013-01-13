@@ -1,47 +1,47 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/cascading-autocompletes-using-jquery-ui/</loc>
+        <loc>http://webdeveasy.com/cascading-autocompletes-using-jquery-ui/</loc>
         <lastmod>2013-01-12T18:21:00+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/style-your-jquery-ui-tabs/</loc>
+        <loc>http://webdeveasy.com/style-your-jquery-ui-tabs/</loc>
         <lastmod>2013-01-12T18:25:31+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/jquery-plugin-pattern/</loc>
+        <loc>http://webdeveasy.com/jquery-plugin-pattern/</loc>
         <lastmod>2012-12-22T21:45:07+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/backbone-singleton/</loc>
+        <loc>http://webdeveasy.com/backbone-singleton/</loc>
         <lastmod>2012-12-22T23:12:14+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/javascript-prototype/</loc>
+        <loc>http://webdeveasy.com/javascript-prototype/</loc>
         <lastmod>2012-12-22T21:45:07+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/blog/about-me/</loc>
+        <loc>http://webdeveasy.com/blog/about-me/</loc>
         <lastmod>2013-01-12T18:25:31+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/blog/archives/</loc>
+        <loc>http://webdeveasy.com/blog/archives/</loc>
         <lastmod>2013-01-12T18:25:31+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/blog/ask-a-question/</loc>
+        <loc>http://webdeveasy.com/blog/ask-a-question/</loc>
         <lastmod>2013-01-12T18:25:31+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/blog/contact-me/</loc>
+        <loc>http://webdeveasy.com/blog/contact-me/</loc>
         <lastmod>2013-01-12T18:25:31+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/blog/posts/</loc>
+        <loc>http://webdeveasy.com/blog/posts/</loc>
         <lastmod>2013-01-12T18:25:31+02:00</lastmod>
     </url>
     <url>
-        <loc>http://naorye.github.com/web-dev-easy/</loc>
+        <loc>http://webdeveasy.com/</loc>
         <lastmod>2013-01-12T18:25:31+02:00</lastmod>
     </url>
 </urlset>

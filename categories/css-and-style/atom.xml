@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: CSS and Style | Web Development is Easy!]]></title>
-  <link href="http://naorye.github.com/web-dev-easy/categories/css-and-style/atom.xml" rel="self"/>
-  <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2013-01-13T10:03:09+02:00</updated>
-  <id>http://naorye.github.com/web-dev-easy/</id>
+  <link href="http://webdeveasy.com/categories/css-and-style/atom.xml" rel="self"/>
+  <link href="http://webdeveasy.com/"/>
+  <updated>2013-01-13T10:06:44+02:00</updated>
+  <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
     <email><![CDATA[mailto:naorye@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Style Your jQuery-UI Tabs]]></title>
-    <link href="http://naorye.github.com/web-dev-easy/style-your-jquery-ui-tabs/"/>
+    <link href="http://webdeveasy.com/style-your-jquery-ui-tabs/"/>
     <updated>2012-09-22T20:11:31+03:00</updated>
-    <id>http://naorye.github.com/web-dev-easy/style-your-jquery-ui-tabs</id>
+    <id>http://webdeveasy.com/style-your-jquery-ui-tabs</id>
     <content type="html"><![CDATA[<p>This article will explain and guide you step by step how to style your jQuery-UI tabs and make them look like this: <br/>
 <img src="http://www.webdeveasy.com/wp-content/uploads/2012/09/style-your-jquery-ui-tabs-sample.png" alt="" /> <br/>
 <a href="http://www.webdeveasy.com/demos/style-your-jquery-ui-tabs/style-tabs.htm">Demo here</a>.</p>

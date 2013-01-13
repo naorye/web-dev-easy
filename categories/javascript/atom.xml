@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
-  <link href="http://naorye.github.com/web-dev-easy/categories/javascript/atom.xml" rel="self"/>
-  <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2013-01-13T10:03:09+02:00</updated>
-  <id>http://naorye.github.com/web-dev-easy/</id>
+  <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://webdeveasy.com/"/>
+  <updated>2013-01-13T10:06:44+02:00</updated>
+  <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
     <email><![CDATA[mailto:naorye@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[JavaScript Prototype]]></title>
-    <link href="http://naorye.github.com/web-dev-easy/javascript-prototype/"/>
+    <link href="http://webdeveasy.com/javascript-prototype/"/>
     <updated>2012-11-13T10:49:17+02:00</updated>
-    <id>http://naorye.github.com/web-dev-easy/javascript-prototype</id>
+    <id>http://webdeveasy.com/javascript-prototype</id>
     <content type="html"><![CDATA[<p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you want to be an expert web developers. This article will explain you about it.</p>
 
 <!-- more -->
@@ -150,9 +150,9 @@ horse.hide(); // will log "I am hiding!"
   
   <entry>
     <title type="html"><![CDATA[Backbone Singleton]]></title>
-    <link href="http://naorye.github.com/web-dev-easy/backbone-singleton/"/>
+    <link href="http://webdeveasy.com/backbone-singleton/"/>
     <updated>2012-11-05T19:13:36+02:00</updated>
-    <id>http://naorye.github.com/web-dev-easy/backbone-singleton</id>
+    <id>http://webdeveasy.com/backbone-singleton</id>
     <content type="html"><![CDATA[<p><strong>Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone and RequieJS. While the first way is simpler and more intuitive, the second allows us more flexibility.</strong></p>
 
 <!-- more -->
@@ -257,9 +257,9 @@ In order to solve this issue we have to remember that <a href="http://backbonejs
   
   <entry>
     <title type="html"><![CDATA[jQuery Plugin Pattern]]></title>
-    <link href="http://naorye.github.com/web-dev-easy/jquery-plugin-pattern/"/>
+    <link href="http://webdeveasy.com/jquery-plugin-pattern/"/>
     <updated>2012-10-02T22:07:46+02:00</updated>
-    <id>http://naorye.github.com/web-dev-easy/jquery-plugin-pattern</id>
+    <id>http://webdeveasy.com/jquery-plugin-pattern</id>
     <content type="html"><![CDATA[<p>jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts of your web application. This article will explain the basics of jQuery plugin and guide you how to create a simple jQuery plugin.</p>
 
 <!-- more -->
@@ -714,9 +714,9 @@ Live example for the compose plugin you can find <a href="http://www.webdeveasy.
   
   <entry>
     <title type="html"><![CDATA[Cascading Autocompletes using jQuery UI]]></title>
-    <link href="http://naorye.github.com/web-dev-easy/cascading-autocompletes-using-jquery-ui/"/>
+    <link href="http://webdeveasy.com/cascading-autocompletes-using-jquery-ui/"/>
     <updated>2012-09-14T18:34:42+03:00</updated>
-    <id>http://naorye.github.com/web-dev-easy/cascading-autocompletes-using-jquery-ui</id>
+    <id>http://webdeveasy.com/cascading-autocompletes-using-jquery-ui</id>
     <content type="html"><![CDATA[<p>Yesterday I got a new requirement for the application I am working on.
 I had several <a href="http://jqueryui.com/demos/autocomplete">jQuery UI autocompletes</a> and I needed to add cascading functionality. This means that each autocomplete in the group affects the following autocomple's possible values. If there is no value selected in the first autocomplete - the next autocomplete must be disabled. When the user selects a value on the first autocomplete - the next autocomplete becomes enabled.</p>
 

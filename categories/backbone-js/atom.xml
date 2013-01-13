@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Backbone.js | Web Development is Easy!]]></title>
-  <link href="http://naorye.github.com/web-dev-easy/categories/backbone-js/atom.xml" rel="self"/>
-  <link href="http://naorye.github.com/web-dev-easy/"/>
-  <updated>2013-01-13T10:03:09+02:00</updated>
-  <id>http://naorye.github.com/web-dev-easy/</id>
+  <link href="http://webdeveasy.com/categories/backbone-js/atom.xml" rel="self"/>
+  <link href="http://webdeveasy.com/"/>
+  <updated>2013-01-13T10:06:44+02:00</updated>
+  <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
     <email><![CDATA[mailto:naorye@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Backbone Singleton]]></title>
-    <link href="http://naorye.github.com/web-dev-easy/backbone-singleton/"/>
+    <link href="http://webdeveasy.com/backbone-singleton/"/>
     <updated>2012-11-05T19:13:36+02:00</updated>
-    <id>http://naorye.github.com/web-dev-easy/backbone-singleton</id>
+    <id>http://webdeveasy.com/backbone-singleton</id>
     <content type="html"><![CDATA[<p><strong>Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone and RequieJS. While the first way is simpler and more intuitive, the second allows us more flexibility.</strong></p>
 
 <!-- more -->
