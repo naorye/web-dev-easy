@@ -9,7 +9,7 @@
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two &hellip;">
+  <meta name="description" content="Using Backbone.js, sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -107,105 +107,185 @@
   </header>
 
 
-<div class="entry-content"><p><strong>Sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone and RequieJS. While the first way is simpler and more intuitive, the second allows us more flexibility.</strong></p>
+<div class="entry-content"><p>Using Backbone.js, sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone.js and require.js. While the first way is simpler and more intuitive, the second allows us more flexibility</p>
 
 <!-- more -->
 
 
-<h2>Simple Singleton:</h2>
+<h2>Simple Singleton</h2>
 
-<p>I am working on a little application using Backbone.js and RequireJS. The application lets the user making searches by a keyword.
+<p>I am working on a little application using Backbone.js and require.js. The application lets the user making searches by a keyword. <br/>
 Thinking of the model, I realized that I need a model that will hold the keyword and since the keyword is single in the application, it should be a singleton.
-Because I am working with RequireJS, in order to simulate a singleton, I created a module that will return an instance of the Keword model.</p>
+Because I am working with require.js, in order to simulate a singleton, I created a module that will return an instance of the Keyword model.</p>
 
-<pre><code>define([ 'backbone' ], function( Backbone ) {
-    var KeywordModel = Backbone.Model.extend({
-        defaults: {
-            keyword: ''
-        }
-    });
+<figure class='code'><figcaption><span>KeywordModel</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">([</span>
+</span><span class='line'>    <span class="s1">&#39;backbone&#39;</span>
+</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">Backbone</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">KeywordModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">keyword</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="nx">KeywordModel</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    return new KeywordModel;
-});
-</code></pre>
 
-<p>This way whenever I want to bind the Keyword single instance, all I have to do is just add keyword.js as a dependency:</p>
+<p>This way whenever I need the Keyword single instance, all I have to do is just add keyword.js as a dependency:</p>
 
-<pre><code>define([
-    'backbone',
-    'models/keyword'
-], function( Backbone, keywordModel ) {
-    var SearchView = Backbone.View.extend({
-        el: '#search'
-        events: {
-            'change': 'setModel'
-        },
-        initialize: function() {
-            keywordModel.on( 'change: keyword', this.render, this );
-        },
-        render: function() {
-            var keyword = keywordModel.get('keyword');
-            this.$el.val(keyword);
-        },
-        setModel: function() {
-            var keyword = this.$el.val();
-            keywordModel.set({ keyword: keyword });
-        }
-    });
+<figure class='code'><figcaption><span>Getting the Keyword single instance</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">([</span>
+</span><span class='line'>  <span class="s1">&#39;backbone&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;models/keyword&#39;</span>
+</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">keywordModel</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">SearchView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#search&#39;</span>
+</span><span class='line'>      <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="s1">&#39;change&#39;</span><span class="o">:</span> <span class="s1">&#39;setModel&#39;</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">keywordModel</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s1">&#39;change: keyword&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">,</span> <span class="k">this</span> <span class="p">);</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">keyword</span> <span class="o">=</span> <span class="nx">keywordModel</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;keyword&#39;</span><span class="p">);</span>
+</span><span class='line'>          <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">keyword</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">setModel</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">keyword</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>          <span class="nx">keywordModel</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span> <span class="nx">keyword</span><span class="o">:</span> <span class="nx">keyword</span> <span class="p">});</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">SearchView</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    return SearchView;
-});
-</code></pre>
 
-<h2>Desire to make history:</h2>
+<p>The first time require.js required to load models/keyword.js, it gets it from the server and returns a new instance of KeywordModel. The next time we ask require.js for models/keyword.js, instead of creating a new instance, require.js returns us the cached instance.</p>
 
-<p>Now, lets assume that now I want to store searches history (each history record contains only the keyword).
-Obviously this means that I have to use a collection, but which model shall I use? I cannot use KeywordModel since I don&#8217;t have access to its definition. Any time I&#8217;ll ask for keyword.js all I get is the model instance and not it&#8217;s definition.
-One solution is to create a new model and return its definition, but this solution is undesirable since we make unnecessary duplication.
-In order to solve this issue we have to remember that <a href="http://backbonejs.org/#Model-extend">Backbone model&#8217;s extend function</a> can get an optional property called &#8220;classProperties&#8221;. These set of properties can be seen as static properties that are related to the class and not to the instance. Therefore our model can be:</p>
+<h2>Desire To Make History</h2>
 
-<pre><code>define([ 'backbone' ], function( Backbone ) {
-    var KeywordModel = Backbone.Model.extend({
-        defaults: {
-            keyword: ''
-        }
-    }, {
-        singleton: null,
-        getAppKeyword: function() {
-            KeywordModel.singleton =
-                KeywordModel.singleton || new KeywordModel;
-            return KeywordModel.singleton;
-        }
-    });
+<p>Now, lets assume that I want to store searches history (each history record contains only the keyword). <br/>
+Obviously this means that I have to use a collection, but which model shall I use? I cannot use KeywordModel since I don&#8217;t have access to its definition. Any time I&#8217;ll ask for models/keyword.js all I get from require.js is the model instance and not it&#8217;s definition. <br/>
+One solution is to create a new model and return its definition, but this solution is undesirable since we make unnecessary duplication. <br/>
+In order to solve this issue we have to remember that <a href="http://backbonejs.org/#Model-extend" target="_blank">Backbone model&#8217;s extend function</a> can get an optional parameter called &#8220;classProperties&#8221;. These set of properties can be seen as static properties that are related to the class and not to the instance. Therefore our model can be:</p>
 
-    return KeywordModel;
-});
-</code></pre>
+<figure class='code'><figcaption><span>Using class properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">([</span>
+</span><span class='line'>    <span class="s1">&#39;backbone&#39;</span>
+</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">Backbone</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">KeywordModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">keyword</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">},</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">singleton</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">getAppKeyword</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">KeywordModel</span><span class="p">.</span><span class="nx">singleton</span> <span class="o">=</span>
+</span><span class='line'>              <span class="nx">KeywordModel</span><span class="p">.</span><span class="nx">singleton</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">KeywordModel</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">return</span> <span class="nx">KeywordModel</span><span class="p">.</span><span class="nx">singleton</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">KeywordModel</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>And in this way, if I add keyword.js as a dependency I get the definition and also can retrieve the singleton by calling KeywordModel.getAppKeyword(). Here is the collection of KeywordModel models:</p>
 
-<pre><code>define([
-    'backbone',
-    'models/keyword'
-], function( Backbone, KeywordModel ) {
-    var KeywordsCollection = Backbone.Collection.extend({
-        model: KeywordModel,
-        initialize: function() {
-            this.appKeyword = KeywordModel.getAppKeyword();
-            appKeyword.on( 'change: keyword', this.pushCopy, this );
-        },
-        pushCopy: function() {
-            var clone = this.appKeyword.clone();
-            this.push(clone );
-        }
-    });
-    return new KeywordsCollection;
-});
-</code></pre>
+<p>And now, asking for models/keyword.js as a dependency will get us the definition which can be used to retrieve the singleton by calling KeywordModel.getAppKeyword(). Here is the collection of KeywordModel models:</p>
 
-<p>Any time the model&#8217;s keyword changes, a copy of the application keyword is added to the collection.</p>
+<figure class='code'><figcaption><span>Collection of KeywordModel models</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">([</span>
+</span><span class='line'>  <span class="s1">&#39;backbone&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;models/keyword&#39;</span>
+</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">KeywordModel</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">KeywordsCollection</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>      <span class="nx">model</span><span class="o">:</span> <span class="nx">KeywordModel</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">this</span><span class="p">.</span><span class="nx">appKeyword</span> <span class="o">=</span> <span class="nx">KeywordModel</span><span class="p">.</span><span class="nx">getAppKeyword</span><span class="p">();</span>
+</span><span class='line'>          <span class="k">this</span><span class="p">.</span><span class="nx">appKeyword</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span> <span class="s1">&#39;change: keyword&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">pushCopy</span><span class="p">,</span> <span class="k">this</span> <span class="p">);</span>
+</span><span class='line'>      <span class="p">},</span>
+</span><span class='line'>      <span class="nx">pushCopy</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">clone</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">appKeyword</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span>
+</span><span class='line'>          <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">clone</span> <span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="nx">KeywordsCollection</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p><strong>Thanks for reading!</strong></p>
+
+<p>This way, any time the model&#8217;s keyword changes, a copy of the application keyword is added to the collection.</p>
+
+<p>I hope this short article gave you another new ideas, thanks for reading!</p>
 </div>
 
 
@@ -233,7 +313,7 @@ In order to solve this issue we have to remember that <a href="http://backbonejs
 
 <span class="categories">
   
-    <a class='category' href='/categories/backbone-js/'>Backbone.js</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>, <a class='category' href='/categories/requirejs/'>RequireJS</a>
+    <a class='category' href='/categories/backbone-js/'>Backbone.js</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>, <a class='category' href='/categories/require-js/'>require.js</a>
   
 </span>
 
