@@ -107,131 +107,225 @@
   </header>
 
 
-<div class="entry-content"><p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you want to be an expert web developers. This article will explain you about it.</p>
+<div class="entry-content"><p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you want to be an expert web developer. This article will explain you about it.</p>
 
 <!-- more -->
 
 
 <h2>Prototype-Based Language</h2>
 
-<p>This part might confuse you a little but believe me that after some examples coming next everything will be clear. So, stop the chit chat and let&#8217;s dive into the JavaScript engine!</p>
+<p>This part might confuse you a little, but believe me, after some examples coming next everything will be clear. So, stop the chit chat and let&#8217;s dive into the JavaScript engine!</p>
 
-<p>JavaScript is an object oriented language, but unlike all the <a href="http://en.wikipedia.org/wiki/Class-based_programming">class-based languages</a> (C++, JAVA, C#, &#8230;) JavaScript is <a href="http://en.wikipedia.org/wiki/Prototype-based_programming">prototype-based language</a>. In class-based languages we write classes which can be organized into hierarchy and so advance code reuse. In prototype-based languages there is no distinction between classes and objects. An object is used as a template for creating a new object. In addition, an object&#8217;s set of properties can be extended either at creation time or at run time. This way prototype-based language furthering code reuse. There are more differences between class-based and prototype-based languages but this is enough for now.</p>
+<p>JavaScript is an object oriented language, but unlike all the <a href="http://en.wikipedia.org/wiki/Class-based_programming" target="_blank">class-based languages</a> (C++, JAVA, C#, &#8230;), JavaScript is <a href="http://en.wikipedia.org/wiki/Prototype-based_programming" target="_blank">prototype-based language</a>. In class-based languages, we write classes which can be organized into hierarchy and so advance code reuse. In prototype-based languages, there is no distinction between classes and objects. An object is used as a template for creating a new object. In addition, an object&#8217;s set of properties can be extended either at creation time or at run time. This way prototype-based language furthering code reuse. There are more differences between class-based and prototype-based languages but this is enough for now.</p>
 
-<p>Let&#8217;s instantiate a new object. In order to do it we have to define an object constructor and then simply use the &#8220;new&#8221; keyword:</p>
+<p>Let&#8217;s instantiate a new object. In order to do it we have to define function and then simply use the &#8220;new&#8221; keyword:</p>
 
-<pre><code>function baseObj() {
-}
-var ins = new baseObj();
-</code></pre>
+<figure class='code'><figcaption><span>Instantiate a new object</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">baseObj</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">sayHi</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Hi &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">ins</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">baseObj</span><span class="p">(</span><span class="s2">&quot;Dan&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The baseObj() function is called Object Constructor since it creates and defines an object. Later we can call:</p>
+
+<figure class='code'><figcaption><span>Hi Dan</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">ins</span><span class="p">.</span><span class="nx">sayHi</span><span class="p">();</span> <span class="c1">// Alerts &quot;Hi Dan&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We will talk about this later.</p>
 
 <h2>JavaScript&#8217;s Prototype</h2>
 
 <p>In JavaScript, as we mentioned before, we can add properties to an object even after its creation:</p>
 
-<pre><code>function animal(){
-}
-var cat = new animal();
-cat.color = "Green";
-</code></pre>
+<figure class='code'><figcaption><span>Add properties to an object</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">animal</span><span class="p">(){</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">cat</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">animal</span><span class="p">();</span>
+</span><span class='line'><span class="nx">cat</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;Green&quot;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>It is important to notice that the color property is added only to the cat instance. Other instances of animal will not contain the color property. But, there are times where we want to add a property to all the instances of an object. Each animal has a color and not only cats, therefore color property is relevant to all instances of animal. That&#8217;s where the prototype object of JavaScript comes in.</p>
 
-<p>In JavaScript, each object has a property called &#8220;prototype&#8221;. An object&#8217;s prototype allows us adding properties to all instances of that object. For example:</p>
+<p>In JavaScript, each object has a property called &#8220;prototype&#8221;. An object&#8217;s prototype allows us adding properties to all instances of that object (even to the existing instances). For example:</p>
 
-<pre><code>var frog = new animal();
-console.log(frog.color); // frog doesn't have color yet
+<figure class='code'><figcaption><span>Add the color property to all animal instances </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">frog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">animal</span><span class="p">();</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frog</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// frog doesn&#39;t have the color property yet</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">animal</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;Green&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">dog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">animal</span><span class="p">();</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">dog</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// will log &quot;Green&quot;</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frog</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// will also log &quot;Green&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-animal.prototype.color = "Green";
-var dog = new animal();
-console.log(dog.color); // will log "Green"
-console.log(frog.color); // will log also "Green"
-</code></pre>
 
 <p>This adds and initialize the color property to every present and future animal instances.</p>
 
 <p>Similar to properties, we can add methods and reflects all the instances:</p>
 
-<pre><code>animal.prototype.run = function() {
-    console.log("I am running!");
-}
-dog.run(); // will log "I am running!"
-</code></pre>
+<figure class='code'><figcaption><span>Add the color method to all instances</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">animal</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I am running!&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">dog</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span> <span class="c1">// will log &quot;I am running!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>This functionality allows us to do very useful things like extending the behavior of an Array and add a method that gets an element and removes it from the array:</p>
 
-<pre><code>Array.prototype.remove = function(elem) {
-    var index = this.indexOf(elem);
-    if (index &gt;= 0) {
-        this.splice(index, 1);
-    }
-}
-var arr = [1, 2, 3, 4, 5];
-arr.remove(4); // will keep the array to be [1, 2, 3, 5]
-</code></pre>
+<figure class='code'><figcaption><span>Extend Array&#8217;s functionality</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">elem</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">elem</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">];</span>
+</span><span class='line'><span class="nx">arr</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span> <span class="c1">// will keep the array to be [1, 2, 3, 5]</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>In this example I used the &#8220;this&#8221; keyword inside the method. Keep in mind that &#8220;this&#8221; refer to the object that calls the method. In this example when calling arr.remove(4), &#8220;this&#8221; refer to arr.</p>
+
+<p>In this example I used the &#8220;this&#8221; keyword inside the method. Keep in mind that &#8220;this&#8221; refer to the object that calls the method. In this example when calling arr.remove(4), &#8220;this&#8221; refer to arr and therefore this.indexOf(elem) returns the index of elem in arr.</p>
 
 <h2>The Object Constructor Way</h2>
 
 <p>Besides the prototype approach, another way to define properties and methods is by doing it inside the object constructor:</p>
 
-<pre><code>function animal() {
-    this.color = "Green";
-    this.run = function() {
-        console.log("I am running!");
-    }
-}
-var mouse = new animal();
-mouse.run(); // will log "I am running!"
-</code></pre>
+<figure class='code'><figcaption><span>Define properties and methods inside the object constructor</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">animal</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;Green&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I am running!&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">mouse</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">animal</span><span class="p">();</span>
+</span><span class='line'><span class="nx">mouse</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span> <span class="c1">// will log &quot;I am running!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>This code results the same object structure as the prototype approach. Each instance of animal will have the color property and the run method.</p>
 
-<p>This approach might seem more readable and convenient but actually is not always recommended, especially when adding many methods. The main advantage of this approach is that you can make a use of local variables defined inside the object constructor:</p>
+<p>The main advantage of this approach is that you can make a use of local variables defined inside the object constructor:</p>
 
-<pre><code>function animal() {
-    var runAlready = false;
-    this.color = "Green";
-    this.run = function() {
-        if (!runAlready) {}
-            console.log("I am running!");
-        } else {
-            console.log("I am tired!");
-        }
-    }
-}
-</code></pre>
+<figure class='code'><figcaption><span>Use local variables inside an object constructor</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">animal</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">runAlready</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;Green&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">runAlready</span><span class="p">)</span> <span class="p">{}</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I am running!&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I am already running!&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>If you don&#8217;t need to use local variables defined inside the object constructor, then there is no reason to use this approach and using prototype is better. That is because if you are going to create lots of animals, a new set of methods will be created and held in different instance each time the animal constructor is called. In the prototype approach, all the instances will share one set of methods and therefore less memory.</p>
 
-<p>You can also use combined approach whereby methods that uses private local constructor variables are defined inside the constructor while other methods are added using the prototype:</p>
+<p>Those local variable &#8220;runAlready&#8221; is acting like private members of C# and JAVA. No one can access this variable except the object&#8217;s methods.</p>
 
-<pre><code>function animal() {
-    var runAlready = false;
-    this.run = function() {
-        if (!runAlready) {}
-            console.log("I am running!");
-        } else {
-            console.log("I am tired!");
-        }
-    }
-}
-animal.prototype.color = "Green";
-animal.prototype.hide = function() {
-    console.log("I am hiding!");
-}
+<p>This approach might seem more readable and convenient but actually is not always recommended, especially when adding many methods. If you don&#8217;t need to use local variables defined inside the object constructor, then there is no reason to use this approach and using prototype is better. That is because if you are going to create lots of animals, a new set of methods will be created and held in different instances each time the animal constructor is called. In the prototype approach, all the instances will share one set of methods and therefore less memory.</p>
 
-var horse = new animal();
-horse.run(); // will log "I am running!"
-horse.hide(); // will log "I am hiding!"
-</code></pre>
+<p>You can also use combine approaches whereby methods that uses private local constructor variables will be defined inside the constructor while other methods will be added using the prototype:</p>
+
+<figure class='code'><figcaption><span>Combined approach for extend an object&#8217;s functionality</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">animal</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">runAlready</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">runAlready</span><span class="p">)</span> <span class="p">{}</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I am running!&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I am already running!&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">animal</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;Green&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">animal</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hide</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I am hiding!&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">horse</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">animal</span><span class="p">();</span>
+</span><span class='line'><span class="nx">horse</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span> <span class="c1">// will log &quot;I am running!&quot;</span>
+</span><span class='line'><span class="nx">horse</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span> <span class="c1">// will log &quot;I am hiding!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>Conclusion</h2>
 
 <p>With this article we understood the meaning of prototype-based language, we saw how we can use the prototype property in order to add properties and methods to all instances of an object. We even saw a practical example of extending Array&#8217;s behavior! :) I demonstrated another way to add properties using the object constructor and explained its drawback.</p>
 
-<p>If you wish to read more about the differences between class-based languages and prototype-based languages, dig in details about prototype and inheritance, I highly recommend to read Mozilla&#8217;s <a href="https://developer.mozilla.org/en-US/docs/Core_JavaScript_1.5_Guide/Details_of_the_Object_Model">&#8220;Details of the object model&#8221;</a> guide.</p>
+<p>If you wish to read more about the differences between class-based languages and prototype-based languages, dig in details about prototype and inheritance, I highly recommend to read Mozilla&#8217;s <a href="https://developer.mozilla.org/en-US/docs/Core_JavaScript_1.5_Guide/Details_of_the_Object_Model" target="_blank">Details of the object model</a> guide.</p>
 
 <p>I really enjoyed writing this article and I hope you enjoyed even more to read it.</p>
 </div>
