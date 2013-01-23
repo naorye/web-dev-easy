@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Backbone.js | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/backbone-js/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-01-23T23:42:29+02:00</updated>
+  <updated>2013-01-23T23:47:01+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -24,9 +24,9 @@ At the end of this article we will have Backbone searcher application which will
 <!-- more -->
 
 
-<h1>Application Loading Flow</h1>
+<h2>Application Loading Flow</h2>
 
-<h2>index.html</h2>
+<h3>index.html</h3>
 
 <p>Let's begin with our application loading flow. After typing the url, the browser starts loading the index.html file:</p>
 
@@ -78,7 +78,7 @@ At the end of this article we will have Backbone searcher application which will
 <p>The index.html file contains the layout of our application which include placeholders for the search section, the history section and the search results area. It also includes reference to css file and reference to the require.js script.
 When the browser loads this html file, right after loading style.css, the browser loads the require.js script. Look closely and you'll notice that require.js script tag has additional attribute called "data-main". This attribute tells require.js to load js/main.js after require.js loads.</p>
 
-<h2>js/main.js</h2>
+<h3>js/main.js</h3>
 
 <p>This file contains two sections:</p>
 
@@ -177,7 +177,7 @@ When the browser loads this html file, right after loading style.css, the browse
 require.js works with <a href="http://requirejs.org/docs/whyamd.html" target="_blank">AMD modules</a>. The AMD structure tells require.js what are the dependencies and which object to return. The purpose of the shim configuration is to tell require.js for each un-AMD module what is its dependencies and which object to return. <br/>
 After the configurations done, we ask require.js to load Backbone, router.js and app.js, and after that execute the initialization function. This function gets as parameters the AMD modules that require.js required to resolve and initializes the router, initializes the app and starts Backbone.history.</p>
 
-<h2>app.js</h2>
+<h3>app.js</h3>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/app.js</span> <a href='/code/searcher/js/app.js' target='_blank'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -312,7 +312,7 @@ After the configurations done, we ask require.js to load Backbone, router.js and
 <p>At this point, the application loading flow is over and now the application waits for user interaction.
 In order to understand completely how everything bonds together and works, we must understand the application features and components.</p>
 
-<h2>router.js</h2>
+<h3>router.js</h3>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/router.js</span> <a href='/code/searcher/js/router.js' target='_blank'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -347,11 +347,11 @@ In order to understand completely how everything bonds together and works, we mu
 
 <p>The router depends on app.js. Whenever a route in form "search/&lt;sourceId&gt;/&lt;term&gt;" is entered to the url, the router trigger the searchImages() method which changes the appQuery singleton.</p>
 
-<h1>Application Features and Components</h1>
+<h2>Application Features and Components</h2>
 
 <p>Now it is time to review the searching, sources and the history features.</p>
 
-<h2>Searching</h2>
+<h3>Searching</h3>
 
 <p>The main purpose of the application is to allow searching. The application makes searches among different search providers, therefore the input it gets from the user contains a search term and a search provider. So, we need a model to store this information. Actually, a single instance of this model will serve us during the entire use of the application. Each time the user makes a different search (change the search term or provider), the model instance changes. Later, those model changes will trigger the search.</p>
 
@@ -489,7 +489,7 @@ In order to understand completely how everything bonds together and works, we mu
 
 <p>SearchView renders itself on initialization, and every time appQuery changes it updates the input values. On render, the view draws itself using <a href="http://www.underscore.com/#template" target="_blank">underscore templates</a> and initializes the inputs according to the appQuery. Whenever the user clicks on the search button, the view set appQuery with the new values which causing the url to change (as we saw in app.js). Notice that SearchView uses the text plugin of require.js in order to load templates/search.html. In addition, the compiled version of templates are stored in searchTemplate and in optionTemplate in order to save compilations. SearchView contains the addSource() method which gets sourceModel instance as parameter (we will see it later) and adds the new source to the sources select list.</p>
 
-<h2>Sources</h2>
+<h3>Sources</h3>
 
 <p>As I mentioned before, the application makes searches among different search providers. The sources mechanism is responsible for defining search providers, their models and their views. This feature includes the SourcesManager view which acts as a bridge and responsible for rendering the relevant search results according to appQuery.</p>
 
@@ -640,7 +640,7 @@ appQuery is the SourcesManager model and the search results are rendered inside 
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<h3>Google Shopping search provider</h3>
+<h4>Google Shopping search provider</h4>
 
 <p>Let's explore the Google Shopping search provider. It's files located under js/sources/google-search-api-for-shopping and it consist of ProductModel, ProductsCollection, products template and it's main view called ListView.</p>
 
@@ -862,7 +862,7 @@ Search providers can contain many views. When defining the search provider in So
 <p>ListView initializes ProductsCollection and on render fetch it and append the results to el. In case of an error or empty results, a relevant text message appears. Behind the scenes, the fetch method uses the jQuery.ajax function and the data option is passed to it. The data option contains needed properties for the Google Shopping api. Keep in mind that in your application you will need to use yours Google api key.
 Now, whenever the user chooses Google Shopping as a search provider, SourcesManager initializes ListView which fetches the results and display them inside ".content" element.</p>
 
-<h2>History</h2>
+<h3>History</h3>
 
 <p>Another feature of this application is history. The application stores queries history and enables us to make searches from history. In order to store the queries history we need a collection of QueryModel:</p>
 
