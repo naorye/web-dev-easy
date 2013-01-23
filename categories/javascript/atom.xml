@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-01-23T17:02:12+02:00</updated>
+  <updated>2013-01-23T23:42:29+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -174,7 +174,7 @@ When the browser loads this html file, right after loading style.css, the browse
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>require.js configuration allows us to map modules paths to names. For example, jQuery.js file is located in "libs/jquery-1.8.2.min". Whenever we wish mark jQuery as a dependency, we will have to write this long path. Since jQuery is basic module and we probably use it a lot, it is better to map its path. <br/>
-require.js works with <a href="http://requirejs.org/docs/whyamd.html">AMD modules</a>. The AMD structure tells require.js what are the dependencies and which object to return. The purpose of the shim configuration is to tell require.js for each un-AMD module what is its dependencies and which object to return. <br/>
+require.js works with <a href="http://requirejs.org/docs/whyamd.html" target="_blank">AMD modules</a>. The AMD structure tells require.js what are the dependencies and which object to return. The purpose of the shim configuration is to tell require.js for each un-AMD module what is its dependencies and which object to return. <br/>
 After the configurations done, we ask require.js to load Backbone, router.js and app.js, and after that execute the initialization function. This function gets as parameters the AMD modules that require.js required to resolve and initializes the router, initializes the app and starts Backbone.history.</p>
 
 <h2>app.js</h2>
@@ -487,13 +487,106 @@ In order to understand completely how everything bonds together and works, we mu
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>SearchView renders itself on initialization, and every time appQuery changes it updates the input values. On render, the view draws itself using (underscore templates)["www.underscore.com/#template"] and initializes the inputs according to the appQuery. Whenever the user clicks on the search button, the view set appQuery with the new values which causing the url to change (as we saw in app.js). Notice that SearchView uses the text plugin of require.js in order to load templates/search.html. In addition, the compiled version of templates are stored in searchTemplate and in optionTemplate in order to save compilations. SearchView contains the addSource() method which gets sourceModel instance as parameter (we will see it later) and adds the new source to the sources select list.</p>
+<p>SearchView renders itself on initialization, and every time appQuery changes it updates the input values. On render, the view draws itself using <a href="http://www.underscore.com/#template" target="_blank">underscore templates</a> and initializes the inputs according to the appQuery. Whenever the user clicks on the search button, the view set appQuery with the new values which causing the url to change (as we saw in app.js). Notice that SearchView uses the text plugin of require.js in order to load templates/search.html. In addition, the compiled version of templates are stored in searchTemplate and in optionTemplate in order to save compilations. SearchView contains the addSource() method which gets sourceModel instance as parameter (we will see it later) and adds the new source to the sources select list.</p>
 
 <h2>Sources</h2>
 
 <p>As I mentioned before, the application makes searches among different search providers. The sources mechanism is responsible for defining search providers, their models and their views. This feature includes the SourcesManager view which acts as a bridge and responsible for rendering the relevant search results according to appQuery.</p>
 
-<p>File /Users/naorye/dev/naorye/octopress/source/code/searcher/js/sources/source-manager.js could not be found</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/sources/sources-manager.js</span> <a href='/code/searcher/js/sources/sources-manager.js' target='_blank'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">([</span>
+</span><span class='line'>	<span class="s1">&#39;jQuery&#39;</span><span class="p">,</span>
+</span><span class='line'>	<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
+</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
+</span><span class='line'>	<span class="s1">&#39;text!templates/loading.html&#39;</span>
+</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">loadingTemplate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>	<span class="kd">var</span> <span class="nx">SourcesManager</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>		<span class="nx">loadingTemplate</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">loadingTemplate</span><span class="p">),</span>
+</span><span class='line'>		<span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">sourcesPool</span> <span class="o">=</span> <span class="p">{</span> <span class="p">};</span>
+</span><span class='line'>			<span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">sources</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>				<span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sources</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>					<span class="k">this</span><span class="p">.</span><span class="nx">addSource</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">sources</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+</span><span class='line'>				<span class="p">}</span>
+</span><span class='line'>			<span class="p">}</span>
+</span><span class='line'>		<span class="p">},</span>
+</span><span class='line'>		<span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;sourceId&#39;</span><span class="p">);</span>
+</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceModel</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">sourcesPool</span><span class="p">[</span><span class="nx">sourceId</span><span class="p">];</span>
+</span><span class='line'>			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">sourceModel</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>				<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Source &#39;</span> <span class="o">+</span> <span class="nx">sourceId</span> <span class="o">+</span> <span class="s1">&#39; not found!&#39;</span><span class="p">);</span>
+</span><span class='line'>				<span class="k">return</span><span class="p">;</span>
+</span><span class='line'>			<span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>			<span class="kd">var</span> <span class="nx">term</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;term&#39;</span><span class="p">);</span>
+</span><span class='line'>			<span class="kd">var</span> <span class="nx">viewType</span> <span class="o">=</span> <span class="nx">sourceModel</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;view&#39;</span><span class="p">);</span>
+</span><span class='line'>			<span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">viewType</span><span class="p">({</span>
+</span><span class='line'>				<span class="nx">el</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">el</span>
+</span><span class='line'>			<span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>			<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Rendering &#39;</span> <span class="o">+</span> <span class="nx">sourceId</span> <span class="o">+</span> <span class="s1">&#39; with term &quot;&#39;</span><span class="o">+</span> <span class="nx">term</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">empty</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">loadingTemplate</span><span class="p">());</span>
+</span><span class='line'>			<span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">({</span> <span class="nx">term</span><span class="o">:</span> <span class="nx">term</span> <span class="p">});</span>
+</span><span class='line'>		<span class="p">},</span>
+</span><span class='line'>		<span class="nx">addSource</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sourceModel</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceId</span> <span class="o">=</span> <span class="nx">sourceModel</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
+</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">sourcesPool</span><span class="p">[</span><span class="nx">sourceId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">sourceModel</span><span class="p">;</span>
+</span><span class='line'>			<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Adding source &#39;</span> <span class="o">+</span> <span class="nx">sourceId</span> <span class="o">+</span> <span class="s1">&#39; to the sources pool&#39;</span><span class="p">);</span>
+</span><span class='line'>		<span class="p">}</span>
+</span><span class='line'>	<span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>	<span class="k">return</span> <span class="nx">SourcesManager</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>When initialized with appQuery as model, SourcesManager renders itself on appQuery change. SourceManager has the ability to add sources using the addSource() function or using the initialization "sources" option. When it renders, it resolves the search provider's view according to appQuery and renders it.
 SourceManager initialization occurs inside the application initialization:
