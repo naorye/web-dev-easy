@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-01-29T19:04:54+02:00</updated>
+  <updated>2013-01-29T22:13:50+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -58,7 +58,7 @@ At the end of this article we will have Backbone searcher application which will
 </span><span class='line'>      <span class="nt">&lt;title&gt;&lt;/title&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;content-type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span> <span class="nt">/&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;css/style.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">/&gt;</span>      
-</span><span class='line'>      <span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;js/main&quot;</span> <span class="na">src=</span><span class="s">&quot;../assets/js/libs/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;js/main&quot;</span> <span class="na">src=</span><span class="s">&quot;assets/js/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;body&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;header&gt;</span>
@@ -133,11 +133,11 @@ When the browser loads this html file, right after loading style.css, the browse
 <span class='line-number'>41</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
 </span><span class='line'>  <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">jQuery</span><span class="o">:</span> <span class="s1">&#39;../../assets/js/libs/jquery.min&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">Underscore</span><span class="o">:</span> <span class="s1">&#39;../../assets/js/libs/underscore-min&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">Backbone</span><span class="o">:</span> <span class="s1">&#39;../../assets/js/libs/backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">tooltipster</span><span class="o">:</span> <span class="s1">&#39;../../assets/js/plugins/jquery.tooltipster&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;../../assets/js/libs/text&#39;</span>
+</span><span class='line'>      <span class="nx">jQuery</span><span class="o">:</span> <span class="s1">&#39;../assets/js/jquery-1.9.0.min&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">Underscore</span><span class="o">:</span> <span class="s1">&#39;../assets/js/underscore-min&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">Backbone</span><span class="o">:</span> <span class="s1">&#39;../assets/js/backbone-min&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">tooltipster</span><span class="o">:</span> <span class="s1">&#39;../assets/js/jquery.tooltipster&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;../assets/js/text&#39;</span>
 </span><span class='line'>  <span class="p">},</span>
 </span><span class='line'>  <span class="nx">shim</span><span class="o">:</span> <span class="p">{</span>
 </span><span class='line'>      <span class="s1">&#39;jQuery&#39;</span><span class="o">:</span> <span class="p">{</span>
@@ -1597,7 +1597,7 @@ In case we want to force the user pass some parameters, we can use the old way f
 </span><span class='line'><span class="o">&lt;</span><span class="nx">html</span><span class="o">&gt;</span>
 </span><span class='line'>  <span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
 </span><span class='line'>      <span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;</span><span class="nx">jQuery</span> <span class="nx">Plugins</span><span class="o">&lt;</span><span class="err">/title&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;../assets/js/jquery-1.9.0.min.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </span><span class='line'>      <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
 </span><span class='line'>          <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>              <span class="nx">$</span><span class="p">.</span><span class="nx">myPlugin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -1680,7 +1680,7 @@ You can watch this example <a href="../code/jquery-plugin-pattern/this-expressio
 </span><span class='line'><span class="o">&lt;</span><span class="nx">html</span><span class="o">&gt;</span>
 </span><span class='line'>  <span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
 </span><span class='line'>      <span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;</span><span class="nx">jQuery</span> <span class="nx">Plugins</span><span class="o">&lt;</span><span class="err">/title&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;../assets/js/jquery-1.9.0.min.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </span><span class='line'>      <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
 </span><span class='line'>          <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>              <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">myPlugin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
@@ -2606,9 +2606,9 @@ Live example for the compose plugin you can find <a href="../code/jquery-plugin-
 </span><span class='line'><span class="o">&lt;</span><span class="nt">html</span><span class="o">&gt;</span>
 </span><span class='line'>  <span class="o">&lt;</span><span class="nt">head</span><span class="o">&gt;</span>
 </span><span class='line'>      <span class="o">&lt;</span><span class="nt">title</span><span class="o">&gt;</span><span class="nt">Custom</span> <span class="nt">jQuery</span> <span class="nt">Tabs</span><span class="o">&lt;/</span><span class="nt">title</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="nt">script</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nt">src</span><span class="o">=</span><span class="s2">&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;</span><span class="o">&gt;&lt;/</span><span class="nt">script</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="nt">script</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nt">src</span><span class="o">=</span><span class="s2">&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js&quot;</span><span class="o">&gt;&lt;/</span><span class="nt">script</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css&quot;</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nt">script</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nt">src</span><span class="o">=</span><span class="s2">&quot;assets/js/jquery-1.9.0.min.js&quot;</span><span class="o">&gt;&lt;/</span><span class="nt">script</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nt">script</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nt">src</span><span class="o">=</span><span class="s2">&quot;assets/js/jquery-ui-1.10.0.custom.min.js&quot;</span><span class="o">&gt;&lt;/</span><span class="nt">script</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;assets/css/jquery-ui-1.10.0.custom.min.css&quot;</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span><span class="o">/&gt;</span>
 </span><span class='line'>
 </span><span class='line'>      <span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&quot;style.css&quot;</span> <span class="o">/&gt;</span>
 </span><span class='line'>  <span class="o">&lt;/</span><span class="nt">head</span><span class="o">&gt;</span>
