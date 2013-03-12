@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Backbone Cache - Web Development is Easy!</title>
+  <meta name="author" content="NaorYe">
+
+  
+  <meta name="description" content="Caching collections and models in Backbone allows to save server calls and return the result faster to the user. This means happier server and &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://webdeveasy.com/backbone-cache/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34683362-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Web Development is Easy!</a></h1>
+  
+    <h2>frameworks, tools and tips for web developers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="mailto:naorye@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:webdeveasy.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <!--<li><a href="/">Home</a></li>-->
+    <li><a href="/">Posts</a></li>
+    <!--<li><a href="/blog/ask-a-question">Ask a Question</a></li>-->
+    <li><a href="/blog/about-me">About Me</a></li>
+    <li><a href="/blog/contact-me">Contact Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Backbone Cache</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-12T22:37:00+02:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Caching collections and models in Backbone allows to save server calls and return the result faster to the user. This means happier server and happier users. This article will guide you how to implement Backbone caching.</p>
+
+<!-- more -->
+
+
+<p>In order to support caching in Backbone, first, I&#8217;ve created a Cache class that has the basic cache behavior and knows to cache key-value items. Then, I override the Backbone.Model&#8217;s and Backbone.Collection&#8217;s fetch method so it will search the cache before fetching from the server.</p>
+
+<h2>Cache Class</h2>
+
+<figure class='code'><figcaption><span>Backbone.Cache class</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Cache</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">store</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Cache</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Events</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;set&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">has</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">isHas</span> <span class="o">=</span> <span class="o">!!</span><span class="k">this</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;has&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">isHas</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">isHas</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">remove</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">clear</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;clear&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">store</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each Cache instance holds an object that stored the data, and its methods manage this object. Cache also extends from Backbone.Events so it would be able to listen to events and trigger some.</p>
+
+<h2>Fetch Cache</h2>
+
+<p>In order to cache fetching results of a model, we need to know the key of the cache item and the cache object instance in which the item stored in. Therefore, each model or collection that needs caching has to define two properties: cacheKey and cacheObject. Defining those properties indicates that this model or collection should be cached on fetch and for later use.
+Lets override Backbone.Model&#8217;s fetch. The override of Backbone.Collection&#8217;s fetch is pretty much the same.</p>
+
+<figure class='code'><figcaption><span>Backbone.Model fetch override</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// store the original fetch for use in our fetch-cache method</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">originalFetch</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// If the model should use cache</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheObject</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">cacheObject</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheObject</span><span class="p">,</span>
+</span><span class='line'>            <span class="nx">cacheKey</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span><span class="p">,</span>
+</span><span class='line'>            <span class="nx">success</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">success</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// Checking whether the cache object already holds the required data</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">cacheObject</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">resp</span> <span class="o">=</span> <span class="nx">cacheObject</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// Do the same as the fetch method does when the data received</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">),</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="nx">success</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// Returns deferred as the original fetch</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">().</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// The cache object doesn&#39;t hold the required data</span>
+</span><span class='line'>            <span class="c1">// Preparing success method that set the cache </span>
+</span><span class='line'>            <span class="nx">options</span><span class="p">.</span><span class="nx">success</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">entity</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">cacheObject</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">,</span> <span class="nx">resp</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="nx">success</span><span class="p">(</span><span class="nx">entity</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">};</span>
+</span><span class='line'>            <span class="c1">// Calling the original fetch</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">originalModelFetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// No cache for this model, calling the original fetch</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">originalModelFetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&#8217;s all! now, each model or collection that has cacheKey and cacheObject properties now cached.</p>
+
+<h2>Usage Example</h2>
+
+<p>First, there must define a cache object. There can be more then cache objects according to the need. For example, application global cache for caching application data or user cache for caching session user data.</p>
+
+<figure class='code'><figcaption><span>Define global application cache</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">globalCache</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Cache</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, define the model and set cacheKey and cacheObject. In this example app.globalCache is used to cache the fetch results. Also, the results will be cached with the key &#8220;UserPermissions_X&#8221; (X is the user id).</p>
+
+<figure class='code'><figcaption><span>Define UserPermissions model</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">UserPermissions</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">cacheObject</span><span class="o">:</span> <span class="nx">app</span><span class="p">.</span><span class="nx">globalCache</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">userId</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span> <span class="o">=</span> <span class="s2">&quot;UserPermissions_&quot;</span> <span class="o">+</span> <span class="nx">userId</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">urlRoot</span><span class="o">:</span> <span class="s1">&#39;api/user/permissions&#39;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, somewhere in the application, call fetch to get the user permissions. The fetch method will ask the server for the data and then cache it.</p>
+
+<figure class='code'><figcaption><span>Fetch user permissions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">user1Permissions</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UserPermissions</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span> <span class="p">});</span>
+</span><span class='line'><span class="nx">user1Permissions</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Later in the application, there is a need to get again the user permissions. calling fetch will immediately retrieve the user permissions from the cache object.</p>
+
+<figure class='code'><figcaption><span>Get user permissions from cache</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">permissions</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UserPermissions</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span> <span class="p">});</span>
+</span><span class='line'><span class="nx">permissions</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Download &amp; github</h2>
+
+<ul>
+<li><a href="../code/backbone-cache/backbone-cache.zip" target="_blank">Backbone Cache Download</a></li>
+<li>Backbone Cache Github Repository</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">NaorYe</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-12T22:37:00+02:00" pubdate data-updated="true">Mar 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/backbone-js/'>Backbone.js</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/creating-photo-gallery-website-using-jekyll/" title="Previous Post: Creating Photo Gallery Website Using Jekyll">&laquo; Creating Photo Gallery Website Using Jekyll</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/backbone-cache/">Backbone Cache</a>
+      </li>
+    
+      <li class="post">
+        <a href="/creating-photo-gallery-website-using-jekyll/">Creating Photo Gallery Website Using Jekyll</a>
+      </li>
+    
+      <li class="post">
+        <a href="/searcher-backbone-dot-js-application-demonstration/">Searcher - Backbone application demonstration</a>
+      </li>
+    
+      <li class="post">
+        <a href="/javascript-prototype/">JavaScript Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-singleton/">Backbone Singleton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/style-your-jquery-ui-tabs/">Style Your jQuery-UI Tabs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/cascading-autocompletes-using-jquery-ui/">Cascading Autocompletes using jQuery UI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - NaorYe -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'webdeveasy';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://webdeveasy.com/backbone-cache/';
+        var disqus_url = 'http://webdeveasy.com/backbone-cache/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

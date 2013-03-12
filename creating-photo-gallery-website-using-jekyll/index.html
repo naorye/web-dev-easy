@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Searcher - Backbone application demonstration - Web Development is Easy!</title>
+  <title>Creating Photo Gallery Website Using Jekyll - Web Development is Easy!</title>
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="In this article we will build Backbone.js application along with jQuery, underscore.js and require.js. The aim of this article is to demonstrate the &hellip;">
+  <meta name="description" content="My wife studies photography at Bezalel Academy Of Art and I thought she should have a portfolio website for her works. So I decided to build her one &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://webdeveasy.com/searcher-backbone-dot-js-application-demonstration/">
+  <link rel="canonical" href="http://webdeveasy.com/creating-photo-gallery-website-using-jekyll/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -84,7 +84,7 @@
   
   <header>
     
-      <h1 class="entry-title">Searcher - Backbone Application Demonstration</h1>
+      <h1 class="entry-title">Creating Photo Gallery Website Using Jekyll</h1>
     
     
       <p class="meta">
@@ -100,20 +100,83 @@
   
 
 
-<time datetime="2013-01-23T19:03:00+02:00" pubdate data-updated="true">Jan 23<span>rd</span>, 2013</time>
+<time datetime="2013-02-25T19:03:00+02:00" pubdate data-updated="true">Feb 25<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>In this article we will build Backbone.js application along with jQuery, underscore.js and require.js. The aim of this article is to demonstrate the use of Backbone components. As we all probably know, there are more then one way to build Backbone applications so feel comfortable to adopt what you like. <br/>
-At the end of this article we will have Backbone searcher application which will know to make searches using different search providers. You can see our final application in action <a href="../code/searcher/index.html" target="_blank">here</a> and can download the code <a href="../code/searcher/searcher.zip" target="_blank">here</a>.</p>
+<div class="entry-content"><p>My wife studies photography at <a href="#">Bezalel Academy Of Art</a> and I thought she should have a portfolio website for her works. So I decided to build her one. <br/>
+First, I thought about using <a href="#">Wordpress</a> or other CMS, but then I realized this is too much for her. All she needs is a website with two or three layouts (for example, grid gallery and single photo layouts) and an easy way to add her photography to the website. She doesn&#8217;t need to manage users, plugins and templates with a complicated online backend. Actually, to be precise, she doesn&#8217;t even need a server side. All her website can be made by pure HTML, CSS and JavaScript. After looking for my options, I decided to use Jekyll in order to build a small project that fulfills her needs. This tutorial will present my work and give you an example of how to build static website on top of Jekyll.</p>
 
 <!-- more -->
 
 
-<h2>Application Loading Flow</h2>
+<h2>What Is Jekyll?</h2>
+
+<p>Basically, Jekyll is a static site generator. It gets the site templates and contents as input, renders it and outputs a static website that contains only HTML, CSS and JavaScript. Jekyll is built on ruby, it uses <a href="#">Textile</a> or <a href="#">Markdown</a> as markup language and <a href="#">Liquid</a> as a template engine. Using Jekyll we can easily build content based static websites. <a href="#">Octopress</a> for example is a blog framework written on top of Jekyll.</p>
+
+<h2>Why Jekyll?</h2>
+
+<ul>
+<li>Using Jekyll I can easily write my own unique desired layout without learning how to build Wordpress templates.</li>
+<li>Jekyll doesn&#8217;t require any database or server side code. Therefore hosting is very simple. All I need is a place to host static website and that&#8217;s all.</li>
+<li>By using Jekyll the content always stays in my possession. It doesn&#8217;t allow me forget I need to perform periodically backups, but I don&#8217;t need to export data from a database or use 3rd party applications to do it. I also don&#8217;t need to worry about data loss due to server errors.</li>
+<li>I can use easily integrate my content with source control management which allows me track changes and more.</li>
+</ul>
+
+
+<h2>How To Use Jekyll?</h2>
+
+<p>In order to start using Jekyll, first, we need to install Jekyll gem.
+&#8212;&#8212;&#8212;> More details here
+After installing Jekyll, lets create working folder named &#8220;jekyll-example&#8221; and create the file &#8220;_config.yml&#8221;. This file contains the project configurations:</p>
+
+<figure class='code'><figcaption><span>_config.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span><span class="p">:</span> <span class="s2">&quot;./_source&quot;</span>
+</span><span class='line'><span class="n">destination</span><span class="p">:</span> <span class="s2">&quot;./_site&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Right now the configuration only contains information about the source and the destination folders. As you can understand, by using this configurations we are telling Jekyll that the input source files will be placed under &#8221;<em>source&#8221; folder and the static website output will be placed under &#8221;</em>site&#8221; folder. <br/>
+Lets create the &#8221;<em>source&#8221; folder. This folder will hold all our website files: layouts, content, JavaScript, CSS and all the other files we want Jekyll to consider when generating the static website. On generate, Jekyll will compile all the files that have yaml front matter (we will see it later) and will copy the results and all the static files to the destination folder.
+We don&#8217;t need to create the destination folder, on generate, Jekyll will create it for us. <br/>
+Another folder relevant for this example is the &#8221;</em>plugins&#8221; folder, which contains all the ruby plugins of our website. Plugins are system hooks that allows us to create custom generated content. During generation Jekyll executes the plugins we added. So, lets create the &#8220;_plugins&#8221; folder.
+One last thing to know before we dive in to code is that Jekyll supports two different type of elements: Post and Page. Basically, both pages and posts can contain content, but posts are related to blog content while pages are related to general website content. By comparing the code of post and page, we could see a few differences:</p>
+
+<ul>
+<li>Post file name contains the title and the date of the post. invalid date in the filename cause an error.</li>
+<li>Posts are Comparable objects, which means two posts can be compared. The comparison is made by the post date and the post slugs.</li>
+<li>The generated default relative url of Post and Page are different (eg. /2000/01/01/my-post.html and /about.html).</li>
+<li>Page can be placed anywhere but Post can only be placed under &#8220;_posts&#8221; folder.</li>
+<li>Post has more data out of the box for use in Liquid templates (title, url, date, id, categories, next, previous, tags, content).</li>
+<li>Posts has unique id.</li>
+</ul>
+
+
+<p>For simplicity I decided to use only Pages in this tutorial.</p>
+
+<h2>Project Requirements</h2>
+
+<p>We are creating a system that gets images and data as input and creates portfolio website out of it. Here are the requirements:
+* The user don&#8217;t have to know code in order to use our system therefore his content should not contain any HTML, CSS or JavaScript.
+* The final website should contain Home page and About page.
+* User pages should be divided into categories. For example a photography project will be categorized under photography.
+* Navigation area should contain the Home page, the About page and the projects divided by category.
+* Each project will have its own set of images and the system should know to create a gallery page from them.
+* Gallery page should contain a thumbnails for the images and clicking on each thumbnail should open a lightbox with the original image.</p>
+
+<p>project requirements
+input for creating the website:</p>
+
+<pre><code>topics generator plugin
+images collection generator
+</code></pre>
+
+<p>layouts (html, css and javascript): general layout and images collection
+demo and download</p>
 
 <h3>index.html</h3>
 
@@ -1101,12 +1164,12 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
   
 
 
-<time datetime="2013-01-23T19:03:00+02:00" pubdate data-updated="true">Jan 23<span>rd</span>, 2013</time>
+<time datetime="2013-02-25T19:03:00+02:00" pubdate data-updated="true">Feb 25<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/categories/backbone-js/'>Backbone.js</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>
+    <a class='category' href='/categories/jekyll/'>Jekyll</a>, <a class='category' href='/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -1122,10 +1185,10 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/javascript-prototype/" title="Previous Post: JavaScript Prototype">&laquo; JavaScript Prototype</a>
+        <a class="basic-alignment left" href="/searcher-backbone-dot-js-application-demonstration/" title="Previous Post: Searcher - Backbone application demonstration">&laquo; Searcher - Backbone application demonstration</a>
       
       
-        <a class="basic-alignment right" href="/creating-photo-gallery-website-using-jekyll/" title="Next Post: Creating Photo Gallery Website Using Jekyll">Creating Photo Gallery Website Using Jekyll &raquo;</a>
+        <a class="basic-alignment right" href="/backbone-cache/" title="Next Post: Backbone Cache">Backbone Cache &raquo;</a>
       
     </p>
   </footer>
@@ -1204,8 +1267,8 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://webdeveasy.com/searcher-backbone-dot-js-application-demonstration/';
-        var disqus_url = 'http://webdeveasy.com/searcher-backbone-dot-js-application-demonstration/';
+        var disqus_identifier = 'http://webdeveasy.com/creating-photo-gallery-website-using-jekyll/';
+        var disqus_url = 'http://webdeveasy.com/creating-photo-gallery-website-using-jekyll/';
         var disqus_script = 'embed.js';
       
     (function () {
