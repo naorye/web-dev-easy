@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Backbone.js | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/backbone-js/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-03-13T00:03:50+02:00</updated>
+  <updated>2013-03-13T00:42:32+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -158,7 +158,7 @@ permissions.fetch();
 
 <ul>
 <li><a href="../code/backbone-cache/backbone-cache.zip" target="_blank">Backbone Cache Download</a></li>
-<li>Backbone Cache Github Repository</li>
+<li><a href="https://github.com/naorye/BackboneCache" target="_blank">Backbone Cache Github Repository</a></li>
 </ul>
 
 ]]></content>
