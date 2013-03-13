@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-03-13T09:40:31+02:00</updated>
+  <updated>2013-03-13T18:22:52+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -23,7 +23,7 @@
 <!-- more -->
 
 
-<p>In order to support caching in Backbone, first, I&#8217;ve created a Cache class that has the basic cache behavior and knows to cache key-value items. Then, I override the Backbone.Model&#8217;s and Backbone.Collection&#8217;s fetch method so it will search the cache before fetching from the server.</p>
+<p>In order to support caching in Backbone, first, I&#8217;ve created a Cache class that has the basic cache behavior and knows to cache key-value items. Then, I&#8217;ve created Backbone.CachedModel and Backbone.CachedCollection classes and override their fetch method so it will search the cache before fetching from the server.</p>
 
 <h2>Cache Class</h2>
 
@@ -92,8 +92,8 @@
 
 <h2>Fetch Cache</h2>
 
-<p>In order to cache fetching results of a model, we need to know the key of the cache item and the cache object instance in which the item stored in. Therefore, each model or collection that needs caching has to define two properties: cacheKey and cacheObject. Defining those properties indicates that this model or collection should be cached on fetch and for later use.
-Lets override Backbone.Model&#8217;s fetch. The override of Backbone.Collection&#8217;s fetch is pretty much the same.</p>
+<p>In order to cache fetching results of a model, we need to know the key of the cache item and the cache object instance in which the item stored in. Therefore, each model or collection that needs caching has to define two properties: cacheKey and cacheObject.
+Lets create Backbone.CachedModel and override it&#8217;s fetch method. Backbone.CachedCollection&#8217;s new fetch is pretty much the same.</p>
 
 <figure class='code'><figcaption><span>Backbone.Model fetch override</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -131,42 +131,46 @@ Lets override Backbone.Model&#8217;s fetch. The override of Backbone.Collection&
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
 <span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// store the original fetch for use in our fetch-cache method</span>
 </span><span class='line'><span class="kd">var</span> <span class="nx">originalFetch</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// If the model should use cache</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheObject</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">cacheObject</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheObject</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">cacheKey</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">success</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">success</span><span class="p">;</span>
+</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CachedModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">fetch</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// If the model has required info for cache</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheObject</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">cacheObject</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheObject</span><span class="p">,</span>
+</span><span class='line'>                <span class="nx">cacheKey</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span><span class="p">,</span>
+</span><span class='line'>                <span class="nx">success</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">success</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="c1">// Checking whether the cache object already holds the required data</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">cacheObject</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">resp</span> <span class="o">=</span> <span class="nx">cacheObject</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">);</span>
+</span><span class='line'>            <span class="c1">// Checking whether the cache object already holds the required data</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">cacheObject</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">resp</span> <span class="o">=</span> <span class="nx">cacheObject</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>            <span class="c1">// Do the same as the fetch method does when the data received</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">),</span> <span class="nx">options</span><span class="p">);</span>
-</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="nx">success</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>                <span class="c1">// Do the same as the fetch method does when the data received</span>
+</span><span class='line'>                <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">),</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="nx">success</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>            <span class="c1">// Returns deferred as the original fetch</span>
-</span><span class='line'>            <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">().</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'>                <span class="c1">// Returns deferred as the original fetch</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">Deferred</span><span class="p">().</span><span class="nx">resolve</span><span class="p">();</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="c1">// The cache object doesn&#39;t hold the required data</span>
+</span><span class='line'>                <span class="c1">// Preparing success method that set the cache </span>
+</span><span class='line'>                <span class="nx">options</span><span class="p">.</span><span class="nx">success</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">entity</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">cacheObject</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">,</span> <span class="nx">resp</span><span class="p">);</span>
+</span><span class='line'>                    <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="nx">success</span><span class="p">(</span><span class="nx">entity</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">};</span>
+</span><span class='line'>                <span class="c1">// Calling the original fetch</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
 </span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1">// The cache object doesn&#39;t hold the required data</span>
-</span><span class='line'>            <span class="c1">// Preparing success method that set the cache </span>
-</span><span class='line'>            <span class="nx">options</span><span class="p">.</span><span class="nx">success</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">entity</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="nx">cacheObject</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">cacheKey</span><span class="p">,</span> <span class="nx">resp</span><span class="p">);</span>
-</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="nx">success</span><span class="p">(</span><span class="nx">entity</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-</span><span class='line'>            <span class="p">};</span>
-</span><span class='line'>            <span class="c1">// Calling the original fetch</span>
-</span><span class='line'>            <span class="k">return</span> <span class="nx">originalModelFetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>            <span class="c1">// No cache for this model, calling the original fetch</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 </span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// No cache for this model, calling the original fetch</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">originalModelFetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -193,7 +197,7 @@ Lets override Backbone.Model&#8217;s fetch. The override of Backbone.Collection&
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">UserPermissions</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">UserPermissions</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">CachedModel</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
 </span><span class='line'>    <span class="nx">cacheObject</span><span class="o">:</span> <span class="nx">app</span><span class="p">.</span><span class="nx">globalCache</span><span class="p">,</span>
 </span><span class='line'>    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>        <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
