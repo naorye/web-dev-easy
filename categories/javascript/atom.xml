@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-03-13T18:22:52+02:00</updated>
+  <updated>2013-03-13T18:25:48+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -72,10 +72,7 @@ Each Cache instance holds an object that stored the data, and its methods manage
 Lets create Backbone.CachedModel and override it's fetch method. Backbone.CachedCollection's new fetch is pretty much the same.</p>
 
 <p>```javascript Backbone.Model fetch override
-// store the original fetch for use in our fetch-cache method
-var originalFetch = Backbone.Model.prototype.fetch;</p>
-
-<p>Backbone.CachedModel = Backbone.Model.extend({</p>
+Backbone.CachedModel = Backbone.Model.extend({</p>
 
 <pre><code>fetch: function(options) {
     // If the model has required info for cache

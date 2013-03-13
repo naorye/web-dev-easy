@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-03-13T18:22:52+02:00</updated>
+  <updated>2013-03-13T18:25:48+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -130,13 +130,7 @@ Lets create Backbone.CachedModel and override it&#8217;s fetch method. Backbone.
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// store the original fetch for use in our fetch-cache method</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">originalFetch</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CachedModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CachedModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
 </span><span class='line'>    <span class="nx">fetch</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// If the model has required info for cache</span>
 </span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">cacheKey</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">cacheObject</span><span class="p">)</span> <span class="p">{</span>
