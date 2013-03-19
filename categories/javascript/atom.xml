@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-03-13T18:25:48+02:00</updated>
+  <updated>2013-03-19T11:32:56+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,313 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Object Oriented Programming with JavaScript]]></title>
+    <link href="http://webdeveasy.com/object-oriented-programming-with-javascript/"/>
+    <updated>2013-03-18T23:01:00+02:00</updated>
+    <id>http://webdeveasy.com/object-oriented-programming-with-javascript</id>
+    <content type="html"><![CDATA[<p>As we already know, JavaScript is an object oriented language. In this article we will see JavaScript example to <a href="http://en.wikipedia.org/wiki/Inheritance_%28object-oriented_programming%29" target="_blank">inheritance</a> and <a href="http://en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming" target="_blank">subtype polymorphism</a>.<!-- more -->
+For solid base, I really recommend to read first about <a href="../javascript-prototype">JavaScript Prototype</a>.</p>
+
+<h2>Base Class</h2>
+
+<p>Lets define an Animal class. First thing to do is to define it's constructor:
+```javascript Animal constructor
+var Animal = function() {</p>
+
+<pre><code>this.color = "Pink";
+</code></pre>
+
+<p>}
+<code>
+Next, lets define Animal's methods:
+</code>javascript Animal methods
+Animal.prototype.run = function() {</p>
+
+<pre><code>console.log("Wuuuuuuuuuuuuushhhhhh");
+</code></pre>
+
+<p>}
+Animal.prototype.sleep = function() {</p>
+
+<pre><code>console.log("ZZZzzzZZZzzzZZZzzzzzz...");
+</code></pre>
+
+<p>}
+Animal.prototype.eat = function() {</p>
+
+<pre><code>console.log("HmnmnmHmmnmnm..BURP");
+</code></pre>
+
+<p>}
+<code>
+An easy way to write this is to extend Animal.prototype (using &lt;a href="http://api.jquery.com/jQuery.extend/" target="_blank"&gt;jQuery&lt;/a&gt;, &lt;a href="http://underscorejs.org/#extend" target="_blank"&gt;underscore&lt;/a&gt; or your own implementation):
+</code>javascript Animal methods using jQuery.extend
+$.extend(Animal.prototype, {</p>
+
+<pre><code>run: function() {
+    console.log("Wuuuuuuuuuuuuushhhhhh");
+},
+sleep: function() {
+    console.log("ZZZzzzZZZzzzZZZzzzzzz...");
+},
+eat: function() {
+    console.log("HmnmnmHmmnmnm..BURP");
+}
+</code></pre>
+
+<p>});
+```
+Great, this looks better. Now we can create animals that can run, sleep and eat.</p>
+
+<h2>Sub Class - Inharitance</h2>
+
+<p>Lets create a Cat which is a sub class of an Animal. First create Cat's constructor:
+```javascript Cat constructor
+var Cat = function() {</p>
+
+<pre><code>Animal.apply(this, arguments); // Call parent class constructor
+
+this.name = name;
+console.log("My name is " + this.name +
+            " and my color is " + this.color);
+</code></pre>
+
+<p>}
+<code>
+Next, we want Cat to have Animal's methods, so we need something like:
+</code>javascript Cat's prototype gets Animal's prototype
+Cat.prototype = Animal.prototype;
+```
+But this code will cause a problem. Adding new methods to Cat's prototype will add those methods also to Animal (since Cat.prototype and Animal.prototype are now refrence to the same set of methods). <br/>
+There are a few ways to solve this problem:</p>
+
+<ol>
+    <li>
+        Use Object.create method that creates an object based on set of properties:
+
+```javascript Using Object.create
+Cat.prototype = Object.create(Animal.prototype);
+```
+    </li>
+    <li>
+        Use extend:
+
+```javascript Using extend
+$.extend(Cat.prototype, Animal.prototype);
+```
+    </li>
+    <li>
+        Dance a little:
+
+```javascript Dancing
+var sub = function() { };
+sub.prototype = Animal.prototype;
+Cat.prototype = new sub();
+```
+    </li>
+</ol>
+
+
+<p>Lets add methods to Cat:
+```javascript Add methods to Cat
+$.extend(Cat.prototype, {</p>
+
+<pre><code>drinkMilk: function() {
+    consoloe.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+}
+</code></pre>
+
+<p>});
+<code>
+Finally, Cat definition looks like this:
+</code>javascript Cat definition
+var Cat = function() {</p>
+
+<pre><code>Animal.apply(this, arguments);
+
+this.name = name;
+console.log("My name is " + this.name +
+            " and my color is " + this.color);
+</code></pre>
+
+<p>}
+Cat.prototype = Object.create(Animal.prototype);
+$.extend(Cat.prototype, {</p>
+
+<pre><code>drinkMilk: function() {
+    console.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+}
+</code></pre>
+
+<p>});
+<code>
+So, meybe it will be easier to create inheritance helper:
+</code>javascript Inheritance helper
+function inherit(base, methods) {</p>
+
+<pre><code>var sub = function() {
+    base.apply(this, arguments); // Call base class constructor
+
+    // Call sub class initialize method that will act like a constructor
+    this.initialize.apply(this, arguments);
+};
+sub.prototype = Object.create(base.prototype);
+$.extend(sub.prototype, methods);
+return sub;
+</code></pre>
+
+<p>}
+<code>
+Now creating Cat using the new helper is really simple and clear:
+</code>javascript Cat definition using our inheritance helper
+var Cat = inherit(Animal, {</p>
+
+<pre><code>initialize: function(name) {
+    this.name = name;
+    console.log("My name is " + this.name +
+                " and my color is " + this.color);
+},
+drinkMilk: function() {
+    console.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h2>Sub Class - Subtype Polymorphism</h2>
+
+<p>Since cats are purring when they sleep, lets override the sleep method:
+```javascript Override base class method
+var Cat = inherit(Animal, {</p>
+
+<pre><code>...
+...
+...
+sleep: function() {
+    console.log("rrr...rrr...rrr...");
+}
+</code></pre>
+
+<p>});
+<code>
+But, what if after purring, cats getting sleep like any other animal?   
+Lets call the Animal's sleep method right after purring:
+</code>javascript Calling base class method
+var Cat = inherit(Animal, {</p>
+
+<pre><code>...
+...
+...
+sleep: function() {
+    console.log("rrr...rrr...rrr...");
+    Animal.prototype.sleep();
+}
+</code></pre>
+
+<p>});
+```
+Now out cat will sleep like any other animal after purring a little.</p>
+
+<h2>Complete Code</h2>
+
+<p>Here is our complete code:
+```javascript Complete code
+function inherit(base, methods) {</p>
+
+<pre><code>var sub = function() {
+    base.apply(this, arguments); // Call base class constructor
+
+    // Call sub class initialize method that will act like a constructor
+    this.initialize.apply(this, arguments);
+};
+sub.prototype = Object.create(base.prototype);
+$.extend(sub.prototype, methods);
+return sub;
+</code></pre>
+
+<p>}</p>
+
+<p>var Animal = function() {</p>
+
+<pre><code>this.color = "Pink";
+</code></pre>
+
+<p>}
+$.extend(Animal.prototype, {</p>
+
+<pre><code>run: function() {
+    console.log("Wuuuuuuuuuuuuushhhhhh");
+},
+sleep: function() {
+    console.log("ZZZzzzZZZzzzZZZzzzzzz...");
+},
+eat: function() {
+    console.log("HmnmnmHmmnmnm..BURP");
+}
+</code></pre>
+
+<p>});</p>
+
+<p>var Cat = inherit(Animal, {</p>
+
+<pre><code>initialize: function(name) {
+    this.name = name;
+    console.log("My name is " + this.name +
+                " and my color is " + this.color);
+},
+drinkMilk: function() {
+    consoloe.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+},
+sleep: function() {
+    console.log("rrr...rrr...rrr...");
+    Animal.prototype.sleep();
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h2>Usage</h2>
+
+<p>Since I have a cat, I must create its virtual persona:
+<code>javascript My virtual Mutzi
+var mutzi = new Cat("Mutzi");
+mutzi.run();
+mutzi.fightOtherCat();
+mutzi.sleep();
+</code>
+And of course, the result will appear on the console:
+<code>
+My name is Mutzi and my color is Pink
+Wuuuuuuuuuuuuushhhhhh
+Mirrrrrrrccchhhhh
+rrr...rrr...rrr...
+ZZZzzzZZZzzzZZZzzzzzz...
+</code></p>
+
+<h2>Summary</h2>
+
+<p>In this article we created the Animal base class. Then we created the Cat sub class by inherit from Animal. Then we added new methods for Cat and at the end we overridden Animal's method and used the base class implementation in our implementation.</p>
+
+<p>I hope you had fun reading this article! <br/>
+Any questions -> to me :)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backbone Cache]]></title>
@@ -1415,618 +1722,6 @@ return new KeywordsCollection;
 This way, any time the model's keyword changes, a copy of the application keyword is added to the collection.</p>
 
 <p>I hope this short article gave you another new ideas, thanks for reading!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[jQuery Plugin Pattern]]></title>
-    <link href="http://webdeveasy.com/jquery-plugin-pattern/"/>
-    <updated>2012-10-02T22:07:46+02:00</updated>
-    <id>http://webdeveasy.com/jquery-plugin-pattern</id>
-    <content type="html"><![CDATA[<p>jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts in a web application. This article will explain the basics of jQuery plugin and guide you how to create a simple jQuery plugin.</p>
-
-<!-- more -->
-
-
-<h2>Two jQuery Plugin Types</h2>
-
-<p>I distinguish between two types of of jQuery plugins:</p>
-
-<p><strong>Plugin that works on element.</strong> For example, a plugin that converts &lt;select&gt; element to an autocomplete. Such plugin is working on the select element. This kind of plugin is actually extention to the jQuery prototype (or $.fn):
-```javascript Extention to $.fn
-$.fn.myPlugin = function() {</p>
-
-<pre><code>... //plugin content
-</code></pre>
-
-<p>}
-<code>
-Invocation of such plugins looks like:
-</code>javascript Plugin invocation<br/>
-$('#my-elem').myPlugin();
-<code>
-**Plugin that doesn't work on element.** &lt;a href="http://docs.jquery.com/Utilities" target="_blank"&gt;The utilities of jQuery&lt;/a&gt; are good examples for such plugin. They are actually functions that located in the jQuery object (or $):
-</code>javascript Extention to $
-$.myPlugin = function() {</p>
-
-<pre><code>... //plugin content
-</code></pre>
-
-<p>}
-<code>
-Invocation of such plugins looks like:
-</code>javascript Plugin invocation
-$.myPlugin();
-```</p>
-
-<p>Both types of plugins can get data as input, make DOM manipulations, make calculations, let the user interact them and much more.</p>
-
-<h2>Limit The Scope</h2>
-
-<p>Usually when writing jQuery plugin (or any JavaScript code), it is a good idea to limit it's scope. This way you can prevent access to private variables and functions. In addition, using scopes may helping prevent naming conflicts. In order to limit the scope of jQuery plugin, wrap it with a function and invoke it. For example:</p>
-
-<p>```javascript Plugin inside IIFE  <br/>
-(function() {</p>
-
-<pre><code>$.fn.myPlugin = function() {
-    ... //plugin content
-}
-</code></pre>
-
-<p>})();
-```
-This is called <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/" target="_blank">Immediately-Invoked Function Expression (IIFE)</a>.</p>
-
-<h2>The Dollar Sign</h2>
-
-<p>The dollar sign ($) is a synonym to the jQuery library. It is shorter and look better then the "jQuery" word. Because of that, there are many other libraries that make a use with the dollar sign as a synonym. So, we have to be sure our plugin doesn't collide with other libraries. Therefore passing jQuery as a parameter to the IIFE is a best practice:</p>
-
-<p>```javascript Passing jQuery as a parameter to the IIFE   <br/>
-(function($) {</p>
-
-<pre><code>$.fn.myPlugin = function() { // Here we sure $ is jQuery
-    ... // Plugin content
-}
-</code></pre>
-
-<p>})(jQuery);
-```</p>
-
-<h2>Plugin Parameters and Defaults</h2>
-
-<p>We can pass parameters to our plugin when calling it, for example:
-<code>javascript Pass parameters to our plugin
-$('#elem').myPlugin(param1, param2, param3);
-</code>
-But, sometimes our plugin will have a lot of parameters (for instance, <a href="http://www.trirand.com/blog/" target="_blank">jqGrid</a> plugin has more then 20 parameters) and some of them might be optionals. For this reason we wrap all the parameters in an object. For example, assume our plugin gets parameters "name", "address" and "color", we will define our plugin:
-<code>javascript Define jQuery plugin with options
-$.fn.myPlugin = function(options) { ... }
-</code>
-and for calling it:
-```javascript Call jQuery plugin with options<br/>
-$('#elem').myPlugin({</p>
-
-<pre><code>name: 'Naor',
-address: 'Jerusalem',
-color: 'Green'
-</code></pre>
-
-<p>});
-<code>
-This way the user can supply only the parameters he wants. But this leads to another problem. What if the plugin need the color parameter which wasn't supplied? The solution is simple. All we have to do is to make a defaults to the parameters:
-</code>javascript Options with defaults
-(function($) {</p>
-
-<pre><code>$.fn.myPlugin = function(options) {
-    options = $.extend({
-        name: 'no-name',
-        address: 'none',
-        color: 'white'
-    }, options);
-    ... // The rest of the plugin
-}
-</code></pre>
-
-<p>})(jQuery);
-```
-This way we support many options with optional parameters. <br/>
-In case we want to force the user pass some parameters, we can use the old way for the compulsory parameters and an "options" object for the optionals:</p>
-
-<p><code>javascript Compulsory and optionals parameters
-// param1 is compulsory
-$.fn.myPlugin = function(param1, options) { ... }
-</code></p>
-
-<h2>The <em>this</em> Expression</h2>
-
-<p>Inside a plugin definition the <em>this</em> expression has a different meaning between the two plugin types. I'll explain the meaning of the <em>this</em> expression using examples:</p>
-
-<h3>The <em>this</em> expression for plugins that do not work on an element</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>The "this" expression</span> <a href='/code/jquery-plugin-pattern/this-expression/this1.html' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="o">&lt;!</span><span class="nx">doctype</span> <span class="nx">html</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">html</span><span class="o">&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;</span><span class="nx">jQuery</span> <span class="nx">Plugins</span><span class="o">&lt;</span><span class="err">/title&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;../assets/js/jquery-1.9.0.min.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>			<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>				<span class="nx">$</span><span class="p">.</span><span class="nx">myPlugin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>					<span class="c1">// Here &lt;i&gt;this&lt;/i&gt; represents the jQuery object</span>
-</span><span class='line'>					<span class="k">return</span> <span class="nx">$</span> <span class="o">===</span> <span class="k">this</span><span class="p">;</span>
-</span><span class='line'>				<span class="p">};</span>
-</span><span class='line'>			<span class="p">})(</span><span class="nx">jQuery</span><span class="p">);</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="err">/script&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="err">/head&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
-</span><span class='line'>		<span class="nx">Is</span> <span class="o">&lt;</span><span class="nx">i</span><span class="o">&gt;</span><span class="k">this</span><span class="o">&lt;</span><span class="sr">/i&gt; equals jQuery? &lt;span id=&quot;isEqual&quot; /</span><span class="o">&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>			<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>				<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#isEqual&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">myPlugin</span><span class="p">());</span>
-</span><span class='line'>			<span class="p">});</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="err">/script&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="err">/body&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Notice that inside such plugin, <em>this</em> is equal to jQuery.
-You can watch this example <a href="../code/jquery-plugin-pattern/this-expression/this1.html" target="_blank">here</a>.</p>
-
-<h3>The <em>this</em> expression for plugins that do work on an element</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>The "this" expression</span> <a href='/code/jquery-plugin-pattern/this-expression/this2.html' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="o">&lt;!</span><span class="nx">doctype</span> <span class="nx">html</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">html</span><span class="o">&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;</span><span class="nx">jQuery</span> <span class="nx">Plugins</span><span class="o">&lt;</span><span class="err">/title&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;../assets/js/jquery-1.9.0.min.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>			<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>				<span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">myPlugin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>					<span class="c1">// Here &lt;i&gt;this&lt;/i&gt; is a reference to the actaul jQuery</span>
-</span><span class='line'>					<span class="c1">// element the plugin works on.</span>
-</span><span class='line'>					<span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>						<span class="kd">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-</span><span class='line'>						<span class="kd">var</span> <span class="nx">elemType</span> <span class="o">=</span> <span class="nx">current</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="s1">&#39;tagName&#39;</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">();</span>
-</span><span class='line'>						<span class="k">switch</span><span class="p">(</span><span class="nx">elemType</span><span class="p">)</span>  <span class="p">{</span>
-</span><span class='line'>							<span class="k">case</span> <span class="s1">&#39;input&#39;</span><span class="o">:</span>
-</span><span class='line'>								<span class="nx">current</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-</span><span class='line'>								<span class="k">break</span><span class="p">;</span>
-</span><span class='line'>							<span class="k">case</span> <span class="s1">&#39;select&#39;</span><span class="o">:</span>
-</span><span class='line'>								<span class="nx">current</span><span class="p">.</span><span class="nx">empty</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;option&gt;&#39;</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">&#39;&lt;/option&gt;&#39;</span><span class="p">);</span>
-</span><span class='line'>								<span class="k">break</span><span class="p">;</span>
-</span><span class='line'>							<span class="k">case</span> <span class="s1">&#39;span&#39;</span><span class="o">:</span>
-</span><span class='line'>								<span class="nx">current</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-</span><span class='line'>								<span class="k">break</span><span class="p">;</span>
-</span><span class='line'>						<span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>					<span class="p">});</span>
-</span><span class='line'>				<span class="p">};</span>
-</span><span class='line'>			<span class="p">})(</span><span class="nx">jQuery</span><span class="p">);</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="err">/script&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="err">/head&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span><span class='line'>			<span class="nx">Choose</span> <span class="nx">text</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;my-text&quot;</span> <span class="o">/&gt;</span>
-</span><span class='line'>			<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;my-button&quot;</span><span class="o">&gt;</span><span class="nx">Press</span> <span class="nx">here</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span><span class='line'>			<span class="nx">Span</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">span</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="o">&gt;&lt;</span><span class="sr">/span&gt; &lt;br/</span><span class="o">&gt;</span>
-</span><span class='line'>			<span class="nx">Text</span> <span class="nx">input</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;target&quot;</span> <span class="o">/&gt;</span> <span class="o">&lt;</span><span class="nx">br</span><span class="o">/&gt;</span>
-</span><span class='line'>			<span class="nx">Select</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">select</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="o">&gt;&lt;</span><span class="err">/select&gt;</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'>		<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>			<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>				<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#my-button&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>					<span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#my-text&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
-</span><span class='line'>					<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.target&#39;</span><span class="p">).</span><span class="nx">myPlugin</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-</span><span class='line'>				<span class="p">});</span>
-</span><span class='line'>			<span class="p">});</span>
-</span><span class='line'>		<span class="o">&lt;</span><span class="err">/script&gt;</span>
-</span><span class='line'>	<span class="o">&lt;</span><span class="err">/body&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Notice that <em>this</em> is a reference to the main element that the plugin works on. Sometimes, like in this example, the jQuery element represents more then one DOM element and we have to iterate each one of them in order to effect all of the DOM elements. In this example each DOM element is different element and so different treatment.
-You can watch this example <a href="../code/jquery-plugin-pattern/this-expression/this2.html" target="_blank">here</a>.</p>
-
-<h2>jQuery Chaining Principal</h2>
-
-<p><strong>jQuery Chaining Principal is relevant only to plugins that do work on an element.</strong></p>
-
-<p>Take this code for example:
-```javascript jQuery without chaining</p>
-
-<pre><code>$('#elem').addClass('active');
-$('#elem').val('some value');
-$('#elem').prop('disabled', true);
-</code></pre>
-
-<p><code>
-This code adds css class to an element, sets its value and disables it. Instead of three different lines of code we can write:
-I believe you've seen this syntax before:
-</code>javascript jQuery chaining
-$('#elem').addClass('active').val('some value').prop('disabled', true);
-```
-This looks better, easier to understand and more effective (no need to search for '#elem' a few times). This is made possible due to the jQuery chaining principal. Each jQuery method or plugin returns the element or elements that it works on:</p>
-
-<p>```javascript jQuery chaining principal  <br/>
-(function($) {</p>
-
-<pre><code>$.fn.myPlugin = function(options) {
-    ...
-    ...
-    return this; // This line responsible for chaining
-}
-</code></pre>
-
-<p>})(jQuery);
-```
-Remember that inside the plugin scope, the <em>this</em> expression referenced to the element itself.</p>
-
-<h2>User Interface</h2>
-
-<p>Up to now we saw a plugin structure wrapped in IIFE, with $ as jQuery and with compulsory/optional parameters. We undertsood the <em>this</em> expression inside a plugin and saw the chaining principal in action. Now we need to see how to create an interface so the user can interact with the plugin. I'll do it separately for each plugin type.</p>
-
-<h3>Plugin that doesn't work on element</h3>
-
-<p>The first plugin doesn't work on element, it gets positions and a text as parameters and displays the text on the specified position:
-```javascript float plugin</p>
-
-<pre><code>(function($) {
-    $.float = function(posX, posY, text) {
-        $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
-            left: posX,
-            top: posY,
-            position: 'absolute'
-        });
-    }   
-})(jQuery);
-</code></pre>
-
-<p><code>
-Now we want to allow the user to move the text to a new position and to remove it. Let's write methods:
-</code>javascript changePosition() and remove() methods<br/>
-(function($) {</p>
-
-<pre><code>function changePosition(elem, posX, posY) {
-    elem.css({
-        left: posX,
-        top: posY
-    });
-}
-
-function remove(elem) {
-    elem.remove();
-}
-
-$.float = function(posX, posY, text) {
-    $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
-        left: posX,
-        top: posY,
-        position: 'absolute'
-    });
-}   
-</code></pre>
-
-<p>})(jQuery);
-<code>
-Notice that the user doesn't have an access to "changePosition" nor "remove" and he never holds the &amp;lt;div&amp;gt; element. So now we need to connect the user to the methods. In order to do it we make the "float" plugin return a "remote control" object:
-</code>javascript jQuery plugin returns "remote control" object
-(function($) {</p>
-
-<pre><code>function changePosition(elem, posX, posY) {
-    elem.css({
-        left: posX,
-        top: posY
-    });
-}
-
-function remove(elem) {
-    elem.remove();
-}
-
-$.float = function(posX, posY, text) {
-    var elem = $('&lt;div&gt;'+text+'&lt;/div&gt;').appendTo('body').css({
-        left: posX,
-        top: posY,
-        position: 'absolute'
-    });
-
-    return {
-        changePosition: function(posX, posY) {
-            changePosition(elem, posX, posY);
-        },
-        remove: function() { remove(elem); }
-    };
-}   
-</code></pre>
-
-<p>})(jQuery);
-<code>
-Now, whenever the user will invoke $.float(..) he will get a "remote control" object with the interface we want to provide, and in order to use it:
-</code>javascript Interact with a plugin
-var control = $.float('100px', '100px', 'Hello!');
-control.changePosition('200px', '200px');
-```
-Live example for the float plugin you can find <a href="../code/jquery-plugin-pattern/float-plugin/float.html" target="_blank">here</a>.</p>
-
-<h3>Plugin that does work on element</h3>
-
-<p>The second plugin does work on element. It works on an &lt;input&gt; element and gets two parameters: &lt;ul&gt; selector and a number "N". Whenever the input's value changes, the &lt;ul&gt; gets filled with "N" items containing the value:</p>
-
-<p>```javascript Compose plugin
-(function($) {</p>
-
-<pre><code>$.fn.compose = function(options) {
-    options = $.extend({
-        number: 2,
-        ul: null
-    }, options);
-
-    this.change(function() {
-        if (options.ul !== null) {
-            var value = $(this).val();
-            var ul = $(options.ul).empty();
-            for(var i=0;i&lt;options.number;i++) {
-                ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
-            }           
-        }
-    });
-
-    return this;
-}
-</code></pre>
-
-<p>})(jQuery);
-<code>
-Now we want to allow the user to change the number parameter "N". Again, let's write a method for changing the parameter:
-</code>javascript setNumber() method
-(function($) {</p>
-
-<pre><code>$.fn.compose = function(options) {
-    options = $.extend({
-        number: 2,
-        ul: null
-    }, options);
-
-    function setNumber(number) {
-        options.number = number;
-    }
-
-    this.change(function() {
-        if (options.ul !== null) {
-            var value = $(this).val();
-            var ul = $(options.ul).empty();
-            for(var i=0;i&lt;options.number;i++) {
-                ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
-            }           
-        }
-    });
-
-    return this;
-}
-</code></pre>
-
-<p>})(jQuery);
-<code>
-Like the former plugin example, the user doesn't have an access to "setNumber" method. Unlike the former plugin example, here we cannot return a "remote control" object. Due to jQuery chaining principal we have to return *this*. For solving this we use &lt;a href="http://api.jquery.com/jQuery.data/" target="_blank"&gt;jQuery.data()&lt;/a&gt; method. This method allows us attach key-value data to an element. For example, $('#elem').data('my-color', 'Green'); attaches the "my-color = Green" key-value to the element. In order to get the value of "my-color" all we have to do is: $('#elem').data('my-color') and we get "Green".
-So we use the jQuery.data() method to attach the "remote control" object to the element, and as a key we use the name of the plugin "compose":
-</code>javascript jQuery plugin returns "remote control" object
-(function($) {</p>
-
-<pre><code>$.fn.compose = function(options) {
-    options = $.extend({
-        number: 2,
-        ul: null
-    }, options);
-
-    function setNumber(number) {
-        options.number = number;
-    }
-
-    this.change(function() {
-        if (options.ul !== null) {
-            var value = $(this).val();
-            var ul = $(options.ul).empty();
-            for(var i=0;i&lt;options.number;i++) {
-                ul.append('&lt;li&gt;' + value + '&lt;/li&gt;')
-            }           
-        }
-    });
-
-    this.data('compose', {
-        setNumber: setNumber
-    });
-
-    return this;
-}
-</code></pre>
-
-<p>})(jQuery);
-<code>
-Now, in order to change the number:
-</code>javascript Interact with a plugin
-$('#elem').compose({</p>
-
-<pre><code>number: 3,
-ul: '#ul'
-</code></pre>
-
-<p>});</p>
-
-<p>$('#elem').data('compose').setNumber(8);
-```
-And then the input's value will appear 8 times.
-Live example for the compose plugin you can find <a href="../code/jquery-plugin-pattern/compose-plugin/compose.html" target="_blank">here</a>.</p>
-
-<h2>Summary</h2>
-
-<p>In this article I presented two jQuery plugin types and their structure (IIFE wrap and jQuery injection as $), I explained how to add compulsory and optional parameters, demonstrated the meaning of the <em>this</em> expression and described the jQuery chaining principal. At the end I also presented a way of letting the user interact the plugins.</p>
-
-<h3>Template of plugin that does not work on an element</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Template of plugin that does not work on an element</span> <a href='/code/jquery-plugin-pattern/templates/plugin-template-1.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="o">//</span> <span class="nt">jQuery</span> <span class="nt">plugin</span> <span class="nt">template</span> <span class="nt">for</span> <span class="nt">plugin</span> <span class="nt">that</span> <span class="nt">does</span> <span class="nt">not</span> <span class="nt">work</span> <span class="nt">on</span> <span class="nt">element</span>
-</span><span class='line'><span class="o">(</span><span class="nt">function</span><span class="o">(</span><span class="err">$</span><span class="o">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="err">$</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="err">$</span><span class="o">,</span> <span class="err">{</span>
-</span><span class='line'>		<span class="n">pluginName</span><span class="o">:</span> <span class="n">function</span><span class="p">(</span><span class="n">param</span><span class="o">,</span> <span class="n">options</span><span class="p">)</span> <span class="err">{</span>
-</span><span class='line'>			<span class="n">options</span> <span class="o">=</span> <span class="err">$</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="err">{</span>
-</span><span class='line'>				<span class="o">//</span> <span class="n">Options</span> <span class="n">Defaults</span>
-</span><span class='line'>			<span class="p">}</span><span class="o">,</span> <span class="nt">options</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="o">//</span> <span class="nt">Plugin</span> <span class="nt">content</span>
-</span><span class='line'>		
-</span><span class='line'>			<span class="nt">return</span> <span class="p">{</span>
-</span><span class='line'>				<span class="o">//</span> <span class="n">Plugin</span> <span class="n">interface</span> <span class="n">object</span>
-</span><span class='line'>			<span class="p">}</span><span class="o">;</span>
-</span><span class='line'>		<span class="err">}</span>
-</span><span class='line'>	<span class="err">}</span><span class="o">);</span>
-</span><span class='line'><span class="err">}</span><span class="o">)(</span><span class="nt">jQuery</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<h3>Template of plugin that does work on an element</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Template of plugin that does not work on an element</span> <a href='/code/jquery-plugin-pattern/templates/plugin-template-2.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="o">//</span> <span class="nt">jQuery</span> <span class="nt">plugin</span> <span class="nt">template</span> <span class="nt">for</span> <span class="nt">plugin</span> <span class="nt">that</span> <span class="nt">does</span> <span class="nt">work</span> <span class="nt">on</span> <span class="nt">element</span>
-</span><span class='line'><span class="o">(</span><span class="nt">function</span><span class="o">(</span><span class="err">$</span><span class="o">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="err">$</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="err">$</span><span class="o">.</span><span class="n">fn</span><span class="o">,</span> <span class="err">{</span>
-</span><span class='line'>		<span class="n">pluginName</span><span class="o">:</span> <span class="n">function</span><span class="p">(</span><span class="n">param</span><span class="o">,</span> <span class="n">options</span><span class="p">)</span> <span class="err">{</span>
-</span><span class='line'>			<span class="n">options</span> <span class="o">=</span> <span class="err">$</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="err">{</span>
-</span><span class='line'>				<span class="o">//</span> <span class="n">Options</span> <span class="n">Defaults</span>
-</span><span class='line'>			<span class="p">}</span><span class="o">,</span> <span class="nt">options</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="nt">this</span><span class="nc">.each</span><span class="o">(</span><span class="nt">function</span><span class="o">()</span> <span class="p">{</span>
-</span><span class='line'>				<span class="o">//</span> <span class="n">Operations</span> <span class="n">for</span> <span class="n">each</span> <span class="n">DOM</span> <span class="n">element</span>
-</span><span class='line'>			<span class="p">}</span><span class="o">)</span><span class="nc">.data</span><span class="o">(</span><span class="s1">&#39;pluginName&#39;</span><span class="o">,</span> <span class="p">{</span>
-</span><span class='line'>				<span class="o">//</span> <span class="n">Plugin</span> <span class="n">interface</span> <span class="n">object</span>
-</span><span class='line'>			<span class="p">}</span><span class="o">);</span>
-</span><span class='line'>		
-</span><span class='line'>			<span class="nt">return</span> <span class="nt">this</span><span class="o">;</span>
-</span><span class='line'>		<span class="err">}</span>
-</span><span class='line'>	<span class="err">}</span><span class="o">);</span>
-</span><span class='line'><span class="err">}</span><span class="o">)(</span><span class="nt">jQuery</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<h2>Demo &amp; Download</h2>
-
-<ul>
-<li>Live example for the float plugin you can find <a href="../code/jquery-plugin-pattern/float-plugin/float.html" target="_blank">here</a>.</li>
-<li>Live example for the compose plugin you can find <a href="../code/jquery-plugin-pattern/compose-plugin/compose.html" target="_blank">here</a>.</li>
-<li><a href="../code/jquery-plugin-pattern/jquery-plugin-pattern.zip" target="_blank">Here</a> you can find all the examples of this post and the plugins templates.</li>
-</ul>
-
-
-<p>I hope you find this post useful, and if you have any question, don't hesitate to ask!</p>
 ]]></content>
   </entry>
   

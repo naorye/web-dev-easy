@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Object Oriented Programming | Web Development is Easy!]]></title>
+  <link href="http://webdeveasy.com/categories/object-oriented-programming/atom.xml" rel="self"/>
+  <link href="http://webdeveasy.com/"/>
+  <updated>2013-03-19T11:32:56+02:00</updated>
+  <id>http://webdeveasy.com/</id>
+  <author>
+    <name><![CDATA[NaorYe]]></name>
+    <email><![CDATA[mailto:naorye@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Object Oriented Programming with JavaScript]]></title>
+    <link href="http://webdeveasy.com/object-oriented-programming-with-javascript/"/>
+    <updated>2013-03-18T23:01:00+02:00</updated>
+    <id>http://webdeveasy.com/object-oriented-programming-with-javascript</id>
+    <content type="html"><![CDATA[<p>As we already know, JavaScript is an object oriented language. In this article we will see JavaScript example to <a href="http://en.wikipedia.org/wiki/Inheritance_%28object-oriented_programming%29" target="_blank">inheritance</a> and <a href="http://en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming" target="_blank">subtype polymorphism</a>.<!-- more -->
+For solid base, I really recommend to read first about <a href="../javascript-prototype">JavaScript Prototype</a>.</p>
+
+<h2>Base Class</h2>
+
+<p>Lets define an Animal class. First thing to do is to define it's constructor:
+```javascript Animal constructor
+var Animal = function() {</p>
+
+<pre><code>this.color = "Pink";
+</code></pre>
+
+<p>}
+<code>
+Next, lets define Animal's methods:
+</code>javascript Animal methods
+Animal.prototype.run = function() {</p>
+
+<pre><code>console.log("Wuuuuuuuuuuuuushhhhhh");
+</code></pre>
+
+<p>}
+Animal.prototype.sleep = function() {</p>
+
+<pre><code>console.log("ZZZzzzZZZzzzZZZzzzzzz...");
+</code></pre>
+
+<p>}
+Animal.prototype.eat = function() {</p>
+
+<pre><code>console.log("HmnmnmHmmnmnm..BURP");
+</code></pre>
+
+<p>}
+<code>
+An easy way to write this is to extend Animal.prototype (using &lt;a href="http://api.jquery.com/jQuery.extend/" target="_blank"&gt;jQuery&lt;/a&gt;, &lt;a href="http://underscorejs.org/#extend" target="_blank"&gt;underscore&lt;/a&gt; or your own implementation):
+</code>javascript Animal methods using jQuery.extend
+$.extend(Animal.prototype, {</p>
+
+<pre><code>run: function() {
+    console.log("Wuuuuuuuuuuuuushhhhhh");
+},
+sleep: function() {
+    console.log("ZZZzzzZZZzzzZZZzzzzzz...");
+},
+eat: function() {
+    console.log("HmnmnmHmmnmnm..BURP");
+}
+</code></pre>
+
+<p>});
+```
+Great, this looks better. Now we can create animals that can run, sleep and eat.</p>
+
+<h2>Sub Class - Inharitance</h2>
+
+<p>Lets create a Cat which is a sub class of an Animal. First create Cat's constructor:
+```javascript Cat constructor
+var Cat = function() {</p>
+
+<pre><code>Animal.apply(this, arguments); // Call parent class constructor
+
+this.name = name;
+console.log("My name is " + this.name +
+            " and my color is " + this.color);
+</code></pre>
+
+<p>}
+<code>
+Next, we want Cat to have Animal's methods, so we need something like:
+</code>javascript Cat's prototype gets Animal's prototype
+Cat.prototype = Animal.prototype;
+```
+But this code will cause a problem. Adding new methods to Cat's prototype will add those methods also to Animal (since Cat.prototype and Animal.prototype are now refrence to the same set of methods). <br/>
+There are a few ways to solve this problem:</p>
+
+<ol>
+    <li>
+        Use Object.create method that creates an object based on set of properties:
+
+```javascript Using Object.create
+Cat.prototype = Object.create(Animal.prototype);
+```
+    </li>
+    <li>
+        Use extend:
+
+```javascript Using extend
+$.extend(Cat.prototype, Animal.prototype);
+```
+    </li>
+    <li>
+        Dance a little:
+
+```javascript Dancing
+var sub = function() { };
+sub.prototype = Animal.prototype;
+Cat.prototype = new sub();
+```
+    </li>
+</ol>
+
+
+<p>Lets add methods to Cat:
+```javascript Add methods to Cat
+$.extend(Cat.prototype, {</p>
+
+<pre><code>drinkMilk: function() {
+    consoloe.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+}
+</code></pre>
+
+<p>});
+<code>
+Finally, Cat definition looks like this:
+</code>javascript Cat definition
+var Cat = function() {</p>
+
+<pre><code>Animal.apply(this, arguments);
+
+this.name = name;
+console.log("My name is " + this.name +
+            " and my color is " + this.color);
+</code></pre>
+
+<p>}
+Cat.prototype = Object.create(Animal.prototype);
+$.extend(Cat.prototype, {</p>
+
+<pre><code>drinkMilk: function() {
+    console.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+}
+</code></pre>
+
+<p>});
+<code>
+So, meybe it will be easier to create inheritance helper:
+</code>javascript Inheritance helper
+function inherit(base, methods) {</p>
+
+<pre><code>var sub = function() {
+    base.apply(this, arguments); // Call base class constructor
+
+    // Call sub class initialize method that will act like a constructor
+    this.initialize.apply(this, arguments);
+};
+sub.prototype = Object.create(base.prototype);
+$.extend(sub.prototype, methods);
+return sub;
+</code></pre>
+
+<p>}
+<code>
+Now creating Cat using the new helper is really simple and clear:
+</code>javascript Cat definition using our inheritance helper
+var Cat = inherit(Animal, {</p>
+
+<pre><code>initialize: function(name) {
+    this.name = name;
+    console.log("My name is " + this.name +
+                " and my color is " + this.color);
+},
+drinkMilk: function() {
+    console.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h2>Sub Class - Subtype Polymorphism</h2>
+
+<p>Since cats are purring when they sleep, lets override the sleep method:
+```javascript Override base class method
+var Cat = inherit(Animal, {</p>
+
+<pre><code>...
+...
+...
+sleep: function() {
+    console.log("rrr...rrr...rrr...");
+}
+</code></pre>
+
+<p>});
+<code>
+But, what if after purring, cats getting sleep like any other animal?   
+Lets call the Animal's sleep method right after purring:
+</code>javascript Calling base class method
+var Cat = inherit(Animal, {</p>
+
+<pre><code>...
+...
+...
+sleep: function() {
+    console.log("rrr...rrr...rrr...");
+    Animal.prototype.sleep();
+}
+</code></pre>
+
+<p>});
+```
+Now out cat will sleep like any other animal after purring a little.</p>
+
+<h2>Complete Code</h2>
+
+<p>Here is our complete code:
+```javascript Complete code
+function inherit(base, methods) {</p>
+
+<pre><code>var sub = function() {
+    base.apply(this, arguments); // Call base class constructor
+
+    // Call sub class initialize method that will act like a constructor
+    this.initialize.apply(this, arguments);
+};
+sub.prototype = Object.create(base.prototype);
+$.extend(sub.prototype, methods);
+return sub;
+</code></pre>
+
+<p>}</p>
+
+<p>var Animal = function() {</p>
+
+<pre><code>this.color = "Pink";
+</code></pre>
+
+<p>}
+$.extend(Animal.prototype, {</p>
+
+<pre><code>run: function() {
+    console.log("Wuuuuuuuuuuuuushhhhhh");
+},
+sleep: function() {
+    console.log("ZZZzzzZZZzzzZZZzzzzzz...");
+},
+eat: function() {
+    console.log("HmnmnmHmmnmnm..BURP");
+}
+</code></pre>
+
+<p>});</p>
+
+<p>var Cat = inherit(Animal, {</p>
+
+<pre><code>initialize: function(name) {
+    this.name = name;
+    console.log("My name is " + this.name +
+                " and my color is " + this.color);
+},
+drinkMilk: function() {
+    consoloe.log("lplplplplplp");
+},
+fightOtherCat: function() {
+    console.log("Mirrrrrrrccchhhhh");
+},
+sleep: function() {
+    console.log("rrr...rrr...rrr...");
+    Animal.prototype.sleep();
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h2>Usage</h2>
+
+<p>Since I have a cat, I must create its virtual persona:
+<code>javascript My virtual Mutzi
+var mutzi = new Cat("Mutzi");
+mutzi.run();
+mutzi.fightOtherCat();
+mutzi.sleep();
+</code>
+And of course, the result will appear on the console:
+<code>
+My name is Mutzi and my color is Pink
+Wuuuuuuuuuuuuushhhhhh
+Mirrrrrrrccchhhhh
+rrr...rrr...rrr...
+ZZZzzzZZZzzzZZZzzzzzz...
+</code></p>
+
+<h2>Summary</h2>
+
+<p>In this article we created the Animal base class. Then we created the Cat sub class by inherit from Animal. Then we added new methods for Cat and at the end we overridden Animal's method and used the base class implementation in our implementation.</p>
+
+<p>I hope you had fun reading this article! <br/>
+Any questions -> to me :)</p>
+]]></content>
+  </entry>
+  
+</feed>
