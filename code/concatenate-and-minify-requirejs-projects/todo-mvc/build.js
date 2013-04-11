@@ -11,8 +11,8 @@
     optimizeCss: "standard",
     removeCombined: true,
     paths: {
-        jquery: 'lib/jquery.min',
-        underscore: 'lib/lodash.min',
+        jquery: 'lib/jquery',
+        underscore: 'lib/underscore',
         backbone: 'lib/backbone/backbone',
         backboneLocalstorage: 'lib/backbone/backbone.localStorage',
         text: 'lib/require/text'

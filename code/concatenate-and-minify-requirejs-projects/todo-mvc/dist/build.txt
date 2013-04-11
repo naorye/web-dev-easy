@@ -5,8 +5,8 @@ css/base.css
 
 js/main.js
 ----------------
-js/lib/jquery.min.js
-js/lib/lodash.min.js
+js/lib/jquery.js
+js/lib/underscore.js
 js/lib/backbone/backbone.js
 js/lib/backbone/backbone.localStorage.js
 js/models/todo.js
