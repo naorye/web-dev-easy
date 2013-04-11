@@ -19,8 +19,8 @@ require.config({
 		}
 	},
 	paths: {
-		jquery: '../../../assets/jquery.min',
-		underscore: '../../../assets/lodash.min',
+		jquery: 'lib/jquery.min',
+		underscore: 'lib/lodash.min',
 		backbone: 'lib/backbone/backbone',
 		backboneLocalstorage: 'lib/backbone/backbone.localStorage',
 		text: 'lib/require/text'
