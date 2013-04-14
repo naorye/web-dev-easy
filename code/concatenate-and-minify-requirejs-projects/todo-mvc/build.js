@@ -1,14 +1,14 @@
 ({
-    appDir: "./",
-    baseUrl: "./js",
-    dir: "./dist",
+    appDir: './',
+    baseUrl: './js',
+    dir: './dist',
     modules: [
         {
-            name: "main"
+            name: 'main'
         }
     ],
     fileExclusionRegExp: /^(r|build)\.js$/,
-    optimizeCss: "standard",
+    optimizeCss: 'standard',
     removeCombined: true,
     paths: {
         jquery: 'lib/jquery',
