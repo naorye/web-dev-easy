@@ -9,7 +9,7 @@
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="As we already know, JavaScript is an object oriented language. In this article we will see JavaScript example to inheritance and subtype polymorphism.">
+  <meta name="description" content="This article will demonstrate you how to concatenate and minify projects that are based on RequireJS. In this article I&#8217;ll use several tools &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,6 +83,277 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/optimize-requirejs-projects/">Optimize (Concatenate and Minify) RequireJS Projects</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-19T07:32:00+03:00" pubdate data-updated="true">Apr 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This article will demonstrate you how to concatenate and minify projects that are based on RequireJS. In this article I&#8217;ll use several tools that require Node.js. So, if you don&#8217;t have Node.js yet, install it <a target="_blank" href="http://nodejs.org/">here</a>.</p>
+
+<h2>Motivation</h2>
+
+<p>A lot has been written already about RequireJS. This tool allows you to easily separate your JavaScript code into several modules and by this keep your code modular and easy to maintain. Then, you get many JavaScript files that have dependency relation. By adding one script reference to RequireJS in your html file, you can load all the required scripts for your page. <br/>
+Still, in production, this is a bad practice to leave all JavaScript files separated. Making many requests, no matter how small the requested files are, take time. This time can be saved by concatenating scripts that reduce the number of requests and save the loading time. <br/>
+Another technique to save loading time is to reduce the size of the requested files, a small file can be delivered faster. This process is called <a target="_blank" href="http://en.wikipedia.org/wiki/Minification_%28programming%29">minification</a> and it is done by carefully changing the script&#8217;s code without changing its behavior and functionality. Such changes can be: removing unnecessary characters like spaces, mangling variables and methods names and so on.
+This process of concatenation and minification is called optimization. In addition to JavaScript files optimization, the same methods are used to optimize CSS files. <br/>
+RequireJS has two main methods: define() and require(). These methods basically have similar declaration and they both know to load dependencies and then execute a callback function.
+Unlike require(), define() is used to store code as a named module. Therefore the define()&#8217;s callback function should return a value to define the module. Such modules are called <a target="_blank" href="http://requirejs.org/docs/whyamd.html">AMD</a> (Asynchronous Module Definition).</p>
+
+<p>If you are not familiar with RequireJS or didn&#8217;t fully understand what I wrote - don&#8217;t worry. An example is about to come.</p>
+
+<h2>JavaScript Application Optimization</h2>
+
+<p>In this section I will demonstrate the optimization of Addy Osmani&#8217;s <a target="_blank" href="http://todomvc.com/dependency-examples/backbone_require/">TodoMVC Backbone.js + RequireJS project</a>. Since the TodoMVC project contains many implementations of TodoMVC in different frameworks, I downloaded version 1.1.0 and draw out the Backbone.js + RequireJS application. Download the application from
+<a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc.zip">here</a> and extract the zip file. The extracted todo-mvc directory will be our example root path and from now on I&#8217;ll refer to this directory as &lt;root&gt;. <br/>
+If you&#8217;ll look on &lt;root&gt;/index.html file, you will see it contains only one script tag (and another one if you use Internet Explorer):</p>
+
+<figure class='code'><figcaption><span>index.html scripts refrences</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;js/main&quot;</span> <span class="na">src=</span><span class="s">&quot;js/lib/require/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="c">&lt;!--[if IE]&gt;</span>
+</span><span class='line'><span class="c">    &lt;script src=&quot;js/lib/ie.js&quot;&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="c">&lt;![endif]--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In fact, the only tag required for loading the whole project&#8217;s scripts is the require.js script tag. If you&#8217;ll launch <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/">the project</a> in your browser and look under the network tab of your favorite inspection tool, you will notice that your browser has also loaded other JavaScript files: <br/>
+<img class="right" src="/code/optimize-requirejs-projects/loaded-js-files-list.png" title="Loaded JavaScript Files List" alt="Loaded JavaScript Files List"> <br/>
+All the scripts marked inside the red square were loaded by RequireJS.</p>
+
+<p>To optimize the project we will use <a target="_blank" href="http://requirejs.org/docs/optimization.html">RequireJS Optimizer</a>. Follow the <a target="_blenk" href="http://requirejs.org/docs/optimization.html#download">download instructions</a>, get r.js and copy it to the &lt;root&gt; directory. jrburke&#8217;s <a target="_blank" href="https://github.com/jrburke/r.js">r.js</a> is a command line tool that can run AMD based projects, but what is more important, it includes the RequireJS Optimizer which allows us to concatenate and minify scripts.<br/>
+RequireJS Optimizer has many usages. It can optimize single JavaScript or single CSS file, it can optimize a whole project or only part of it as well as multi-page application. It can also use different minification engines or no minification at all, and so on. This article has no intention to cover all the possibilities of RequireJS Optimizer, but to demonstrate a usage.</p>
+
+<p>As I mentioned earlier, we will use Node.js in order to run the optimizer. The following command runs it:</p>
+
+<figure class='code'><figcaption><span>Run RequireJS Optimizer</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>node r.js -o &lt;arguments&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are two ways to supply arguments to the optimizer. One way is to specify arguments on the command line:</p>
+
+<figure class='code'><figcaption><span>Arguments on the command line</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>node r.js -o <span class="nv">baseUrl</span><span class="o">=</span>. <span class="nv">name</span><span class="o">=</span>main <span class="nv">out</span><span class="o">=</span>main-built.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Other way is to specify a build profile file (relative to the execution folder) that contains the arguments:</p>
+
+<figure class='code'><figcaption><span>Arguments on build profile file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>node r.js -o build.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And build.js content:</p>
+
+<figure class='code'><figcaption><span>Arguments on build profile file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">({</span>
+</span><span class='line'>    <span class="nx">baseUrl</span><span class="o">:</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">out</span><span class="o">:</span> <span class="s2">&quot;main-built.js&quot;</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I think a build profile file is more readable than command line arguments so I&#8217;ll use this method. Let&#8217;s create our &lt;root&gt;/build.js file and see which arguments it contains:</p>
+
+<figure class='code'><figcaption><span>&lt;root&gt;/build.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">({</span>
+</span><span class='line'>    <span class="nx">appDir</span><span class="o">:</span> <span class="s1">&#39;./&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">baseUrl</span><span class="o">:</span> <span class="s1">&#39;./js&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">dir</span><span class="o">:</span> <span class="s1">&#39;./dist&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">modules</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;main&#39;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">],</span>
+</span><span class='line'>    <span class="nx">fileExclusionRegExp</span><span class="o">:</span> <span class="sr">/^(r|build)\.js$/</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">optimizeCss</span><span class="o">:</span> <span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">removeCombined</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">jquery</span><span class="o">:</span> <span class="s1">&#39;lib/jquery&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">underscore</span><span class="o">:</span> <span class="s1">&#39;lib/underscore&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">backbone</span><span class="o">:</span> <span class="s1">&#39;lib/backbone/backbone&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">backboneLocalstorage</span><span class="o">:</span> <span class="s1">&#39;lib/backbone/backbone.localStorage&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;lib/require/text&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">shim</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">underscore</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;_&#39;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">backbone</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">deps</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s1">&#39;underscore&#39;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s1">&#39;jquery&#39;</span>
+</span><span class='line'>            <span class="p">],</span>
+</span><span class='line'>            <span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;Backbone&#39;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">backboneLocalstorage</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">deps</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;backbone&#39;</span><span class="p">],</span>
+</span><span class='line'>            <span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;Store&#39;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Understanding all the configurations of RequireJS Optimizer is not the aim of this article, but I want do describe the arguments I used:</p>
+
+<table>
+<thead>
+<tr>
+<th>Argument            </th>
+<th> Description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>appDir              </td>
+<td> The directory that contains the application (the &lt;root&gt; directory). All the files sitting under this directory will be copied from here to the dir argument.</td>
+</tr>
+<tr>
+<td>baseUrl             </td>
+<td> A path, relative to appDir, that represents the anchor path for finding files.</td>
+</tr>
+<tr>
+<td>dir                 </td>
+<td> This is the output directory which all the application files will be copied to.</td>
+</tr>
+<tr>
+<td>modules             </td>
+<td> Array that contains objects. Each object represents a module that should be optimize.</td>
+</tr>
+<tr>
+<td>fileExclusionRegExp </td>
+<td> Each file or directory that will be match to this regular expression will not be copied to our output directory. Since we located r.js and build.js under the application directory, we want the optimizer to exclude them. Therefore we set this argument to /&#94;(r|build)&#92;.js$/.</td>
+</tr>
+<tr>
+<td>optimizeCss         </td>
+<td> RequireJS Optimizer automatically optimizes our application&#8217;s CSS files. This argument controls the CSS optimization settings. Allowed values: &#8220;none&#8221;, &#8220;standard&#8221;, &#8220;standard.keepLines&#8221;, &#8220;standard.keepComments&#8221;, &#8220;standard.keepComments.keepLines&#8221;.</td>
+</tr>
+<tr>
+<td>removeCombined      </td>
+<td> If true, optimizer will remove concatenated files from the output directory.</td>
+</tr>
+<tr>
+<td>paths               </td>
+<td> Relative paths of modules.</td>
+</tr>
+<tr>
+<td>shim                </td>
+<td> Configure dependencies and exports for &#8220;browser globals&#8221; scripts, that do not use define() to declare the dependencies and set a module value.</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>For more information and for advanced usage of the RequireJS Optimizer, in addition to it&#8217;s web page provided earlier, you can read the details of all the allowed optimizer configuration options <a target="_blank" href="https://github.com/jrburke/r.js/blob/master/build/example.build.js">here</a>.</p>
+
+<p>Now that we have the build file, lets run the optimizer. Go to the &lt;root&gt; directory and execute the command:</p>
+
+<figure class='code'><figcaption><span>Run optimizer</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>node r.js -o build.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A new folder has created: &lt;root&gt;/dist. It is important to notice that the script &lt;root&gt;/dist/js/main.js now contains all it&#8217;s combined and minified dependencies. Moreover, &lt;root&gt;/dist/css/base.css is also optimized. <br/>
+Running <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/dist/">the optimized project</a> launches the application which looks exactly like the non-optimized version. Inspecting the page network traffic will show that only two JavaScript files were loaded:
+<img class="right" src="/code/optimize-requirejs-projects/loaded-optimized-js-files-list.png" title="Loaded Optimized JavaScript Files List" alt="Loaded Optimized JavaScript Files List"> <br/>
+RequireJs Optimizer reduced the amount of server scripts requests from 13 to 2 and reduced the total scripts size from 164KB to 58.6KB (both require.js and main.js).</p>
+
+<h2>Overhead</h2>
+
+<p>Apparently, after the optimization is over, we don&#8217;t need a reference to require.js because the scripts are no longer separated and all the dependencies were loaded. <br/>
+Still, the optimization process concatenated all our scripts and produced one optimized script file which contains many calls to define() and require(). Therefore, to allow the application work properly, define() and require() must be specified and
+implemented somewhere in our application. <br/>
+This issue causes a well known overhead: we always have to have any code that implement define() and require(). <strong>This code is not part of our application and it exists only due to our infrastructure considerations.</strong> This problem becomes even bigger when we want to develop a JavaScript library. Such libraries usually have small size comparing to RequireJS itself, and therefore including it in the library will cause a huge overhead.</p>
+
+<p>At the time of writing this article, there isn&#8217;t any full solution for this overhead, but we can ease it using <a target="_blank" href="https://github.com/jrburke/almond">almond</a>. Almond is a minimalistic AMD loader which implements the RequireJS API, and so, instead of including the RequireJS implementation in our optimized code, we can include almond. <br/>
+Nowadays, I am working on an optimizer that will be able to optimize RequireJS applications without overhead, but this is still a new project so there is nothing to show yet.</p>
+
+<h2>Download &amp; Conslusion</h2>
+
+<ul>
+<li><a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc.zip">Download</a> <strong>unoptimized</strong> TodoMVC Backbone.js + RequireJS project or <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/">See</a> it in action.</li>
+<li><a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc-optimized.zip">Download</a> <strong>optimized</strong> TodoMVC Backbone.js + RequireJS project (located under dist folder) or <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/dist/">See</a> it in action.</li>
+</ul>
+
+
+<p>After reading this article, I believe you got a solid idea how to optimize your RequireJS application. I&#8217;ll be glad to answer any question you have.</p>
+
+<p>Good Luck! <br/>
+NaorYe</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -426,6 +697,10 @@ I had several <a href="http://jqueryui.com/demos/autocomplete" target="_blank">j
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/optimize-requirejs-projects/">Optimize (Concatenate and Minify) RequireJS Projects</a>
+      </li>
     
       <li class="post">
         <a href="/object-oriented-programming-with-javascript/">Object Oriented Programming with JavaScript</a>
