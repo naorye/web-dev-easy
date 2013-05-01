@@ -1,0 +1,650 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Backbone Cleanup - Web Development is Easy!</title>
+  <meta name="author" content="NaorYe">
+
+  
+  <meta name="description" content="Backbone allows our users to browse our website without refreshing the page. Each page the user visits consists of several Backbone views which are &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://webdeveasy.com/backbone-cleanup/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  
+
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34683362-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Web Development is Easy!</a></h1>
+  
+    <h2>frameworks, tools and tips for web developers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="mailto:naorye@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:webdeveasy.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <!--<li><a href="/">Home</a></li>-->
+    <li><a href="/">Posts</a></li>
+    <!--<li><a href="/blog/ask-a-question">Ask a Question</a></li>-->
+    <li><a href="/blog/about-me">About Me</a></li>
+    <li><a href="/blog/contact-me">Contact Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Backbone Cleanup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-30T21:09:00+03:00" pubdate data-updated="true">Apr 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Backbone allows our users to browse our website without refreshing the page. Each page the user visits consists of several Backbone views which are replaced whenever the user navigates. Views reflect our data models and interact with each other. This can be done by listening and triggering events which add functionality to the page. Whenever the view is replaced, there is a need to clean up the removed view, unbind events and remove unmanaged structure. <br/>
+This article suggests a solution to the views cleanup problem.<!-- more --> <br/>
+Keep in mind that this is only a suggestion as Backbone doesn&#8217;t bind us to a specific solution. Your solution should be the one that fit your application structure and requirements.</p>
+
+<h2>Cleanup Router</h2>
+
+<p>We want to cleanup views. In order to do this, we have to find where and when a view is not relevant anymore. After thinking a little I understood that this resides somewhere inside the router, the place where views are replaced by other views. Actually, we want to cleanup the view <strong>right before</strong> the navigation. Unfortunately, Backbone.Router has no &#8220;before-navigate&#8221; event, so we have to override Router&#8217;s &#8216;navigate()&#8217; method and do whatever we want before calling the original &#8216;navigate()&#8217; method. Let&#8217;s define the Router&#8217;s &#8216;currentView&#8217; member as a reference to the current visible view. Then we can do:</p>
+
+<figure class='code'><figcaption><span>Backbone.CleanupRouter class first sketch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupRouter</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">navigate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentView</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span><span class="p">.</span><span class="nx">cleanupAll</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">navigate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This way, each time the user navigates between pages, the router calls the current view&#8217;s &#8216;cleanupAll()&#8217; method and then do the navigation. <br/>
+In order to let instances of such a router to mark the current view, let&#8217;s add &#8216;markCurrentView()&#8217; method:</p>
+
+<figure class='code'><figcaption><span>Backbone.CleanupRouter class second sketch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupRouter</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">navigate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fragment</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentView</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span><span class="p">.</span><span class="nx">cleanupAll</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">navigate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">markCurrentView</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, CleanupRouter&#8217;s instance can be something like:</p>
+
+<figure class='code'><figcaption><span>Backbone.CleanupRouter instance example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupRouter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">routes</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s1">&#39;page-a&#39;</span><span class="o">:</span> <span class="s1">&#39;pageA&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">pageA</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="c1">// create a view for page A</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">markCurrentView</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After looking on the original Backbone.Router&#8217;s &#8216;navigate()&#8217; method, I noticed that there are some cases where the navigate exits without replacing the view (for example, navigation to the same current route should do nothing). In such cases, we don&#8217;t need to cleanup the current view. Let&#8217;s change our custom &#8216;navigate()&#8217; to exit in those cases:</p>
+
+<figure class='code'><figcaption><span>Backbone.CleanupRouter class final sketch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">routeStripper</span> <span class="o">=</span> <span class="sr">/^[#\/]/</span><span class="p">;</span>
+</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupRouter</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">navigate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fragment</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Filter cases where navigate exists without navigate</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">History</span><span class="p">.</span><span class="nx">started</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">frag</span> <span class="o">=</span> <span class="p">(</span><span class="nx">fragment</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="nx">routeStripper</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">fragment</span> <span class="o">==</span> <span class="nx">frag</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentView</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span><span class="p">.</span><span class="nx">cleanupAll</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">navigate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">markCurrentView</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Cleanup View</h2>
+
+<p>Now we have to define a view that has a &#8216;cleanupAll()&#8217; method. This view should clean up itself when calling &#8216;cleanupAll()&#8217;:</p>
+
+<figure class='code'><figcaption><span>Backbone.CleanupView class first sketch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">cleanup</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// This method should be overridden by each view and should</span>
+</span><span class='line'>        <span class="c1">// contains all the cleanup commands</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">cleanupAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">cleanup</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Backbone views can hold nested views. Whenever we cleanup a view, we need to clean also it&#8217;s nested views. In order to do that, each view should have a reference to all it&#8217;s nested views. Let&#8217;s implement this:</p>
+
+<figure class='code'><figcaption><span>Backbone.CleanupView class last sketch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">nestedViews</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>        <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">setNestedView</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">nestedViews</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">cleanup</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// This method should be overridden</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">cleanupAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">nestedViews</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">nestedViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">cleanup</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">nestedViews</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">cleanup</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, CleanupView&#8217;s instance can be something like:</p>
+
+<figure class='code'><figcaption><span>Backbone.CleanupView instance example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Render current view</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">nested</span> <span class="o">=</span> <span class="c1">// create a nested view which is</span>
+</span><span class='line'>                     <span class="c1">// also instance of CleanupView</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">nested</span><span class="p">.</span><span class="nx">$el</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">setNestedView</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">cleanup</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Cleanup current view only</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Example</h2>
+
+<p>In order to test our cleanup plugin, I have created a small application that uses it and logs the &#8216;render()&#8217; and &#8216;cleanup()&#8217; methods. The application contains one router of CleanupRouter type and two views of CleanupView type (with templates):</p>
+
+<figure class='code'><figcaption><span>Application router</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Router</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupRouter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">routes</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s1">&#39;&#39;</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;single-view&#39;</span><span class="o">:</span> <span class="s1">&#39;singleView&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s1">&#39;nested-view&#39;</span><span class="o">:</span> <span class="s1">&#39;nestedView&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">navigate</span><span class="p">(</span><span class="s1">&#39;single-view&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">trigger</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">singleView</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SingleView</span><span class="p">();</span>
+</span><span class='line'>        <span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#view&#39;</span><span class="p">).</span><span class="nx">empty</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">$el</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">markCurrentView</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">nestedView</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">NestedView</span><span class="p">();</span>
+</span><span class='line'>        <span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#view&#39;</span><span class="p">).</span><span class="nx">empty</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">$el</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">markCurrentView</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Our router renders instances of SingleView and NestedView according to the route. After each render we call &#8216;markCurrentView()&#8217; in order to mark the current view.</p>
+
+<figure class='code'><figcaption><span>SingleView view</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">SingleView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;single-view&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">template</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">singleViewTemplate</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">app</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Render: SingleView (&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">cid</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">cleanup</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">app</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Cleanup: SingleView (&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">cid</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>single-view.html template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Single</span> <span class="nx">View</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>SingleView&#8217;s template contains only a title. Each time &#8216;render()&#8217; and &#8216;cleanup()&#8217; are called, the application logs the action.</p>
+
+<figure class='code'><figcaption><span>NestedView view</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">NestedView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">CleanupView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>    <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;nested-view&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">template</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">nestedViewTemplate</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s1">&#39;click .add-view&#39;</span><span class="o">:</span> <span class="s1">&#39;addView&#39;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">app</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Render: NestedView (&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">cid</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">cleanup</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">app</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Cleanup: NestedView (&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">cid</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">addView</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SingleView</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">$el</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">setNestedView</span><span class="p">(</span><span class="nx">view</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>nested-view.html template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">Nested</span> <span class="nx">View</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">button</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;add-view&quot;</span><span class="o">&gt;</span><span class="nx">Add</span> <span class="nx">View</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NestedView&#8217;s template contains a title and a button. Each time this button is pressed, the view creates and appends to itself a SingleView instance. In addition, by calling &#8216;setNestedView()&#8217;, the view registers the new SingleView instance to the nested views array. As in SingleView, calls to &#8216;render()&#8217; and &#8216;cleanup()&#8217; are logged.</p>
+
+<p>You can see the application in action <a target="_blank" href="../code/backbone-cleanup/example/">here</a>. Try to navigate between views and add nested views in order to see in the log how &#8216;render()&#8217; and &#8216;cleanup()&#8217; take place in the application flow.</p>
+
+<h2>Download &amp; GitHub &amp; Demo</h2>
+
+<ul>
+<li><a href="../code/backbone-cleanup/backbone-cleanup.zip" target="_blank">Backbone Cleanup Download</a></li>
+<li><a href="https://github.com/naorye/BackboneCleanup" target="_blank">Backbone Cleanup GitHub Repository</a></li>
+<li>Example application in action <a target="_blank" href="../code/backbone-cleanup/example/">here</a>.</li>
+</ul>
+
+
+<p>I hope you enjoyed reading this article,</p>
+
+<p>NaorYe</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">NaorYe</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-30T21:09:00+03:00" pubdate data-updated="true">Apr 30<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/backbone-js/'>Backbone.js</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/optimize-requirejs-projects/" title="Previous Post: Optimize (Concatenate and Minify) RequireJS Projects">&laquo; Optimize (Concatenate and Minify) RequireJS Projects</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/backbone-cleanup/">Backbone Cleanup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/optimize-requirejs-projects/">Optimize (Concatenate and Minify) RequireJS Projects</a>
+      </li>
+    
+      <li class="post">
+        <a href="/object-oriented-programming-with-javascript/">Object Oriented Programming with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-cache/">Backbone Cache</a>
+      </li>
+    
+      <li class="post">
+        <a href="/searcher-backbone-dot-js-application-demonstration/">Searcher - Backbone application demonstration</a>
+      </li>
+    
+      <li class="post">
+        <a href="/javascript-prototype/">JavaScript Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-singleton/">Backbone Singleton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/style-your-jquery-ui-tabs/">Style Your jQuery-UI Tabs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/cascading-autocompletes-using-jquery-ui/">Cascading Autocompletes using jQuery UI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - NaorYe -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'webdeveasy';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://webdeveasy.com/backbone-cleanup/';
+        var disqus_url = 'http://webdeveasy.com/backbone-cleanup/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

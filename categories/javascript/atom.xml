@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-04-19T18:18:54+03:00</updated>
+  <updated>2013-05-01T23:50:47+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,267 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Backbone Cleanup]]></title>
+    <link href="http://webdeveasy.com/backbone-cleanup/"/>
+    <updated>2013-04-30T21:09:00+03:00</updated>
+    <id>http://webdeveasy.com/backbone-cleanup</id>
+    <content type="html"><![CDATA[<p>Backbone allows our users to browse our website without refreshing the page. Each page the user visits consists of several Backbone views which are replaced whenever the user navigates. Views reflect our data models and interact with each other. This can be done by listening and triggering events which add functionality to the page. Whenever the view is replaced, there is a need to clean up the removed view, unbind events and remove unmanaged structure. <br/>
+This article suggests a solution to the views cleanup problem.<!-- more --> <br/>
+Keep in mind that this is only a suggestion as Backbone doesn't bind us to a specific solution. Your solution should be the one that fit your application structure and requirements.</p>
+
+<h2>Cleanup Router</h2>
+
+<p>We want to cleanup views. In order to do this, we have to find where and when a view is not relevant anymore. After thinking a little I understood that this resides somewhere inside the router, the place where views are replaced by other views. Actually, we want to cleanup the view <strong>right before</strong> the navigation. Unfortunately, Backbone.Router has no "before-navigate" event, so we have to override Router's 'navigate()' method and do whatever we want before calling the original 'navigate()' method. Let's define the Router's 'currentView' member as a reference to the current visible view. Then we can do:<br/>
+```javascript Backbone.CleanupRouter class first sketch
+Backbone.CleanupRouter = Backbone.Router.extend({</p>
+
+<pre><code>navigate: function() {
+    if (this.currentView) {
+        this.currentView.cleanupAll();
+        this.currentView = null;
+    }
+    Backbone.Router.prototype.navigate.apply(this, arguments);
+}
+</code></pre>
+
+<p>});
+<code>
+This way, each time the user navigates between pages, the router calls the current view's 'cleanupAll()' method and then do the navigation.   
+In order to let instances of such a router to mark the current view, let's add 'markCurrentView()' method:
+</code>javascript Backbone.CleanupRouter class second sketch
+Backbone.CleanupRouter = Backbone.Router.extend({</p>
+
+<pre><code>navigate: function(fragment) {
+    if (this.currentView) {
+        this.currentView.cleanupAll();
+        this.currentView = null;
+    }
+    Backbone.Router.prototype.navigate.apply(this, arguments);
+},
+markCurrentView: function(view) {
+    this.currentView = view;
+}
+</code></pre>
+
+<p>});
+<code>
+Now, CleanupRouter's instance can be something like:
+</code>javascript Backbone.CleanupRouter instance example
+var router = Backbone.CleanupRouter.extend({</p>
+
+<pre><code>routes: {
+    'page-a': 'pageA'
+},
+pageA: function() {
+    var view = // create a view for page A
+    this.markCurrentView(view);
+}
+</code></pre>
+
+<p>});
+<code>
+After looking on the original Backbone.Router's 'navigate()' method, I noticed that there are some cases where the navigate exits without replacing the view (for example, navigation to the same current route should do nothing). In such cases, we don't need to cleanup the current view. Let's change our custom 'navigate()' to exit in those cases:
+</code>javascript Backbone.CleanupRouter class final sketch
+var routeStripper = /<sup>[#\/]/;</sup>
+Backbone.CleanupRouter = Backbone.Router.extend({</p>
+
+<pre><code>navigate: function(fragment) {
+    // Filter cases where navigate exists without navigate
+    if (!Backbone.History.started) return false;
+    var frag = (fragment || '').replace(routeStripper, '');
+    if (Backbone.history.fragment == frag) return;
+
+    if (this.currentView) {
+        this.currentView.cleanupAll();
+        this.currentView = null;
+    }
+    Backbone.Router.prototype.navigate.apply(this, arguments);
+},
+markCurrentView: function(view) {
+    this.currentView = view;
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h2>Cleanup View</h2>
+
+<p>Now we have to define a view that has a 'cleanupAll()' method. This view should clean up itself when calling 'cleanupAll()':
+```javascript Backbone.CleanupView class first sketch
+Backbone.CleanupView = Backbone.View.extend({</p>
+
+<pre><code>cleanup: function() {
+    // This method should be overridden by each view and should
+    // contains all the cleanup commands
+},
+cleanupAll: function() {
+    this.cleanup();
+}
+</code></pre>
+
+<p>});
+<code>
+Backbone views can hold nested views. Whenever we cleanup a view, we need to clean also it's nested views. In order to do that, each view should have a reference to all it's nested views. Let's implement this:
+</code>javascript Backbone.CleanupView class last sketch
+Backbone.CleanupView = Backbone.View.extend({</p>
+
+<pre><code>constructor: function() {
+    this.nestedViews = [];
+    Backbone.View.prototype.constructor.apply(this, arguments);
+},
+setNestedView: function(view) {
+    this.nestedViews.push(view);
+},
+cleanup: function() {
+    // This method should be overridden
+},
+cleanupAll: function() {
+    for (var i in this.nestedViews) {
+        this.nestedViews[i].cleanup();
+    }
+    this.nestedViews = null;
+    this.cleanup();
+}
+</code></pre>
+
+<p>});
+<code>
+Now, CleanupView's instance can be something like:
+</code>javascript Backbone.CleanupView instance example
+var view = Backbone.CleanupView.extend({</p>
+
+<pre><code>render: function() {
+    // Render current view
+    var nested = // create a nested view which is
+                 // also instance of CleanupView
+    this.$el.append(nested.$el);
+
+    this.setNestedView(view);
+},
+cleanup: function() {
+    // Cleanup current view only
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h2>Example</h2>
+
+<p>In order to test our cleanup plugin, I have created a small application that uses it and logs the 'render()' and 'cleanup()' methods. The application contains one router of CleanupRouter type and two views of CleanupView type (with templates):</p>
+
+<p>```javascript Application router
+var Router = Backbone.CleanupRouter.extend({</p>
+
+<pre><code>routes: {
+    '': 'index',
+    'single-view': 'singleView',
+    'nested-view': 'nestedView'
+},
+index: function() {
+    this.navigate('single-view', {trigger: true});
+},
+singleView: function() {
+    var view = new SingleView();
+    view.render();
+    $('#view').empty().append(view.$el);
+
+    this.markCurrentView(view);
+},
+nestedView: function() {
+    var view = new NestedView();
+    view.render();
+    $('#view').empty().append(view.$el);
+
+    this.markCurrentView(view);
+}
+</code></pre>
+
+<p>});
+```
+Our router renders instances of SingleView and NestedView according to the route. After each render we call 'markCurrentView()' in order to mark the current view.</p>
+
+<p>```javascript SingleView view
+var SingleView = Backbone.CleanupView.extend({</p>
+
+<pre><code>className: 'single-view',
+template: _.template(singleViewTemplate),
+render: function() {
+    app.log('Render: SingleView (' + this.cid + ')');
+
+    var template = this.template();
+    this.$el.html(template);
+},
+cleanup: function() {
+    app.log('Cleanup: SingleView (' + this.cid + ')');
+}
+</code></pre>
+
+<p>});
+<code>
+</code>javascript single-view.html template</p>
+
+<h2>Single View</h2>
+
+
+<p>```
+SingleView's template contains only a title. Each time 'render()' and 'cleanup()' are called, the application logs the action.</p>
+
+<p>```javascript NestedView view
+var NestedView = Backbone.CleanupView.extend({</p>
+
+<pre><code>className: 'nested-view',
+template: _.template(nestedViewTemplate),
+events: {
+    'click .add-view': 'addView'
+},
+render: function() {
+    app.log('Render: NestedView (' + this.cid + ')');
+
+    var template = this.template();
+    this.$el.html(template);
+},
+cleanup: function() {
+    app.log('Cleanup: NestedView (' + this.cid + ')');
+},
+addView: function() {
+    var view = new SingleView();
+    this.$el.append(view.$el);
+    view.render();
+    this.setNestedView(view);
+}
+</code></pre>
+
+<p>});
+<code>
+</code>javascript nested-view.html template</p>
+
+<h2>Nested View</h2>
+
+
+<p><button class="add-view">Add View</button>
+```
+NestedView's template contains a title and a button. Each time this button is pressed, the view creates and appends to itself a SingleView instance. In addition, by calling 'setNestedView()', the view registers the new SingleView instance to the nested views array. As in SingleView, calls to 'render()' and 'cleanup()' are logged.</p>
+
+<p>You can see the application in action <a target="_blank" href="../code/backbone-cleanup/example/">here</a>. Try to navigate between views and add nested views in order to see in the log how 'render()' and 'cleanup()' take place in the application flow.</p>
+
+<h2>Download &amp; GitHub &amp; Demo</h2>
+
+<ul>
+<li><a href="../code/backbone-cleanup/backbone-cleanup.zip" target="_blank">Backbone Cleanup Download</a></li>
+<li><a href="https://github.com/naorye/BackboneCleanup" target="_blank">Backbone Cleanup GitHub Repository</a></li>
+<li>Example application in action <a target="_blank" href="../code/backbone-cleanup/example/">here</a>.</li>
+</ul>
+
+
+<p>I hope you enjoyed reading this article,</p>
+
+<p>NaorYe</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Optimize (Concatenate and Minify) RequireJS Projects]]></title>
@@ -1615,176 +1876,6 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>HistoryView gets appQuery as a model, and on initialization it creates QueriesCollection instance. Whenever the appQuery changes, the view adds it to queries collection and renders itself. Render takes the queries collection and generates the markup from the queriesListTemplate dependency. Whenever the user click on history entry, the setModel() function triggered and set appQuery with the history values. As a result of appQuery change, SourcesManager's render occurred.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[JavaScript Prototype]]></title>
-    <link href="http://webdeveasy.com/javascript-prototype/"/>
-    <updated>2012-11-13T10:49:17+02:00</updated>
-    <id>http://webdeveasy.com/javascript-prototype</id>
-    <content type="html"><![CDATA[<p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you want to be an expert web developer. This article will explain you about it.</p>
-
-<!-- more -->
-
-
-<h2>Prototype-Based Language</h2>
-
-<p>This part might confuse you a little, but believe me, after some examples coming next everything will be clear. So, stop the chit chat and let's dive into the JavaScript engine!</p>
-
-<p>JavaScript is an object oriented language, but unlike all the <a href="http://en.wikipedia.org/wiki/Class-based_programming" target="_blank">class-based languages</a> (C++, JAVA, C#, ...), JavaScript is <a href="http://en.wikipedia.org/wiki/Prototype-based_programming" target="_blank">prototype-based language</a>. In class-based languages, we write classes which can be organized into hierarchy and so advance code reuse. In prototype-based languages, there is no distinction between classes and objects. An object is used as a template for creating a new object. In addition, an object's set of properties can be extended either at creation time or at run time. This way prototype-based language furthering code reuse. There are more differences between class-based and prototype-based languages but this is enough for now.</p>
-
-<p>Let's instantiate a new object. In order to do it we have to define function and then simply use the "new" keyword:
-```javascript Instantiate a new object</p>
-
-<pre><code>function baseObj(name) {
-    this.sayHi = function() {
-        alert("Hi " + this.name);
-    }
-    this.name = name;
-}
-var ins = new baseObj("Dan");
-</code></pre>
-
-<p><code>
-The baseObj() function is called Object Constructor since it creates and defines an object. Later we can call:
-</code>javascript Hi Dan</p>
-
-<pre><code>ins.sayHi(); // Alerts "Hi Dan"
-</code></pre>
-
-<p>```
-We will talk about this later.</p>
-
-<h2>JavaScript's Prototype</h2>
-
-<p>In JavaScript, as we mentioned before, we can add properties to an object even after its creation:
-``` javascript Add properties to an object</p>
-
-<pre><code>function animal(){
-    ...
-    ...
-}
-var cat = new animal();
-cat.color = "Green";
-</code></pre>
-
-<p>```
-It is important to notice that the color property is added only to the cat instance. Other instances of animal will not contain the color property. But, there are times where we want to add a property to all the instances of an object. Each animal has a color and not only cats, therefore color property is relevant to all instances of animal. That's where the prototype object of JavaScript comes in.</p>
-
-<p>In JavaScript, each object has a property called "prototype". An object's prototype allows us adding properties to all instances of that object (even to the existing instances). For example:
-```javascript Add the color property to all animal instances</p>
-
-<pre><code>var frog = new animal();
-console.log(frog.color); // frog doesn't have the color property yet
-
-animal.prototype.color = "Green";
-var dog = new animal();
-console.log(dog.color); // will log "Green"
-console.log(frog.color); // will also log "Green"
-</code></pre>
-
-<p>```
-This adds and initialize the color property to every present and future animal instances.</p>
-
-<p>Similar to properties, we can add methods and reflects all the instances:
-```javascript Add the color method to all instances</p>
-
-<pre><code>animal.prototype.run = function() {
-    console.log("I am running!");
-}
-dog.run(); // will log "I am running!"
-</code></pre>
-
-<p><code>
-This functionality allows us to do very useful things like extending the behavior of an Array and add a method that gets an element and removes it from the array:
-</code> javascript Extend Array's functionality</p>
-
-<pre><code>Array.prototype.remove = function(elem) {
-    var index = this.indexOf(elem);
-    if (index &gt;= 0) {
-        this.splice(index, 1);
-    }
-}
-var arr = [1, 2, 3, 4, 5];
-arr.remove(4); // will keep the array to be [1, 2, 3, 5]
-</code></pre>
-
-<p>```
-In this example I used the "this" keyword inside the method. Keep in mind that "this" refer to the object that calls the method. In this example when calling arr.remove(4), "this" refer to arr and therefore this.indexOf(elem) returns the index of elem in arr.</p>
-
-<h2>The Object Constructor Way</h2>
-
-<p>Besides the prototype approach, another way to define properties and methods is by doing it inside the object constructor:
-```javascript Define properties and methods inside the object constructor</p>
-
-<pre><code>function animal() {
-    this.color = "Green";
-    this.run = function() {
-        console.log("I am running!");
-    }
-}
-var mouse = new animal();
-mouse.run(); // will log "I am running!"
-</code></pre>
-
-<p>```
-This code results the same object structure as the prototype approach. Each instance of animal will have the color property and the run method.</p>
-
-<p>The main advantage of this approach is that you can make a use of local variables defined inside the object constructor:
-```javascript Use local variables inside an object constructor</p>
-
-<pre><code>function animal() {
-    var runAlready = false;
-    this.color = "Green";
-    this.run = function() {
-        if (!runAlready) {}
-            console.log("I am running!");
-        } else {
-            console.log("I am already running!");
-        }
-    }
-}
-</code></pre>
-
-<p>```</p>
-
-<p>Those local variable "runAlready" is acting like private members of C# and JAVA. No one can access this variable except the object's methods.</p>
-
-<p>This approach might seem more readable and convenient but actually is not always recommended, especially when adding many methods. If you don't need to use local variables defined inside the object constructor, then there is no reason to use this approach and using prototype is better. That is because if you are going to create lots of animals, a new set of methods will be created and held in different instances each time the animal constructor is called. In the prototype approach, all the instances will share one set of methods and therefore less memory.</p>
-
-<p>You can also use combine approaches whereby methods that uses private local constructor variables will be defined inside the constructor while other methods will be added using the prototype:
-```javascript Combined approach for extend an object's functionality</p>
-
-<pre><code>function animal() {
-    var runAlready = false;
-    this.run = function() {
-        if (!runAlready) {}
-            console.log("I am running!");
-        } else {
-            console.log("I am already running!");
-        }
-    }
-}
-animal.prototype.color = "Green";
-animal.prototype.hide = function() {
-    console.log("I am hiding!");
-}
-
-var horse = new animal();
-horse.run(); // will log "I am running!"
-horse.hide(); // will log "I am hiding!"
-</code></pre>
-
-<p>```</p>
-
-<h2>Conclusion</h2>
-
-<p>With this article we understood the meaning of prototype-based language, we saw how we can use the prototype property in order to add properties and methods to all instances of an object. We even saw a practical example of extending Array's behavior! :) I demonstrated another way to add properties using the object constructor and explained its drawback.</p>
-
-<p>If you wish to read more about the differences between class-based languages and prototype-based languages, dig in details about prototype and inheritance, I highly recommend to read Mozilla's <a href="https://developer.mozilla.org/en-US/docs/Core_JavaScript_1.5_Guide/Details_of_the_Object_Model" target="_blank">Details of the object model</a> guide.</p>
-
-<p>I really enjoyed writing this article and I hope you enjoyed even more to read it.</p>
 ]]></content>
   </entry>
   
