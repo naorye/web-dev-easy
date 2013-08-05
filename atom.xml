@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-08-05T23:39:08+03:00</updated>
+  <updated>2013-08-05T23:44:39+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -372,7 +372,7 @@ The endDrag() method uses next(), prev() and current() methods in order to cente
 
 <h2>Integrate with jQuery Plugin</h2>
 
-<p>Now that we have the plugin code, integrating it into jQuery plugin is not a big deal. If you don&#8217;t familiar with the <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">jQuery plugin pattern<a/>, I advice you to read <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">this post</a>.</p>
+<p>Now that we have the plugin code, integrating it into jQuery plugin is not a big deal. If you don&#8217;t familiar with the <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">jQuery plugin pattern</a>, I advice you to read <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">this post</a>.</p>
 
 <figure class='code'><figcaption><span>jQuery plugin integration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
