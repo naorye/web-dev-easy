@@ -1,12 +1,20 @@
 body {
     padding: 0;
     margin: 0;
+    text-align: center;
 }
 
 .example {
     text-align: center;
-    margin: 0 30px;
     display: inline-block;
+}
+
+.example:nth-child(1) {
+    margin-right: 30px;  
+}
+
+.example:nth-child(2) {
+    margin-left: 30px; 
 }
 
 .slider {
@@ -35,16 +43,46 @@ body {
 .example:nth-child(1) .page:nth-child(4) {
     background-image: url('http://www.lorempixum.com/300/100/?4');
 }
-
-.example:nth-child(2) .page:nth-child(1) {
+.example:nth-child(1) .page:nth-child(5) {
     background-image: url('http://www.lorempixum.com/300/100/?5');
 }
-.example:nth-child(2) .page:nth-child(2) {
+.example:nth-child(1) .page:nth-child(6) {
     background-image: url('http://www.lorempixum.com/300/100/?6');
 }
-.example:nth-child(2) .page:nth-child(3) {
+.example:nth-child(1) .page:nth-child(7) {
     background-image: url('http://www.lorempixum.com/300/100/?7');
 }
-.example:nth-child(2) .page:nth-child(4) {
+.example:nth-child(1) .page:nth-child(8) {
     background-image: url('http://www.lorempixum.com/300/100/?8');
+}
+
+.example:nth-child(2) .page:nth-child(1) {
+    background-image: url('http://www.lorempixum.com/300/100/?9');
+}
+.example:nth-child(2) .page:nth-child(2) {
+    background-image: url('http://www.lorempixum.com/300/100/?10');
+}
+.example:nth-child(2) .page:nth-child(3) {
+    background-image: url('http://www.lorempixum.com/300/100/?11');
+}
+.example:nth-child(2) .page:nth-child(4) {
+    background-image: url('http://www.lorempixum.com/300/100/?12');
+}
+.example:nth-child(2) .page:nth-child(5) {
+    background-image: url('http://www.lorempixum.com/300/100/?13');
+}
+.example:nth-child(2) .page:nth-child(6) {
+    background-image: url('http://www.lorempixum.com/300/100/?14');
+}
+.example:nth-child(2) .page:nth-child(7) {
+    background-image: url('http://www.lorempixum.com/300/100/?15');
+}
+.example:nth-child(2) .page:nth-child(8) {
+    background-image: url('http://www.lorempixum.com/300/100/?16');
+}
+
+@media only screen and (max-width: 670px) {
+    .example.mouse {
+        display: none;
+    }
 }
