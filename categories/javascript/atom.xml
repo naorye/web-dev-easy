@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-08-06T09:53:27+03:00</updated>
+  <updated>2013-08-07T08:45:37+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -20,7 +20,7 @@
     <id>http://webdeveasy.com/pages-slider-with-javascript-and-css</id>
     <content type="html"><![CDATA[<p>In this article I will show you how to build a pages slider that looks like those on our smartphones. At the end we will get this:</p>
 
-<iframe src="../code/pages-slider-with-javascript-and-css/index.html#touch" width="100%" height="122px"></iframe>
+<iframe src="../code/pages-slider-with-javascript-and-css/index.html#touch" width="100%" height="122px" scrolling="no"></iframe>
 
 
 <!-- more -->
