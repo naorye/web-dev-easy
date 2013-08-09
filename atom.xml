@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-08-07T09:00:55+03:00</updated>
+  <updated>2013-08-09T20:51:20+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -28,11 +28,11 @@
 
 <h2>Slider Markup Structure</h2>
 
-<p>Our slider consist of div contained in another div. The parent div has limited width with overflow hidden where the child div contains the pages and therefore has their total width. This way only one page is visible and in order to move between pages all we have to do is change the child div&#8217;s position relative to its parent. Important thing to mention is that we won&#8217;t really change the child div&#8217;s position property but will use CSS transform property to simulate this. Here is a sketch of the slider markup structure:</p>
+<p>Our slider consist of div contained in another div. The parent div has limited width with overflow set to &#8220;hidden&#8221;. The child div contains the pages and therefore has their total width. This way only one page is visible and in order to move between pages all we have to do is change the child div&#8217;s position relative to its parent. Important thing to mention is that we won&#8217;t really change the child div&#8217;s position property but will use CSS transform property to simulate this. Here is a sketch of the slider markup structure:</p>
 
 <p><img class="center" src="http://webdeveasy.com/code/pages-slider-with-javascript-and-css/images/markup.png" title="'Slider Markup Structure'" ></p>
 
-<p>According to this plan, lets write a markup for four pages with relevant CSS properties:</p>
+<p>According to this plan, let&#8217;s write a markup for four pages with relevant CSS properties:</p>
 
 <figure class='code'><figcaption><span>Pages slider plugin markup</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -62,7 +62,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This CSS is mandatory in order to give our slider the correct appearance. In addition, we have to style the pages. Their style is not mandatory for the plugin behavior and its only purpose is to make the pages look nice.</p>
+<p>This CSS is mandatory in order to give our slider the correct appearance. In addition, we have to style the pages. Their style is not mandatory for the plugin behavior and it&#8217;s only purpose is to make the pages look nice.</p>
 
 <figure class='code'><figcaption><span>Pages style</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -109,14 +109,14 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Keep in mind that all the pages must have equal width. In our example, page size is 300px-100px. In order to make this example interesting, each page contains a random image. <br/>
-Now all we left to do is writing the plugin behavior.</p>
+<p>Keep in mind that all the pages must have equal width. In our example, page size is 300px width and 100px height. In order to make this example interesting, each page contains a random image. <br/>
+Now all we are left to do is writing the plugin&#8217;s behavior.</p>
 
 <h2>Slider Behavior</h2>
 
-<p>Out slider behavior is very simple. All we have to do it to listen to mouse down, mouse move and mouse up events, and move the pages accordingly. <br/>
+<p>Our slider behavior is very simple. All we have to do is to bind to mouse down, mouse move and mouse up events, and move the pages accordingly. <br/>
 I will start to write this plugin with prototype, so if you are not familiar with prototype, my <a href="http://webdeveasy.com/javascript-prototype" target="_blank">JavaScript Prototype</a> article can be a good reference. Later I will integrate the plugin to jQuery plugin but you can easily integrate it yourself to an AngularJS directive or whatever you like. At the end I will integrate the plugin with <a href="http://eightmedia.github.io/hammer.js" target="_blank">Hammer.js</a> so the plugin will work also with touch gestures. <br/>
-Ok, enough talking. Lets write our plugin.</p>
+Ok, enough talking. Let&#8217;s write our plugin.</p>
 
 <h2>PagesSlider Initialization and Events Binding</h2>
 
@@ -205,11 +205,11 @@ Ok, enough talking. Lets write our plugin.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Our constructor gets the slider element as an input. It sets the slider&#8217;s width to be equal to the first page width and sets content&#8217;s width to be equal to the pages widths sum. Since all the pages should have the same width and since slider&#8217;s overflow CSS property set to hidden, only one page will be visible. The page that will be visible is depending on content&#8217;s offset relative to slider.</p>
+<p>Our constructor gets the slider element as an input. It sets the slider&#8217;s width to be equal to the first page width and sets content&#8217;s width to be equal to the pages widths sum. Since all the pages should have the same width and since slider&#8217;s overflow CSS property was set to hidden, only one page will be visible. The page that will be visible is depending on the content&#8217;s offset relative to slider.</p>
 
 <h2>startDrag(), doDrag(), endDrag() and removeTransition()</h2>
 
-<p>At the end of the constructor we bind to &#8216;mousedown&#8217;, &#8216;mousemove&#8217;, &#8216;mouseup&#8217; and &#8216;transitionend&#8217; events. Lets see the implementation of startDrag(), doDrag(), endDrag() and removeTransition():</p>
+<p>At the end of the constructor method we bind to &#8216;mousedown&#8217;, &#8216;mousemove&#8217;, &#8216;mouseup&#8217; and &#8216;transitionend&#8217; events. Let&#8217;s see the implementation of startDrag(), doDrag(), endDrag() and removeTransition():</p>
 
 <figure class='code'><figcaption><span>startDrag(), doDrag(), endDrag() and removeTransition() implementation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -294,8 +294,8 @@ Ok, enough talking. Lets write our plugin.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>On startDrag() we enable dragging and stores the current X position in order to calculate dragging delta. <br/>
-On doDrag() we validate that dragging is enabled (mouse is down) and then calculate the delta and transform content strip&#8217;s position according to the delta. <br/>
+<p>On startDrag() we enable dragging and store the current X position in order to calculate dragging delta. <br/>
+On doDrag() we validate that dragging is enabled (mouse is down) and then calculate the delta and transform the content strip&#8217;s position according to the delta. <br/>
 On endDrag() we disable dragging and move to the new page (previous, next or center the current page). <br/>
 The endDrag() method uses next(), prev() and current() methods in order to center the relevant page. Those methods are using CSS animation in order to make smoother transitions. Later, when we use mouse for dragging, we don&#8217;t need that animation. Therefore, after the transition ends, we remove the animation using removeTransition() method.</p>
 
@@ -340,7 +340,7 @@ The endDrag() method uses next(), prev() and current() methods in order to cente
 </span><span class='line'>        <span class="kd">var</span> <span class="nx">position</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">pages</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">position</span><span class="p">();</span>
 </span><span class='line'>
 </span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">content</span>
-</span><span class='line'>            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;transition&#39;</span><span class="p">,</span> <span class="s1">&#39;all &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">endDuration</span> <span class="o">+</span> <span class="s1">&#39;ms ease&#39;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;transition&#39;</span><span class="p">,</span> <span class="s1">&#39;all 400ms ease&#39;</span><span class="p">)</span>
 </span><span class='line'>            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">,</span> <span class="s1">&#39;translate3d(&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="nx">position</span><span class="p">.</span><span class="nx">left</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;px, 0, 0)&#39;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">index</span><span class="p">;</span>
@@ -366,13 +366,13 @@ The endDrag() method uses next(), prev() and current() methods in order to cente
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The last methods of the plugin are obvious. goToIndex() is a main method that sets transition to page in a specific index. next(), prev() and current() validates that the new page&#8217;s index is possible (for example, the index cannot be less then 0) and uses goToIndex() to transition to the new page.</p>
+<p>The last methods of the plugin are obvious. goToIndex() is a central method that gets a page index and makes a transition to that page. next(), prev() and current() validates that the new page&#8217;s index is possible (for example, the index cannot be less than 0) and uses goToIndex() to make a transition to the new page.</p>
 
-<p>Thats it! Pretty simple though.</p>
+<p>That&#8217;s it! Pretty simple.</p>
 
 <h2>Integrate with jQuery Plugin</h2>
 
-<p>Now that we have the plugin code, integrating it into jQuery plugin is not a big deal. If you don&#8217;t familiar with the <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">jQuery plugin pattern</a>, I advice you to read <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">this post</a>.</p>
+<p>Now that we have the plugin code, integrating it into jQuery plugin is not a big deal. If you are not familiar with the <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">jQuery plugin pattern</a>, I advice you to read <a href="http://webdeveasy.com/jquery-plugin-pattern" target="_blank">this post</a>.</p>
 
 <figure class='code'><figcaption><span>jQuery plugin integration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -410,8 +410,8 @@ The endDrag() method uses next(), prev() and current() methods in order to cente
 
 <h2>Integrate with Hammer.js</h2>
 
-<p>Hammer.js is a JavaScript library for multi-touch gestures. Although we don&#8217;t need multi-touch support, we want our users will be able to slide between pages by touch.
-Lets download Hammer.js jQuery plugin and initialize Hammer in the scope of the slider before calling the plugin:</p>
+<p>Hammer.js is a JavaScript library for multi-touch gestures. Although we don&#8217;t need multi-touch support, we want our users to be able to slide between pages by touch.
+Let&#8217;s download Hammer.js jQuery plugin and initialize Hammer in the scope of the slider before calling the plugin:</p>
 
 <figure class='code'><figcaption><span>Initialize Hammer.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
