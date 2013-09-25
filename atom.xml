@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-09-26T02:00:48+03:00</updated>
+  <updated>2013-09-26T02:03:16+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -840,7 +840,7 @@ One last thing to do is to determine the authentication state when the applicati
     <id>http://webdeveasy.com/pages-slider-with-javascript-and-css</id>
     <content type="html"><![CDATA[<p>In this article I will show you how to build a pages slider that looks like those on our smartphones. At the end we will get this:</p>
 
-<iframe src="../code/pages-slider-with-javascript-and-css/index.html#touch" width="100%" height="122px" scrolling="no" style="overflow:hidden;"></iframe>
+<iframe src="http://webdeveasy.com/code/pages-slider-with-javascript-and-css/index.html#touch" width="100%" height="122px" scrolling="no" style="overflow:hidden;"></iframe>
 
 
 <!-- more -->
@@ -4745,7 +4745,7 @@ Live example for the compose plugin you can find <a href="../code/jquery-plugin-
     <id>http://webdeveasy.com/style-your-jquery-ui-tabs</id>
     <content type="html"><![CDATA[<p>This article will explain and guide you step by step how to style your jQuery-UI tabs and make them look like this:</p>
 
-<iframe src="../code/style-your-jquery-ui-tabs/style-tabs.html" width="100%"></iframe>
+<iframe src="http://webdeveasy.com/code/style-your-jquery-ui-tabs/style-tabs.html" width="100%"></iframe>
 
 
 <!-- more -->
