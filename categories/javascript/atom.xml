@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-10-08T10:35:07+02:00</updated>
+  <updated>2013-10-09T23:08:00+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -20,7 +20,26 @@
     <id>http://webdeveasy.com/easy-select-plugin</id>
     <content type="html"><![CDATA[<p>One day I was asked to add a text input component with an ability to choose a value from fixed list. After searching the web, I found several jQuery plugins that was able to solve my needs and much more. But, those components required many dependencies and weighed so much for my simple need. So I decided to write my own plugin. Easy Select requires jQuery only and takes 3kb minified (before gzip):</p>
 
-<iframe src="http://webdeveasy.com/code/easy-select-plugin/index.html" width="100%" height="110px" scrolling="no" style="overflow:hidden;margin-top:-20px;"></iframe>
+<div>
+    Select a continent: <input class="continent-input" type="text" />
+    <script>
+        $(function() {
+            $('.continent-input').easySelect({
+                idKey: 'value',
+                textKey: 'name',
+                items: [
+                    { name: 'Africa', value: 1},
+                    { name: 'Antarctica', value: 2},
+                    { name: 'Asia', value: 3},
+                    { name: 'Australia', value: 4},
+                    { name: 'Europe', value: 5},
+                    { name: 'North America', value: 6},
+                    { name: 'South America', value: 7}
+                ]
+            });
+        });
+    </script>
+</div>
 
 
 <!-- more -->
