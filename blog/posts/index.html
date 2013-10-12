@@ -26,6 +26,7 @@
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="/javascripts/ender.js"></script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/code/assets/js/jquery-2.0.3.min.js"></script>
   <link href="/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -50,8 +51,7 @@
 
   
     
-      <script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="/code/easy-select-plugin/dist/jquery.easy-select.min.js"></script>
+      <script src="/code/easy-select-plugin/dist/jquery.easy-select.min.js"></script>
 <link href="/code/easy-select-plugin/dist/easy-select.min.css" rel="stylesheet" type="text/css" />
 <style>
 .continent-input, .easy-select {
@@ -78,7 +78,51 @@
     
       
     
-      
+      <style>
+    .example {
+        text-align: center;
+        margin-bottom: 1.5em;
+    }
+    .slider {
+        display: inline-block;
+    }
+    .slider .page {
+        width: 300px;
+        height: 100px;  
+        border-radius: 2px;
+        box-shadow: inset 0 0 6px 0 rgba(0,0,0,0.4);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .slider .page:nth-child(1) {
+        background-image: url('http://www.lorempixum.com/300/100/?1');
+    }
+    .slider .page:nth-child(2) {
+        background-image: url('http://www.lorempixum.com/300/100/?2');
+    }
+    .slider .page:nth-child(3) {
+        background-image: url('http://www.lorempixum.com/300/100/?3');
+    }
+    .slider .page:nth-child(4) {
+        background-image: url('http://www.lorempixum.com/300/100/?4');
+    }
+    .slider .page:nth-child(5) {
+        background-image: url('http://www.lorempixum.com/300/100/?5');
+    }
+    .slider .page:nth-child(6) {
+        background-image: url('http://www.lorempixum.com/300/100/?6');
+    }
+    .slider .page:nth-child(7) {
+        background-image: url('http://www.lorempixum.com/300/100/?7');
+    }
+    .slider .page:nth-child(8) {
+        background-image: url('http://www.lorempixum.com/300/100/?8');
+    }
+</style>
+<link rel="stylesheet" href="/code/pages-slider-with-javascript-and-css/slider.css" type="text/css"/>
+<script type="text/javascript" src="/code/assets/js/hammer.js"></script>
+<script type="text/javascript" src="/code/pages-slider-with-javascript-and-css/slider-touch.js"></script>
+
     
       
     
@@ -270,7 +314,27 @@ The final application will look like this (without the horrible styling):<!--
 
   <div class="entry-content"><p>In this article I will show you how to build a pages slider that looks like those on our smartphones. At the end we will get this:</p>
 
-<iframe src="/code/pages-slider-with-javascript-and-css/index.html#touch" width="100%" height="122px" scrolling="no" style="overflow:hidden;"></iframe>
+<div class="example">
+    <div class="slider">
+        <div class="content">
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+        $('.slider').pagesSliderTouch();
+    });
+</script>
 
 
 </div>
