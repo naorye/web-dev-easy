@@ -4,7 +4,7 @@
   <title><![CDATA[Category: CSS | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/css/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-10-12T02:12:42+02:00</updated>
+  <updated>2013-10-26T13:48:24+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,190 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Flexbox Accordion]]></title>
+    <link href="http://webdeveasy.com/flexbox-accordion/"/>
+    <updated>2013-10-26T16:45:02+03:00</updated>
+    <id>http://webdeveasy.com/flexbox-accordion</id>
+    <content type="html"><![CDATA[<p>I have made a css accordion using flexbox and I like to share it. This is how it looks like:</p>
+
+<div class="flexbox-accordion-container">
+    <ul class="actions-list">
+        <li class="action-item facebook">
+            Facebook
+        </li>
+        <li class="action-item google">
+            GooglePlus
+        </li>
+        <li class="action-item linkedin">
+            LinkedIn
+        </li>
+        <li class="action-item picasa">
+            Picasa
+        </li>
+        <li class="action-item twitter">
+            Twitter
+        </li>
+        <li class="action-item wikipedia">
+            Wikipedia
+        </li>
+    </ul>
+</div>
+
+
+<!-- more -->
+
+
+<br/>
+
+
+<p>The markup and the css are pretty simple. We have a list of items, where the list is flexbox container and each item is a flex element. After defining this, all left to do is to define sizes, colors and the styling of each item. <br/>
+Here is the code:
+```html Flexbox accordion markup</p>
+
+<ul class="actions-list">
+    <li class="action-item facebook">
+        Facebook
+    </li>
+    <li class="action-item google">
+        GooglePlus
+    </li>
+    <li class="action-item linkedin">
+        LinkedIn
+    </li>
+    <li class="action-item picasa">
+        Picasa
+    </li>
+    <li class="action-item twitter">
+        Twitter
+    </li>
+    <li class="action-item wikipedia">
+        Wikipedia
+    </li>
+</ul>
+
+
+<p><code>
+</code>css Flexbox accordion css
+/<em> Flex box define </em>/
+.actions-list {</p>
+
+<pre><code>display: -webkit-box;
+display: -webkit-inline-flex;
+display: -moz-inline-flex;
+display: -ms-inline-flexbox;
+display: inline-flex;  
+</code></pre>
+
+<p>}</p>
+
+<p>.actions-list .action-item {</p>
+
+<pre><code>-webkit-box-flex: 1;
+-webkit-flex: 1 1 auto;
+-moz-flex: 1 1 auto;
+-ms-flex: 1 1 auto;
+flex: 1 1 auto;
+
+-webkit-transition: all 300ms ease;
+-moz-transition: all 300ms ease;
+-o-transition: all 300ms ease;
+transition: all 300ms ease;
+
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+
+overflow: hidden;
+</code></pre>
+
+<p>}</p>
+
+<p>/<em> Design: widths, colors, borders, etc... </em>/
+.actions-list {</p>
+
+<pre><code>margin: 0;
+padding: 0;
+</code></pre>
+
+<p>}
+.actions-list .action-item {</p>
+
+<pre><code>font-family: Helvetica, Arial, sans-serif;
+font-weight: lighter;
+cursor: pointer;
+background-color: #66bbcc;
+border-left: 1px solid rgba(0, 0, 0, 0.2);
+color: #000000;
+padding-left: 52px;
+background-repeat: no-repeat;
+background-position: left 10px center;
+background-size: 32px;
+line-height: 52px;
+height: 52px;
+max-width: 50px;
+</code></pre>
+
+<p>}
+.actions-list .action-item:hover {</p>
+
+<pre><code>max-width: 150px;
+background-color: #ff9966;
+padding-right: 10px;
+</code></pre>
+
+<p>}
+.actions-list .action-item:first-child {</p>
+
+<pre><code>border: none;
+</code></pre>
+
+<p>}</p>
+
+<p>.facebook {</p>
+
+<pre><code>background-image: url(http://www.webdeveasy.com/code/assets/images/facebook.png);
+</code></pre>
+
+<p>}
+.google {</p>
+
+<pre><code>background-image: url(http://www.webdeveasy.com/code/assets/images/google.png);
+</code></pre>
+
+<p>}
+.linkedin {</p>
+
+<pre><code>background-image: url(http://www.webdeveasy.com/code/assets/images/linkedin.png);
+</code></pre>
+
+<p>}
+.picasa {</p>
+
+<pre><code>background-image: url(http://www.webdeveasy.com/code/assets/images/picasa.png);
+</code></pre>
+
+<p>}
+.twitter {</p>
+
+<pre><code>background-image: url(http://www.webdeveasy.com/code/assets/images/twitter.png);
+</code></pre>
+
+<p>}
+.wikipedia {</p>
+
+<pre><code>background-image: url(http://www.webdeveasy.com/code/assets/images/wikipedia.png);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>I hope you will find a good use for it.</p>
+
+<p>NaorYe</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pages Slider With JavaScript And CSS]]></title>
@@ -52,7 +236,7 @@
 
 <p>Our slider consist of div contained in another div. The parent div has limited width with overflow set to "hidden". The child div contains the pages and therefore has their total width. This way only one page is visible and in order to move between pages all we have to do is change the child div's position relative to its parent. Important thing to mention is that we won't really change the child div's position property but will use CSS transform property to simulate this. Here is a sketch of the slider markup structure:</p>
 
-<p><img class="center" src="/code/pages-slider-with-javascript-and-css/images/markup.png" title="'Slider Markup Structure'" ></p>
+<p>{% img center /code/pages-slider-with-javascript-and-css/images/markup.png 'Slider Markup Structure' %}</p>
 
 <p>According to this plan, let's write a markup for four pages with relevant CSS properties:
 ```html Pages slider plugin markup</p>

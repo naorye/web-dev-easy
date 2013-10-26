@@ -9,7 +9,7 @@
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="One day I was asked to add a text input component with an ability to choose a value from fixed list. After searching the web, I found several jQuery &hellip;">
+  <meta name="description" content="I have made a css accordion using flexbox and I like to share it. This is how it looks like: Facebook GooglePlus LinkedIn Picasa Twitter Wikipedia ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -50,6 +50,88 @@
   
 
   
+    
+      <style>
+/* Flex box define */
+.actions-list {
+    display: -webkit-box;
+    display: -webkit-inline-flex;
+    display: -moz-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;  
+}
+
+.actions-list .action-item {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -moz-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+/* Design: widths, colors, borders, etc... */
+.actions-list {
+    margin: 0;
+    padding: 0;
+}
+.actions-list .action-item {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: lighter;
+    cursor: pointer;
+    background-color: #66bbcc;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    color: #000000;
+    padding-left: 52px;
+    background-repeat: no-repeat;
+    background-position: left 10px center;
+    background-size: 32px;
+    line-height: 52px;
+    height: 52px;
+    max-width: 50px;
+}
+.actions-list .action-item:hover {
+    max-width: 150px;
+    background-color: #ff9966;
+    padding-right: 10px;
+}
+.actions-list .action-item:first-child {
+    border: none;
+}
+
+.facebook {
+    background-image: url(../code/assets/images/facebook.png);
+}
+.google {
+    background-image: url(../code/assets/images/google.png);
+}
+.linkedin {
+    background-image: url(../code/assets/images/linkedin.png);
+}
+.picasa {
+    background-image: url(../code/assets/images/picasa.png);
+}
+.twitter {
+    background-image: url(../code/assets/images/twitter.png);
+}
+.wikipedia {
+    background-image: url(../code/assets/images/wikipedia.png);
+}
+.flexbox-accordion-container {
+    text-align: center;
+}
+</style>
+
     
       <script src="/code/easy-select-plugin/dist/jquery.easy-select.min.js"></script>
 <link href="/code/easy-select-plugin/dist/easy-select.min.css" rel="stylesheet" type="text/css" />
@@ -136,8 +218,6 @@
     
       
     
-      
-    
   
 </head>
 
@@ -183,6 +263,71 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/flexbox-accordion/">Flexbox Accordion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-26T16:45:02+03:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have made a css accordion using flexbox and I like to share it. This is how it looks like:</p>
+
+<div class="flexbox-accordion-container">
+    <ul class="actions-list">
+        <li class="action-item facebook">
+            Facebook
+        </li>
+        <li class="action-item google">
+            GooglePlus
+        </li>
+        <li class="action-item linkedin">
+            LinkedIn
+        </li>
+        <li class="action-item picasa">
+            Picasa
+        </li>
+        <li class="action-item twitter">
+            Twitter
+        </li>
+        <li class="action-item wikipedia">
+            Wikipedia
+        </li>
+    </ul>
+</div>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/flexbox-accordion/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/easy-select-plugin/">Easy Select Plugin</a></h1>
     
     
@@ -199,7 +344,7 @@
   
 
 
-<time datetime="2013-10-07T19:12:43+02:00" pubdate data-updated="true">Oct 7<span>th</span>, 2013</time>
+<time datetime="2013-10-07T20:12:43+03:00" pubdate data-updated="true">Oct 7<span>th</span>, 2013</time>
         
       </p>
     
@@ -594,47 +739,6 @@ At the end of this article we will have Backbone searcher application which will
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/backbone-singleton/">Backbone Singleton</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-05T19:13:36+02:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Using Backbone.js, sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone.js and require.js. While the first way is simpler and more intuitive, the second allows us more flexibility</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/backbone-singleton/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/posts/page/2/">&larr; Older</a>
@@ -648,6 +752,10 @@ At the end of this article we will have Backbone searcher application which will
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/flexbox-accordion/">Flexbox Accordion</a>
+      </li>
     
       <li class="post">
         <a href="/easy-select-plugin/">Easy Select Plugin</a>

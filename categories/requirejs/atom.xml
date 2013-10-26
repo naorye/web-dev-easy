@@ -4,7 +4,7 @@
   <title><![CDATA[Category: RequireJs | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/requirejs/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-10-12T02:12:42+02:00</updated>
+  <updated>2013-10-26T13:48:24+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -51,7 +51,7 @@ If you'll look on &lt;root&gt;/index.html file, you will see it contains only on
 
 <p>```
 In fact, the only tag required for loading the whole project's scripts is the require.js script tag. If you'll launch <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/">the project</a> in your browser and look under the network tab of your favorite inspection tool, you will notice that your browser has also loaded other JavaScript files: <br/>
-<img class="right" src="/code/optimize-requirejs-projects/loaded-js-files-list.png" title="Loaded JavaScript Files List" alt="Loaded JavaScript Files List"> <br/>
+{% img right /code/optimize-requirejs-projects/loaded-js-files-list.png 'Loaded JavaScript Files List' 'Loaded JavaScript Files List' %} <br/>
 All the scripts marked inside the red square were loaded by RequireJS.</p>
 
 <p>To optimize the project we will use <a target="_blank" href="http://requirejs.org/docs/optimization.html">RequireJS Optimizer</a>. Follow the <a target="_blenk" href="http://requirejs.org/docs/optimization.html#download">download instructions</a>, get r.js and copy it to the &lt;root&gt; directory. jrburke's <a target="_blank" href="https://github.com/jrburke/r.js">r.js</a> is a command line tool that can run AMD based projects, but what is more important, it includes the RequireJS Optimizer which allows us to concatenate and minify scripts.<br/>
@@ -182,7 +182,7 @@ $ node r.js -o build.js
 </code>
 A new folder has created: &lt;root&gt;/dist. It is important to notice that the script &lt;root&gt;/dist/js/main.js now contains all it's combined and minified dependencies. Moreover, &lt;root&gt;/dist/css/base.css is also optimized. <br/>
 Running <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/dist/">the optimized project</a> launches the application which looks exactly like the non-optimized version. Inspecting the page network traffic will show that only two JavaScript files were loaded:
-<img class="right" src="/code/optimize-requirejs-projects/loaded-optimized-js-files-list.png" title="Loaded Optimized JavaScript Files List" alt="Loaded Optimized JavaScript Files List"> <br/>
+{% img right /code/optimize-requirejs-projects/loaded-optimized-js-files-list.png 'Loaded Optimized JavaScript Files List' 'Loaded Optimized JavaScript Files List' %} <br/>
 RequireJs Optimizer reduced the amount of server scripts requests from 13 to 2 and reduced the total scripts size from 164KB to 58.6KB (both require.js and main.js).</p>
 
 <h2>Overhead</h2>
