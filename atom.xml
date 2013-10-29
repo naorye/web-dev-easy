@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-10-26T13:48:14+03:00</updated>
+  <updated>2013-10-29T11:02:19+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -15,8 +15,17 @@
   
   <entry>
     <title type="html"><![CDATA[Flexbox Accordion]]></title>
+    <link href="http://webdeveasy.com/technorati-token/"/>
+    <updated>2013-10-26T15:45:02+02:00</updated>
+    <id>http://webdeveasy.com/technorati-token</id>
+    <content type="html"><![CDATA[<p>ZPGDN5EP33VU</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Flexbox Accordion]]></title>
     <link href="http://webdeveasy.com/flexbox-accordion/"/>
-    <updated>2013-10-26T16:45:02+03:00</updated>
+    <updated>2013-10-26T15:45:02+02:00</updated>
     <id>http://webdeveasy.com/flexbox-accordion</id>
     <content type="html"><![CDATA[<p>I have made a css accordion using flexbox and I like to share it. This is how it looks like:</p>
 
@@ -258,7 +267,7 @@ Here is the code:</p>
   <entry>
     <title type="html"><![CDATA[Easy Select Plugin]]></title>
     <link href="http://webdeveasy.com/easy-select-plugin/"/>
-    <updated>2013-10-07T20:12:43+03:00</updated>
+    <updated>2013-10-07T19:12:43+02:00</updated>
     <id>http://webdeveasy.com/easy-select-plugin</id>
     <content type="html"><![CDATA[<p>One day I was asked to add a text input component with an ability to choose a value from fixed list. After searching the web, I found several jQuery plugins that was able to solve my needs and much more. But, those components required many dependencies and weighed so much for my simple need. So I decided to write my own plugin. Easy Select requires jQuery only and takes 3kb minified (before gzip):</p>
 
@@ -5166,7 +5175,7 @@ Live example for the compose plugin you can find <a href="../code/jquery-plugin-
   <entry>
     <title type="html"><![CDATA[Style Your jQuery-UI Tabs]]></title>
     <link href="http://webdeveasy.com/style-your-jquery-ui-tabs/"/>
-    <updated>2012-09-22T20:11:31+03:00</updated>
+    <updated>2012-09-22T19:11:31+02:00</updated>
     <id>http://webdeveasy.com/style-your-jquery-ui-tabs</id>
     <content type="html"><![CDATA[<p>This article will explain and guide you step by step how to style your jQuery-UI tabs and make them look like this:</p>
 

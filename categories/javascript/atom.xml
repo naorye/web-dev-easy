@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-10-26T13:48:24+03:00</updated>
+  <updated>2013-10-29T11:02:19+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Easy Select Plugin]]></title>
     <link href="http://webdeveasy.com/easy-select-plugin/"/>
-    <updated>2013-10-07T20:12:43+03:00</updated>
+    <updated>2013-10-07T19:12:43+02:00</updated>
     <id>http://webdeveasy.com/easy-select-plugin</id>
     <content type="html"><![CDATA[<p>One day I was asked to add a text input component with an ability to choose a value from fixed list. After searching the web, I found several jQuery plugins that was able to solve my needs and much more. But, those components required many dependencies and weighed so much for my simple need. So I decided to write my own plugin. Easy Select requires jQuery only and takes 3kb minified (before gzip):</p>
 
@@ -762,7 +762,7 @@ app.run(['sessionService', '$window', function (sessionService, $window) {</p>
 
 <p>Our slider consist of div contained in another div. The parent div has limited width with overflow set to "hidden". The child div contains the pages and therefore has their total width. This way only one page is visible and in order to move between pages all we have to do is change the child div's position relative to its parent. Important thing to mention is that we won't really change the child div's position property but will use CSS transform property to simulate this. Here is a sketch of the slider markup structure:</p>
 
-<p>{% img center /code/pages-slider-with-javascript-and-css/images/markup.png 'Slider Markup Structure' %}</p>
+<p><img class="center" src="/code/pages-slider-with-javascript-and-css/images/markup.png" title="'Slider Markup Structure'" ></p>
 
 <p>According to this plan, let's write a markup for four pages with relevant CSS properties:
 ```html Pages slider plugin markup</p>
@@ -1334,7 +1334,7 @@ If you'll look on &lt;root&gt;/index.html file, you will see it contains only on
 
 <p>```
 In fact, the only tag required for loading the whole project's scripts is the require.js script tag. If you'll launch <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/">the project</a> in your browser and look under the network tab of your favorite inspection tool, you will notice that your browser has also loaded other JavaScript files: <br/>
-{% img right /code/optimize-requirejs-projects/loaded-js-files-list.png 'Loaded JavaScript Files List' 'Loaded JavaScript Files List' %} <br/>
+<img class="right" src="/code/optimize-requirejs-projects/loaded-js-files-list.png" title="Loaded JavaScript Files List" alt="Loaded JavaScript Files List"> <br/>
 All the scripts marked inside the red square were loaded by RequireJS.</p>
 
 <p>To optimize the project we will use <a target="_blank" href="http://requirejs.org/docs/optimization.html">RequireJS Optimizer</a>. Follow the <a target="_blenk" href="http://requirejs.org/docs/optimization.html#download">download instructions</a>, get r.js and copy it to the &lt;root&gt; directory. jrburke's <a target="_blank" href="https://github.com/jrburke/r.js">r.js</a> is a command line tool that can run AMD based projects, but what is more important, it includes the RequireJS Optimizer which allows us to concatenate and minify scripts.<br/>
@@ -1465,7 +1465,7 @@ $ node r.js -o build.js
 </code>
 A new folder has created: &lt;root&gt;/dist. It is important to notice that the script &lt;root&gt;/dist/js/main.js now contains all it's combined and minified dependencies. Moreover, &lt;root&gt;/dist/css/base.css is also optimized. <br/>
 Running <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/dist/">the optimized project</a> launches the application which looks exactly like the non-optimized version. Inspecting the page network traffic will show that only two JavaScript files were loaded:
-{% img right /code/optimize-requirejs-projects/loaded-optimized-js-files-list.png 'Loaded Optimized JavaScript Files List' 'Loaded Optimized JavaScript Files List' %} <br/>
+<img class="right" src="/code/optimize-requirejs-projects/loaded-optimized-js-files-list.png" title="Loaded Optimized JavaScript Files List" alt="Loaded Optimized JavaScript Files List"> <br/>
 RequireJs Optimizer reduced the amount of server scripts requests from 13 to 2 and reduced the total scripts size from 164KB to 58.6KB (both require.js and main.js).</p>
 
 <h2>Overhead</h2>
