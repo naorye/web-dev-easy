@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-10-29T11:12:38+02:00</updated>
+  <updated>2013-11-23T18:55:22+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,348 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AngularJS Data Model]]></title>
+    <link href="http://webdeveasy.com/angularjs-data-model/"/>
+    <updated>2013-11-23T20:51:33+02:00</updated>
+    <id>http://webdeveasy.com/angularjs-data-model</id>
+    <content type="html"><![CDATA[<p>As we already know, AngularJS doesn't come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use JSON data as a model in the controller. As the time passed and my application grew, I realized that this modeling method isn't powerful enough to fit my application's needs. In this article I will present the way I dealt with data modeling in my AngularJS application.</p>
+
+<!-- more -->
+
+
+<h2>Defining a model for controller</h2>
+
+<p>Let's start with a simple example. I would like to display a book view. This is the controller:
+```javascript BookController
+app.controller('BookController', ['$scope', function($scope) {</p>
+
+<pre><code>$scope.book = {
+    id: 1,
+    name: 'Harry Potter',
+    author: 'J. K. Rowling',
+    stores: [
+        { id: 1, name: 'Barnes &amp; Noble', quantity: 3},
+        { id: 2, name: 'Waterstones', quantity: 2},
+        { id: 3, name: 'Book Depository', quantity: 5}
+    ]
+};
+</code></pre>
+
+<p>}]);
+<code>
+This controller creates a model of book which can be later used in our template:
+</code>html template for displaying a book</p>
+
+<div ng-controller="BookController">
+    Id: <span ng-bind="book.id"></span>
+    <br/>
+    Name:<input type="text" ng-model="book.name" />
+    <br/>
+    Author: <input type="text" ng-model="book.author" />
+</div>
+
+
+<p><code>
+In case we would like to get the book data from a backend api, we can also use $http:
+</code>javascript BookController with $http
+app.controller('BookController', ['$scope', '$http', function($scope, $http) {</p>
+
+<pre><code>var bookId = 1;
+
+$http.get('ourserver/books/' + bookId).success(function(bookData) {
+    $scope.book = bookData;
+});
+</code></pre>
+
+<p>}]);
+<code>
+Notice that bookData is still a JSON object.
+Later on we would like to do something with this data. For example, update the book, delete it or even do other operations that are not dealing with the backend, like generate a book image url according to requested size or determining whether the book is available. Those methods can be declared on our controller:
+</code>javascript BookController with several book actions
+app.controller('BookController', ['$scope', '$http', function($scope, $http) {</p>
+
+<pre><code>var bookId = 1;
+
+$http.get('ourserver/books/' + bookId).success(function(bookData) {
+    $scope.book = bookData;
+});
+
+$scope.deleteBook = function() {
+    $http.delete('ourserver/books/' + bookId);
+};
+
+$scope.updateBook = function() {
+    $http.put('ourserver/books/' + bookId, $scope.book);
+};
+
+$scope.getBookImageUrl = function(width, height) {
+    return 'our/image/service/' + bookId + '/width/height';
+};
+
+$scope.isAvailable = function() {
+    if (!$scope.book.stores || $scope.book.stores.length === 0) {
+        return false;
+    }
+    return $scope.book.stores.some(function(store) {
+        return store.quantity &gt; 0;
+    });
+};
+</code></pre>
+
+<p>}]);
+<code>
+And later in our template:
+</code>html template for displaying a complete book</p>
+
+<div ng-controller="BookController">
+    <div ng-style="{ backgroundImage: 'url(' + getBookImageUrl(100, 100) + ')' }"></div>
+    Id: <span ng-bind="book.id"></span>
+    <br/>
+    Name:<input type="text" ng-model="book.name" />
+    <br/>
+    Author: <input type="text" ng-model="book.author" />
+    <br/>
+    Is Available: <span ng-bind="isAvailable() ? 'Yes' : 'No' "></span>
+    <br/>
+    <button ng-click="deleteBook()">Delete</button>
+    <br/>
+    <button ng-click="updateBook()">Update</button>
+</div>
+
+
+<p>```</p>
+
+<h2>Sharing a model between controllers</h2>
+
+<p>As long as the book's structure and methods are relevant only to one controller, all is fine and our work here is done. But as the application grows, there might be other controllers that will deal with books. Those controllers will sometimes need to fetch a book, update it, delete it or get it's image url or availability. Therefore we have to share the behaviors of a book between controllers. In order to do this we will use a factory that returns the book's behavior. Before writing this factory, I would like to mention here that we could make the factory return an object that contains helper methods for book (i.e. functions that get a book JSON and do what asked), but I prefer to use <a>prototype</a> for constructing a Book class, which I believe is the right choice:
+```javascript Book model service
+app.factory('Book', ['$http', function($http) {</p>
+
+<pre><code>function Book(bookData) {
+    if (bookData) {
+        this.setData(bookData):
+    }
+    // Some other initializations related to book
+};
+Book.prototype = {
+    setData: function(bookData) {
+        angular.extend(this, bookData);
+    },
+    load: function(id) {
+        var scope = this;
+        $http.get('ourserver/books/' + bookId).success(function(bookData) {
+            scope.setData(bookData);
+        });
+    },
+    delete: function() {
+        $http.delete('ourserver/books/' + bookId);
+    },
+    update: function() {
+        $http.put('ourserver/books/' + bookId, this);
+    },
+    getImageUrl: function(width, height) {
+        return 'our/image/service/' + this.book.id + '/width/height';
+    },
+    isAvailable: function() {
+        if (!this.book.stores || this.book.stores.length === 0) {
+            return false;
+        }
+        return this.book.stores.some(function(store) {
+            return store.quantity &gt; 0;
+        });
+    }
+};
+return Book;
+</code></pre>
+
+<p>}]);
+<code>
+This way all book's behavior is encapsulated in Book service. Now, let's use our shiny Book service in our BookController:
+</code>javascript BookController that uses Book model
+app.factory('BookController', ['$scope', 'Book', function($scope, Book) {</p>
+
+<pre><code>$scope.book = new Book();
+$scope.book.load(1);
+</code></pre>
+
+<p>}]);
+<code>
+As you can see, the controller became very thin. It now creates a Book instance, assigns it to the scope and loads it from the backend. When the book will be loaded, it's properties will be changed and so the template. Keep in mind that other controllers that interact with a book, simply inject the Book service. We have to change the template to use book's methods as well:
+</code>html template that uses book instance</p>
+
+<div ng-controller="BookController">
+    <div ng-style="{ backgroundImage: 'url(' + book.getImageUrl(100, 100) + ')' }"></div>
+    Id: <span ng-bind="book.id"></span>
+    <br/>
+    Name:<input type="text" ng-model="book.name" />
+    <br/>
+    Author: <input type="text" ng-model="book.author" />
+    <br/>
+    Is Available: <span ng-bind="book.isAvailable() ? 'Yes' : 'No' "></span>
+    <br/>
+    <button ng-click="book.delete()">Delete</button>
+    <br/>
+    <button ng-click="book.update()">Update</button>
+</div>
+
+
+<p>```
+Up to here we saw how to model a data, encapsulate all its methods in one class and share this class between controllers without code duplication.</p>
+
+<h2>Model of the same book in several controllers</h2>
+
+<p>So we have a book model definition and several controllers that work with books. After using this modeling architecture you will notice that there is a big problem.
+Up to now we supported several controllers that do operations with books. But what will happen if two controllers will deal with the same book? <br/>
+Assume that we have a section with a list of names of all our books and another section with an editable view of a book. We have two controllers, one for each section. The first controller loads the books list and the second controller loads a single book. Our user sees the second section, edit the name of the book and then presses on the "update" button. The update process will succeed and the book name will be changed. But in the books list section the user still sees the old name! What happened actually is that there were two different instances of the same book - one for the books list and one for the editable view. When the user edited the book's name, he actually changed the name property of the book instance that was binded to the editable view. Whereas the book instance that was binded to the books list view didn't changed. <br/>
+The solution for this problem is to share the same books instances with any controller that needs them. This way both the books list controller and the editable view controller will hold the same book instance and whenever this instance is changed, the changes will be reflected in all the views. Translating words to actions, we have to create a booksManager service (the letter b is not capital because it is an object and not a Class) that will manage books instances pool and will be responsible for returning instances of books. If the required instance doesn't exist in the pool, the service will create it. If the required instance already exists in the pool, the service will only return it. Keep in mind that all the functions that load instances of books will be defined eventually only in our booksManager service since it has to be the only component that provide books instances.
+```javascript booksManager service
+app.factory('booksManager', ['$http', '$q', 'Book', function($http, $q, Book) {</p>
+
+<pre><code>var booksManager = {
+    _pool: {},
+    _retrieveInstance: function(bookId, bookData) {
+        var instance = this._pool[bookId];
+
+        if (instance) {
+            instance.setData(bookData);
+        } else {
+            instance = new Book(messageData);
+            this._pool[bookId] = instance;
+        }
+
+        return instance;
+    },
+    _search: function(bookId) {
+        return this._pool[bookId];
+    },
+    _load: function(bookId, deferred) {
+        var scope = this;
+
+        $http.get('ourserver/books/' + bookId)
+            .success(function(bookData) {
+                var book = scope._retrieveInstance(bookData.id, bookData);
+                deferred.resolve(book);
+            })
+            .error(function() {
+                deferred.reject();
+            });
+    },
+    /* Public Methods */
+    /* Use this function in order to get a book instance by it's id */
+    getBook: function(bookId) {
+        var deferred = $q.defer();
+        var book = this._search(bookId);
+        if (book) {
+            deferred.resolve(book);
+        } else {
+            this._load(bookId, deferred);
+        }
+        return deferred.promise;
+    },
+    /* Use this function in order to get instances of all the books */
+    loadAllBooks: function() {
+        var deferred = $q.defer();
+        var scope = this;
+        $http.get('ourserver/books)
+            .success(function(booksArray) {
+                var books = [];
+                booksArray.forEach(function(bookData) {
+                    var book = scope._retrieveInstance(bookData.id, bookData);
+                    books.push(book);
+                });
+
+                deferred.resolve(books);
+            })
+            .error(function() {
+                deferred.reject();
+            });
+        return deferred.promise;
+    },
+    /*  This function is useful when we got somehow the book data and we wish to store it or update the pool and get a book instance in return */
+    setBook: function(bookData) {
+        var scope = this;
+        var book = this._search(bookData.id);
+        if (book) {
+            book.setData(bookData);
+        } else {
+            book = scope._retrieveInstance(bookData);
+        }
+        return book;
+    },
+
+};
+return booksManager;
+</code></pre>
+
+<p>}]);
+<code>
+Our Book service is now without the load method:
+</code>javascript Book model without the load method
+app.factory('Book', ['$http', function($http) {</p>
+
+<pre><code>function Book(bookData) {
+    if (bookData) {
+        this.setData(bookData):
+    }
+    // Some other initializations related to book
+};
+Book.prototype = {
+    setData: function(bookData) {
+        angular.extend(this, bookData);
+    },
+    delete: function() {
+        $http.delete('ourserver/books/' + bookId);
+    },
+    update: function() {
+        $http.put('ourserver/books/' + bookId, this);
+    },
+    getImageUrl: function(width, height) {
+        return 'our/image/service/' + this.book.id + '/width/height';
+    },
+    isAvailable: function() {
+        if (!this.book.stores || this.book.stores.length === 0) {
+            return false;
+        }
+        return this.book.stores.some(function(store) {
+            return store.quantity &gt; 0;
+        });
+    }
+};
+return Book;
+</code></pre>
+
+<p>}]);
+<code>
+Our EditableBookController and BooksListController controllers looks like:
+</code>javascript EditableBookController and BooksListController that uses booksManager
+app</p>
+
+<pre><code>.factory('EditableBookController', ['$scope', 'booksManager', function($scope, booksManager) {
+    booksManager.getBook(1).then(function(book) {
+        $scope.book = book
+    });
+}])
+.factory('BooksListController', ['$scope', 'booksManager', function($scope, booksManager) {
+    booksManager.loadAllBooks().then(function(books) {
+        $scope.books = books
+    });
+}]);
+</code></pre>
+
+<p>```
+Notice that the templates remain the same as they still use instances. Now the application will hold only one book instance with id equals to 1 and any change on it will be reflected on all views that use it.</p>
+
+<h2>Summery</h2>
+
+<p>On this article I suggested an architecture for modeling data in AngularJS. First, I presented the default model binding of AngularJS, then I showed how to encapsulate the model's methods and operations so we can share it between different controllers, and finally I explained how to manage our models instances so all the changes will be reflected on all the application views.</p>
+
+<p>I hope this article gave you ideas how to implement your data models. If you have any question, don't hesitate to ask!</p>
+
+<p>NaorYe</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Easy Select Plugin]]></title>
@@ -1293,203 +1635,6 @@ NestedView's template contains a title and a button. Each time this button is pr
 <p>I hope you enjoyed reading this article,</p>
 
 <p>NaorYe</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Optimize (Concatenate and Minify) RequireJS Projects]]></title>
-    <link href="http://webdeveasy.com/optimize-requirejs-projects/"/>
-    <updated>2013-04-19T07:32:00+03:00</updated>
-    <id>http://webdeveasy.com/optimize-requirejs-projects</id>
-    <content type="html"><![CDATA[<p>This article will demonstrate you how to concatenate and minify projects that are based on RequireJS. In this article I'll use several tools that require Node.js. So, if you don't have Node.js yet, install it <a target="_blank" href="http://nodejs.org/">here</a>.</p>
-
-<!-- more -->
-
-
-<h2>Motivation</h2>
-
-<p>A lot has been written already about RequireJS. This tool allows you to easily separate your JavaScript code into several modules and by this keep your code modular and easy to maintain. Then, you get many JavaScript files that have dependency relation. By adding one script reference to RequireJS in your html file, you can load all the required scripts for your page. <br/>
-Still, in production, this is a bad practice to leave all JavaScript files separated. Making many requests, no matter how small the requested files are, take time. This time can be saved by concatenating scripts that reduce the number of requests and save the loading time. <br/>
-Another technique to save loading time is to reduce the size of the requested files, a small file can be delivered faster. This process is called <a target="_blank" href="http://en.wikipedia.org/wiki/Minification_%28programming%29">minification</a> and it is done by carefully changing the script's code without changing its behavior and functionality. Such changes can be: removing unnecessary characters like spaces, mangling variables and methods names and so on.
-This process of concatenation and minification is called optimization. In addition to JavaScript files optimization, the same methods are used to optimize CSS files. <br/>
-RequireJS has two main methods: define() and require(). These methods basically have similar declaration and they both know to load dependencies and then execute a callback function.
-Unlike require(), define() is used to store code as a named module. Therefore the define()'s callback function should return a value to define the module. Such modules are called <a target="_blank" href="http://requirejs.org/docs/whyamd.html">AMD</a> (Asynchronous Module Definition).</p>
-
-<p>If you are not familiar with RequireJS or didn't fully understand what I wrote - don't worry. An example is about to come.</p>
-
-<h2>JavaScript Application Optimization</h2>
-
-<p>In this section I will demonstrate the optimization of Addy Osmani's <a target="_blank" href="http://todomvc.com/dependency-examples/backbone_require/">TodoMVC Backbone.js + RequireJS project</a>. Since the TodoMVC project contains many implementations of TodoMVC in different frameworks, I downloaded version 1.1.0 and draw out the Backbone.js + RequireJS application. Download the application from
-<a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc.zip">here</a> and extract the zip file. The extracted todo-mvc directory will be our example root path and from now on I'll refer to this directory as &lt;root&gt;. <br/>
-If you'll look on &lt;root&gt;/index.html file, you will see it contains only one script tag (and another one if you use Internet Explorer):
-```html index.html scripts refrences</p>
-
-<script data-main="js/main" src="js/lib/require/require.js"></script>
-
-
-<!--[if IE]>
-    <script src="js/lib/ie.js"></script>
-<![endif]-->
-
-
-<p>```
-In fact, the only tag required for loading the whole project's scripts is the require.js script tag. If you'll launch <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/">the project</a> in your browser and look under the network tab of your favorite inspection tool, you will notice that your browser has also loaded other JavaScript files: <br/>
-<img class="right" src="/code/optimize-requirejs-projects/loaded-js-files-list.png" title="Loaded JavaScript Files List" alt="Loaded JavaScript Files List"> <br/>
-All the scripts marked inside the red square were loaded by RequireJS.</p>
-
-<p>To optimize the project we will use <a target="_blank" href="http://requirejs.org/docs/optimization.html">RequireJS Optimizer</a>. Follow the <a target="_blenk" href="http://requirejs.org/docs/optimization.html#download">download instructions</a>, get r.js and copy it to the &lt;root&gt; directory. jrburke's <a target="_blank" href="https://github.com/jrburke/r.js">r.js</a> is a command line tool that can run AMD based projects, but what is more important, it includes the RequireJS Optimizer which allows us to concatenate and minify scripts.<br/>
-RequireJS Optimizer has many usages. It can optimize single JavaScript or single CSS file, it can optimize a whole project or only part of it as well as multi-page application. It can also use different minification engines or no minification at all, and so on. This article has no intention to cover all the possibilities of RequireJS Optimizer, but to demonstrate a usage.</p>
-
-<p>As I mentioned earlier, we will use Node.js in order to run the optimizer. The following command runs it:
-<code>bash Run RequireJS Optimizer
-$ node r.js -o &lt;arguments&gt;
-</code>
-There are two ways to supply arguments to the optimizer. One way is to specify arguments on the command line:
-<code>bash Arguments on the command line
-$ node r.js -o baseUrl=. name=main out=main-built.js
-</code>
-Other way is to specify a build profile file (relative to the execution folder) that contains the arguments:
-<code>bash Arguments on build profile file
-$ node r.js -o build.js
-</code>
-And build.js content:
-```javascript Arguments on build profile file
-({</p>
-
-<pre><code>baseUrl: ".",
-name: "main",
-out: "main-built.js"
-</code></pre>
-
-<p>})
-<code>
-I think a build profile file is more readable than command line arguments so I'll use this method. Let's create our &amp;lt;root&amp;gt;/build.js file and see which arguments it contains:
-</code>javascript &lt;root&gt;/build.js
-({</p>
-
-<pre><code>appDir: './',
-baseUrl: './js',
-dir: './dist',
-modules: [
-    {
-        name: 'main'
-    }
-],
-fileExclusionRegExp: /^(r|build)\.js$/,
-optimizeCss: 'standard',
-removeCombined: true,
-paths: {
-    jquery: 'lib/jquery',
-    underscore: 'lib/underscore',
-    backbone: 'lib/backbone/backbone',
-    backboneLocalstorage: 'lib/backbone/backbone.localStorage',
-    text: 'lib/require/text'
-},
-shim: {
-    underscore: {
-        exports: '_'
-    },
-    backbone: {
-        deps: [
-            'underscore',
-            'jquery'
-        ],
-        exports: 'Backbone'
-    },
-    backboneLocalstorage: {
-        deps: ['backbone'],
-        exports: 'Store'
-    }
-}
-</code></pre>
-
-<p>})
-```</p>
-
-<p>Understanding all the configurations of RequireJS Optimizer is not the aim of this article, but I want do describe the arguments I used:</p>
-
-<table>
-<thead>
-<tr>
-<th>Argument            </th>
-<th> Description </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>appDir              </td>
-<td> The directory that contains the application (the &lt;root&gt; directory). All the files sitting under this directory will be copied from here to the dir argument.</td>
-</tr>
-<tr>
-<td>baseUrl             </td>
-<td> A path, relative to appDir, that represents the anchor path for finding files.</td>
-</tr>
-<tr>
-<td>dir                 </td>
-<td> This is the output directory which all the application files will be copied to.</td>
-</tr>
-<tr>
-<td>modules             </td>
-<td> Array that contains objects. Each object represents a module that should be optimize.</td>
-</tr>
-<tr>
-<td>fileExclusionRegExp </td>
-<td> Each file or directory that will be match to this regular expression will not be copied to our output directory. Since we located r.js and build.js under the application directory, we want the optimizer to exclude them. Therefore we set this argument to /&#94;(r|build)&#92;.js$/.</td>
-</tr>
-<tr>
-<td>optimizeCss         </td>
-<td> RequireJS Optimizer automatically optimizes our application's CSS files. This argument controls the CSS optimization settings. Allowed values: "none", "standard", "standard.keepLines", "standard.keepComments", "standard.keepComments.keepLines".</td>
-</tr>
-<tr>
-<td>removeCombined      </td>
-<td> If true, optimizer will remove concatenated files from the output directory.</td>
-</tr>
-<tr>
-<td>paths               </td>
-<td> Relative paths of modules.</td>
-</tr>
-<tr>
-<td>shim                </td>
-<td> Configure dependencies and exports for "browser globals" scripts, that do not use define() to declare the dependencies and set a module value.</td>
-</tr>
-</tbody>
-</table>
-
-
-<p>For more information and for advanced usage of the RequireJS Optimizer, in addition to it's web page provided earlier, you can read the details of all the allowed optimizer configuration options <a target="_blank" href="https://github.com/jrburke/r.js/blob/master/build/example.build.js">here</a>.</p>
-
-<p>Now that we have the build file, lets run the optimizer. Go to the &lt;root&gt; directory and execute the command:</p>
-
-<p><code>bash Run optimizer
-$ node r.js -o build.js
-</code>
-A new folder has created: &lt;root&gt;/dist. It is important to notice that the script &lt;root&gt;/dist/js/main.js now contains all it's combined and minified dependencies. Moreover, &lt;root&gt;/dist/css/base.css is also optimized. <br/>
-Running <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/dist/">the optimized project</a> launches the application which looks exactly like the non-optimized version. Inspecting the page network traffic will show that only two JavaScript files were loaded:
-<img class="right" src="/code/optimize-requirejs-projects/loaded-optimized-js-files-list.png" title="Loaded Optimized JavaScript Files List" alt="Loaded Optimized JavaScript Files List"> <br/>
-RequireJs Optimizer reduced the amount of server scripts requests from 13 to 2 and reduced the total scripts size from 164KB to 58.6KB (both require.js and main.js).</p>
-
-<h2>Overhead</h2>
-
-<p>Apparently, after the optimization is over, we don't need a reference to require.js because the scripts are no longer separated and all the dependencies were loaded. <br/>
-Still, the optimization process concatenated all our scripts and produced one optimized script file which contains many calls to define() and require(). Therefore, to allow the application work properly, define() and require() must be specified and
-implemented somewhere in our application. <br/>
-This issue causes a well known overhead: we always have to have any code that implement define() and require(). <strong>This code is not part of our application and it exists only due to our infrastructure considerations.</strong> This problem becomes even bigger when we want to develop a JavaScript library. Such libraries usually have small size comparing to RequireJS itself, and therefore including it in the library will cause a huge overhead.</p>
-
-<p>At the time of writing this article, there isn't any full solution for this overhead, but we can ease it using <a target="_blank" href="https://github.com/jrburke/almond">almond</a>. Almond is a minimalistic AMD loader which implements the RequireJS API, and so, instead of including the RequireJS implementation in our optimized code, we can include almond. <br/>
-Nowadays, I am working on an optimizer that will be able to optimize RequireJS applications without overhead, but this is still a new project so there is nothing to show yet.</p>
-
-<h2>Download &amp; Conslusion</h2>
-
-<ul>
-<li><a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc.zip">Download</a> <strong>unoptimized</strong> TodoMVC Backbone.js + RequireJS project or <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/">See</a> it in action.</li>
-<li><a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc-optimized.zip">Download</a> <strong>optimized</strong> TodoMVC Backbone.js + RequireJS project (located under dist folder) or <a target="_blank" href="../code/optimize-requirejs-projects/todo-mvc/dist/">See</a> it in action.</li>
-</ul>
-
-
-<p>After reading this article, I believe you got a solid idea how to optimize your RequireJS application. I'll be glad to answer any question you have.</p>
-
-<p>Good Luck! <br/>
-NaorYe</p>
 ]]></content>
   </entry>
   

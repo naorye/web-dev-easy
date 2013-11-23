@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-10-29T11:12:38+02:00</updated>
+  <updated>2013-11-23T18:55:22+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,577 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AngularJS Data Model]]></title>
+    <link href="http://webdeveasy.com/angularjs-data-model/"/>
+    <updated>2013-11-23T20:51:33+02:00</updated>
+    <id>http://webdeveasy.com/angularjs-data-model</id>
+    <content type="html"><![CDATA[<p>As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use JSON data as a model in the controller. As the time passed and my application grew, I realized that this modeling method isn&#8217;t powerful enough to fit my application&#8217;s needs. In this article I will present the way I dealt with data modeling in my AngularJS application.</p>
+
+<!-- more -->
+
+
+<h2>Defining a model for controller</h2>
+
+<p>Let&#8217;s start with a simple example. I would like to display a book view. This is the controller:</p>
+
+<figure class='code'><figcaption><span>BookController</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;BookController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Harry Potter&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">author</span><span class="o">:</span> <span class="s1">&#39;J. K. Rowling&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">stores</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Barnes &amp; Noble&#39;</span><span class="p">,</span> <span class="nx">quantity</span><span class="o">:</span> <span class="mi">3</span><span class="p">},</span>
+</span><span class='line'>            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Waterstones&#39;</span><span class="p">,</span> <span class="nx">quantity</span><span class="o">:</span> <span class="mi">2</span><span class="p">},</span>
+</span><span class='line'>            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Book Depository&#39;</span><span class="p">,</span> <span class="nx">quantity</span><span class="o">:</span> <span class="mi">5</span><span class="p">}</span>
+</span><span class='line'>        <span class="p">]</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This controller creates a model of book which can be later used in our template:</p>
+
+<figure class='code'><figcaption><span>template for displaying a book</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;BookController&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    Id: <span class="nt">&lt;span</span> <span class="na">ng-bind=</span><span class="s">&quot;book.id&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Name:<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;book.name&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Author: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;book.author&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In case we would like to get the book data from a backend api, we can also use $http:</p>
+
+<figure class='code'><figcaption><span>BookController with $http</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;BookController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;$http&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">bookId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">).</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span> <span class="o">=</span> <span class="nx">bookData</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that bookData is still a JSON object.
+Later on we would like to do something with this data. For example, update the book, delete it or even do other operations that are not dealing with the backend, like generate a book image url according to requested size or determining whether the book is available. Those methods can be declared on our controller:</p>
+
+<figure class='code'><figcaption><span>BookController with several book actions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;BookController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;$http&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">bookId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">).</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span> <span class="o">=</span> <span class="nx">bookData</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">deleteBook</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">$http</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateBook</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">$http</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">,</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">getBookImageUrl</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s1">&#39;our/image/service/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span> <span class="o">+</span> <span class="s1">&#39;/width/height&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">isAvailable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span> <span class="o">||</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">store</span><span class="p">.</span><span class="nx">quantity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And later in our template:</p>
+
+<figure class='code'><figcaption><span>template for displaying a complete book</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;BookController&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">ng-style=</span><span class="s">&quot;{ backgroundImage: &#39;url(&#39; + getBookImageUrl(100, 100) + &#39;)&#39; }&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>    Id: <span class="nt">&lt;span</span> <span class="na">ng-bind=</span><span class="s">&quot;book.id&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Name:<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;book.name&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Author: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;book.author&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Is Available: <span class="nt">&lt;span</span> <span class="na">ng-bind=</span><span class="s">&quot;isAvailable() ? &#39;Yes&#39; : &#39;No&#39; &quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;deleteBook()&quot;</span><span class="nt">&gt;</span>Delete<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;updateBook()&quot;</span><span class="nt">&gt;</span>Update<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Sharing a model between controllers</h2>
+
+<p>As long as the book&#8217;s structure and methods are relevant only to one controller, all is fine and our work here is done. But as the application grows, there might be other controllers that will deal with books. Those controllers will sometimes need to fetch a book, update it, delete it or get it&#8217;s image url or availability. Therefore we have to share the behaviors of a book between controllers. In order to do this we will use a factory that returns the book&#8217;s behavior. Before writing this factory, I would like to mention here that we could make the factory return an object that contains helper methods for book (i.e. functions that get a book JSON and do what asked), but I prefer to use <a>prototype</a> for constructing a Book class, which I believe is the right choice:</p>
+
+<figure class='code'><figcaption><span>Book model service</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;Book&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$http&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="c1">// Some other initializations related to book</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">setData</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">angular</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">load</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">).</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">scope</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="k">delete</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">getImageUrl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s1">&#39;our/image/service/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;/width/height&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">isAvailable</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">store</span><span class="p">.</span><span class="nx">quantity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">Book</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This way all book&#8217;s behavior is encapsulated in Book service. Now, let&#8217;s use our shiny Book service in our BookController:</p>
+
+<figure class='code'><figcaption><span>BookController that uses Book model</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;BookController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;Book&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">Book</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">();</span>
+</span><span class='line'>    <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, the controller became very thin. It now creates a Book instance, assigns it to the scope and loads it from the backend. When the book will be loaded, it&#8217;s properties will be changed and so the template. Keep in mind that other controllers that interact with a book, simply inject the Book service. We have to change the template to use book&#8217;s methods as well:</p>
+
+<figure class='code'><figcaption><span>template that uses book instance</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;BookController&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">ng-style=</span><span class="s">&quot;{ backgroundImage: &#39;url(&#39; + book.getImageUrl(100, 100) + &#39;)&#39; }&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>    Id: <span class="nt">&lt;span</span> <span class="na">ng-bind=</span><span class="s">&quot;book.id&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Name:<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;book.name&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Author: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;book.author&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    Is Available: <span class="nt">&lt;span</span> <span class="na">ng-bind=</span><span class="s">&quot;book.isAvailable() ? &#39;Yes&#39; : &#39;No&#39; &quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;book.delete()&quot;</span><span class="nt">&gt;</span>Delete<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;book.update()&quot;</span><span class="nt">&gt;</span>Update<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Up to here we saw how to model a data, encapsulate all its methods in one class and share this class between controllers without code duplication.</p>
+
+<h2>Model of the same book in several controllers</h2>
+
+<p>So we have a book model definition and several controllers that work with books. After using this modeling architecture you will notice that there is a big problem.
+Up to now we supported several controllers that do operations with books. But what will happen if two controllers will deal with the same book? <br/>
+Assume that we have a section with a list of names of all our books and another section with an editable view of a book. We have two controllers, one for each section. The first controller loads the books list and the second controller loads a single book. Our user sees the second section, edit the name of the book and then presses on the &#8220;update&#8221; button. The update process will succeed and the book name will be changed. But in the books list section the user still sees the old name! What happened actually is that there were two different instances of the same book - one for the books list and one for the editable view. When the user edited the book&#8217;s name, he actually changed the name property of the book instance that was binded to the editable view. Whereas the book instance that was binded to the books list view didn&#8217;t changed. <br/>
+The solution for this problem is to share the same books instances with any controller that needs them. This way both the books list controller and the editable view controller will hold the same book instance and whenever this instance is changed, the changes will be reflected in all the views. Translating words to actions, we have to create a booksManager service (the letter b is not capital because it is an object and not a Class) that will manage books instances pool and will be responsible for returning instances of books. If the required instance doesn&#8217;t exist in the pool, the service will create it. If the required instance already exists in the pool, the service will only return it. Keep in mind that all the functions that load instances of books will be defined eventually only in our booksManager service since it has to be the only component that provide books instances.</p>
+
+<figure class='code'><figcaption><span>booksManager service</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;booksManager&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$http&#39;</span><span class="p">,</span> <span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="s1">&#39;Book&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$q</span><span class="p">,</span> <span class="nx">Book</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">booksManager</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">_pool</span><span class="o">:</span> <span class="p">{},</span>
+</span><span class='line'>        <span class="nx">_retrieveInstance</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bookId</span><span class="p">,</span> <span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">instance</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_pool</span><span class="p">[</span><span class="nx">bookId</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">instance</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">instance</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">messageData</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">this</span><span class="p">.</span><span class="nx">_pool</span><span class="p">[</span><span class="nx">bookId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">instance</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">_search</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bookId</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_pool</span><span class="p">[</span><span class="nx">bookId</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">_load</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bookId</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="kd">var</span> <span class="nx">book</span> <span class="o">=</span> <span class="nx">scope</span><span class="p">.</span><span class="nx">_retrieveInstance</span><span class="p">(</span><span class="nx">bookData</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>                    <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">book</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">})</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+</span><span class='line'>                <span class="p">});</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="cm">/* Public Methods */</span>
+</span><span class='line'>        <span class="cm">/* Use this function in order to get a book instance by it&#39;s id */</span>
+</span><span class='line'>        <span class="nx">getBook</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bookId</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">book</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_search</span><span class="p">(</span><span class="nx">bookId</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">book</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">book</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">this</span><span class="p">.</span><span class="nx">_load</span><span class="p">(</span><span class="nx">bookId</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="cm">/* Use this function in order to get instances of all the books */</span>
+</span><span class='line'>        <span class="nx">loadAllBooks</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="err">&#39;</span><span class="nx">ourserver</span><span class="o">/</span><span class="nx">books</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">booksArray</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="kd">var</span> <span class="nx">books</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>                    <span class="nx">booksArray</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                        <span class="kd">var</span> <span class="nx">book</span> <span class="o">=</span> <span class="nx">scope</span><span class="p">.</span><span class="nx">_retrieveInstance</span><span class="p">(</span><span class="nx">bookData</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>                        <span class="nx">books</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">book</span><span class="p">);</span>
+</span><span class='line'>                    <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>                    <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">books</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">})</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+</span><span class='line'>                <span class="p">});</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="cm">/*  This function is useful when we got somehow the book data and we wish to store it or update the pool and get a book instance in return */</span>
+</span><span class='line'>        <span class="nx">setBook</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">book</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_search</span><span class="p">(</span><span class="nx">bookData</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">book</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">book</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">book</span> <span class="o">=</span> <span class="nx">scope</span><span class="p">.</span><span class="nx">_retrieveInstance</span><span class="p">(</span><span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">book</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">booksManager</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Our Book service is now without the load method:</p>
+
+<figure class='code'><figcaption><span>Book model without the load method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;Book&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$http&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span><span class="o">:</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="c1">// Some other initializations related to book</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">setData</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bookData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">angular</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">bookData</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="k">delete</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">getImageUrl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s1">&#39;our/image/service/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;/width/height&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">isAvailable</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">some</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">store</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">store</span><span class="p">.</span><span class="nx">quantity</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">Book</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Our EditableBookController and BooksListController controllers looks like:</p>
+
+<figure class='code'><figcaption><span>EditableBookController and BooksListController that uses booksManager</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;EditableBookController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;booksManager&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">booksManager</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">booksManager</span><span class="p">.</span><span class="nx">getBook</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">book</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$scope</span><span class="p">.</span><span class="nx">book</span> <span class="o">=</span> <span class="nx">book</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">}])</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;BooksListController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;booksManager&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">booksManager</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">booksManager</span><span class="p">.</span><span class="nx">loadAllBooks</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">books</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">$scope</span><span class="p">.</span><span class="nx">books</span> <span class="o">=</span> <span class="nx">books</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that the templates remain the same as they still use instances. Now the application will hold only one book instance with id equals to 1 and any change on it will be reflected on all views that use it.</p>
+
+<h2>Summery</h2>
+
+<p>On this article I suggested an architecture for modeling data in AngularJS. First, I presented the default model binding of AngularJS, then I showed how to encapsulate the model&#8217;s methods and operations so we can share it between different controllers, and finally I explained how to manage our models instances so all the changes will be reflected on all the application views.</p>
+
+<p>I hope this article gave you ideas how to implement your data models. If you have any question, don&#8217;t hesitate to ask!</p>
+
+<p>NaorYe</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flexbox Accordion]]></title>
