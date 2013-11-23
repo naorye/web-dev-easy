@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AngularJS | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/angularjs/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-11-23T18:55:22+02:00</updated>
+  <updated>2013-11-23T20:47:42+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -345,7 +345,7 @@ app</p>
 <p>```
 Notice that the templates remain the same as they still use instances. Now the application will hold only one book instance with id equals to 1 and any change on it will be reflected on all views that use it.</p>
 
-<h2>Summery</h2>
+<h2>Summary</h2>
 
 <p>On this article I suggested an architecture for modeling data in AngularJS. First, I presented the default model binding of AngularJS, then I showed how to encapsulate the model's methods and operations so we can share it between different controllers, and finally I explained how to manage our models instances so all the changes will be reflected on all the application views.</p>
 
