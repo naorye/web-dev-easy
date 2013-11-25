@@ -504,7 +504,7 @@ The solution for this problem is to share the same books instances with any cont
 </span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">instance</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>                <span class="nx">instance</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">bookData</span><span class="p">);</span>
 </span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">messageData</span><span class="p">);</span>
+</span><span class='line'>                <span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">bookData</span><span class="p">);</span>
 </span><span class='line'>                <span class="k">this</span><span class="p">.</span><span class="nx">_pool</span><span class="p">[</span><span class="nx">bookId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">instance</span><span class="p">;</span>
 </span><span class='line'>            <span class="p">}</span>
 </span><span class='line'>
