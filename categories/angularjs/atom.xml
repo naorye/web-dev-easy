@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AngularJS | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/angularjs/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2013-11-25T08:06:36+02:00</updated>
+  <updated>2013-12-09T16:29:34+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -172,7 +172,7 @@ return Book;
 <code>
 This way all book's behavior is encapsulated in Book service. Now, let's use our shiny Book service in our BookController:
 </code>javascript BookController that uses Book model
-app.factory('BookController', ['$scope', 'Book', function($scope, Book) {</p>
+app.controller('BookController', ['$scope', 'Book', function($scope, Book) {</p>
 
 <pre><code>$scope.book = new Book();
 $scope.book.load(1);
@@ -330,12 +330,12 @@ Our EditableBookController and BooksListController controllers looks like:
 </code>javascript EditableBookController and BooksListController that uses booksManager
 app</p>
 
-<pre><code>.factory('EditableBookController', ['$scope', 'booksManager', function($scope, booksManager) {
+<pre><code>.controller('EditableBookController', ['$scope', 'booksManager', function($scope, booksManager) {
     booksManager.getBook(1).then(function(book) {
         $scope.book = book
     });
 }])
-.factory('BooksListController', ['$scope', 'booksManager', function($scope, booksManager) {
+.controller('BooksListController', ['$scope', 'booksManager', function($scope, booksManager) {
     booksManager.loadAllBooks().then(function(books) {
         $scope.books = books
     });
