@@ -6,11 +6,11 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AngularJS Data Model - Web Development is Easy!</title>
+  <title>Logger For AngularJS - Web Development is Easy!</title>
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use &hellip;">
+  <meta name="description" content="In this article I&#8217;ll create a tidy Logger for your AngularJS application. Throw this article I&#8217;ll also explain what is provider and what &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://webdeveasy.com/angularjs-data-model/">
+  <link rel="canonical" href="http://webdeveasy.com/logger-for-angularjs/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   
@@ -92,7 +92,7 @@
   
   <header>
     
-      <h1 class="entry-title">AngularJS Data Model</h1>
+      <h1 class="entry-title">Logger for AngularJS</h1>
     
     
       <p class="meta">
@@ -108,14 +108,30 @@
   
 
 
-<time datetime="2013-11-23T20:51:33+02:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
+<time datetime="2013-01-18T16:49:33+02:00" pubdate data-updated="true">Jan 18<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use JSON data as a model in the controller. As the time passed and my application grew, I realized that this modeling method isn&#8217;t powerful enough to fit my application&#8217;s needs. In this article I will present the way I dealt with data modeling in my AngularJS application.</p>
+<div class="entry-content"><p>In this article I&#8217;ll create a tidy Logger for your AngularJS application. Throw this article I&#8217;ll also explain what is provider and what is the difference between provider and a factory.</p>
+
+<!-- more -->
+
+
+<h2>What is wrong with $log?</h2>
+
+<p>Nothing! Really, $log is doing the work. It is a simple service for logging, including a default implementation that writes messages into the browser&#8217;s console. And thats it. But when talking about logging, I&#8217;d like a service that will print my messages nicely, something like a timestamp and maybe a hint about where the message was created. I would also like to turn off all the messages in production. I know $logProvider has the <code>debugEnabled(flag)</code> method, but I would like to turn off all the kinds of messages (like <code>info()</code> and <code>error()</code>). Later on I might like to add colors to my messages and maybe aggregate all the <code>error()</code> messages and send them somehow to me. This is why I was looking to create a new logging mechanism. <br/>
+While thinking about a way of implementations, I was thinking about using a decorator (link)</p>
+
+<p>The main purpose of this service is to simplify debugging and troubleshooting.</p>
+
+<p>what is provider
+provider vs a service
+logger code</p>
+
+<p>As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use JSON data as a model in the controller. As the time passed and my application grew, I realized that this modeling method isn&#8217;t powerful enough to fit my application&#8217;s needs. In this article I will present the way I dealt with data modeling in my AngularJS application.</p>
 
 <!-- more -->
 
@@ -700,7 +716,7 @@ The solution for this problem is to share the same books instances with any cont
   
 
 
-<time datetime="2013-11-23T20:51:33+02:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
+<time datetime="2013-01-18T16:49:33+02:00" pubdate data-updated="true">Jan 18<span>th</span>, 2013</time>
       
 
 <span class="categories">
@@ -721,8 +737,10 @@ The solution for this problem is to share the same books instances with any cont
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/flexbox-accordion/" title="Previous Post: Flexbox Accordion">&laquo; Flexbox Accordion</a>
+        <a class="basic-alignment left" href="/javascript-prototype/" title="Previous Post: JavaScript Prototype">&laquo; JavaScript Prototype</a>
       
+      
+        <a class="basic-alignment right" href="/searcher-backbone-dot-js-application-demonstration/" title="Next Post: Searcher - Backbone application demonstration">Searcher - Backbone application demonstration &raquo;</a>
       
     </p>
   </footer>
@@ -733,7 +751,7 @@ The solution for this problem is to share the same books instances with any cont
     (function (options, document, base, script) {
         options.base = base;
         //options.spotId = 'e9c642b7d400891990e8e6239e37f403';
-        options.spotName = 'lobby';
+        options.spotName = 'angularjs';
         options.type = 'FLOATING';
         options.template = 'default';
         options.position = 'BOTTOM_RIGHT';
@@ -864,8 +882,8 @@ The solution for this problem is to share the same books instances with any cont
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://webdeveasy.com/angularjs-data-model/';
-        var disqus_url = 'http://webdeveasy.com/angularjs-data-model/';
+        var disqus_identifier = 'http://webdeveasy.com/logger-for-angularjs/';
+        var disqus_url = 'http://webdeveasy.com/logger-for-angularjs/';
         var disqus_script = 'embed.js';
       
     (function () {
