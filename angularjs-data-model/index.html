@@ -733,7 +733,7 @@ The solution for this problem is to share the same books instances with any cont
     (function (options, document, base, script) {
         options.base = base;
         //options.spotId = 'e9c642b7d400891990e8e6239e37f403';
-        options.spotName = 'angularjs';
+        options.spotName = 'lobby';
         options.type = 'FLOATING';
         options.template = 'default';
         options.position = 'BOTTOM_RIGHT';
@@ -744,7 +744,7 @@ The solution for this problem is to share the same books instances with any cont
         spt.async = true;
         spt.src = base + '/scripts/' + script;
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(spt);
-    }(window.SPOTIM = {}, document, 'http://embed.spot.im', 'launcher.js'));
+    }(window.SPOTIM = {}, document, 'http://embed.staging.spot.im', 'launcher.js'));
 </script>
   
 
