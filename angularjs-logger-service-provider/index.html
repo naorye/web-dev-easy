@@ -1,0 +1,750 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Service Providers in AngularJS and Logger Implementation - Web Development is Easy!</title>
+  <meta name="author" content="NaorYe">
+
+  
+  <meta name="description" content="In this article I&#8217;ll explain what a provider is and what is the difference between a provider and other services declaration in AngularJS. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://webdeveasy.com/angularjs-logger-service-provider/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  
+
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/code/assets/js/jquery-2.0.3.min.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34683362-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+  
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Web Development is Easy!</a></h1>
+  
+    <h2>frameworks, tools and tips for web developers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+    <li><a href="mailto:naorye@gmail.com" rel="subscribe-email" title="subscribe via email">Email</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:webdeveasy.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <!--<li><a href="/">Home</a></li>-->
+    <li><a href="/">Posts</a></li>
+    <!--<li><a href="/blog/ask-a-question">Ask a Question</a></li>-->
+    <li><a href="/blog/about-me">About Me</a></li>
+    <li><a href="/blog/contact-me">Contact Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Service Providers in AngularJS and Logger Implementation</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-08T16:49:33+02:00" pubdate data-updated="true">Feb 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In this article I&#8217;ll explain what a provider is and what is the difference between a provider and other services declaration in AngularJS. Through this article I&#8217;ll also create a tidy Logger for your AngularJS application.</p>
+
+<!-- more -->
+
+
+<h2>What is wrong with $log?</h2>
+
+<p>Nothing! Really, $log is doing it&#8217;s work. It is a simple service for logging, including a default implementation that writes messages into the browser&#8217;s console. And that&#8217;s it. But when talking about logging, I&#8217;d like a service that will print my messages nicely, something like a timestamp and maybe a hint about where the message was created. I would also like to turn off all the messages during application configuration when running on production, and maybe expose a way to turn it on. I know $logProvider has the <code>debugEnabled(flag)</code> method, but I would like to turn off all the other kinds of messages (like <code>info()</code> and <code>error()</code>) and not only debug. Later on I may want to add colors to my messages and maybe aggregate all the <code>error()</code> messages and send them somehow to me. This is why I was looking to create a new logging mechanism. <br/>
+While thinking about a way of implementation, I considered using a <a href="http://docs.angularjs.org/api/AUTO.$provide#decorator" target="_blank">service decorator</a> but then realized that I might want more than modifying the behavior of $log, like add or remove methods, or change the way $log&#8217;s methods work. Eventually I decided to use a <a href="http://docs.angularjs.org/api/AUTO.$provide#methods_provider" target="_blank">service provider</a>.</p>
+
+<h2>A little about AngularJS services</h2>
+
+<p>This section might be a little confusing, but it is really important to understand. When we call <code>module.provider()</code>, we are actually calling the <code>provider()</code> method of the <code>$provide</code> service. <code>$provide.provider()</code> is exposed on <code>angular.Module</code>. The same is for <code>module.service()</code> and <code>module.factory()</code>, they are methods of <code>$provide</code> service that are exposed on <code>angular.Module</code>. Therefore the following blocks are the same thing:</p>
+
+<figure class='code'><figcaption><span>Calling directly to module.provider(), module.service() and module.factory()</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;providerName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">});</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;serviceName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">});</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;factoryName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>Calling directly to module.provider(), module.service() and module.factory()</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$provide&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$provide</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$provide</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;providerName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$provide&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$provide</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$provide</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;serviceName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$provide&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$provide</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$provide</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;factoryName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>More than that, <code>$provide.service()</code> and <code>$provide.factory()</code> are actually an easy way to use <code>$provide.provider()</code>:</p>
+
+<figure class='code'><figcaption><span>$provide.service() and $provide.factory() are actually $provide.provider()</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$provide</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;serviceName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;The Catcher in the Rye&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="s1">&#39;J. D. Salinger&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="c1">// Equals to</span>
+</span><span class='line'><span class="nx">$provide</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;serviceName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">$get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$injector</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">instantiate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;The Catcher in the Rye&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="s1">&#39;J. D. Salinger&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$provide</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;factoryName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;The Catcher in the Rye&#39;</span><span class="p">,</span> <span class="nx">author</span><span class="o">:</span> <span class="s1">&#39;J. D. Salinger&#39;</span> <span class="p">};</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="c1">// Equals to</span>
+</span><span class='line'><span class="nx">$provide</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;serviceName&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">$get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$injector</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;The Catcher in the Rye&#39;</span><span class="p">,</span> <span class="nx">author</span><span class="o">:</span> <span class="s1">&#39;J. D. Salinger&#39;</span> <span class="p">};</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As we all can see, AngularJS only knows service provider (<code>$provide.provider()</code>) and all other ways of creating services are derived.</p>
+
+<h2>What service provider gives?</h2>
+
+<p>Besides of creating the service, service provider allows to configure the service on <code>module.config()</code> block. Look on the following <code>appColor</code> example service that is defined by a service provider:</p>
+
+<figure class='code'><figcaption><span>Sample `appColor` service provider</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$provide</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;appColor&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="s1">&#39;Green&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setColor</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newColor</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">color</span> <span class="o">=</span> <span class="nx">newColor</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">$get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">color</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Whenever we ask from Angular to inject <code>appColor</code>, we get the <code>color</code> variable that returned from the <code>$get</code> method. But on <code>module.config()</code> blocks we can ask for <code>appColorProvider</code> which exposes the provider and all it&#8217;s methods and attributes. This let us configure the service before other code consumes it:</p>
+
+<figure class='code'><figcaption><span>`appColor` configuration and usage</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;appColorProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">appColorProvider</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">appColorProvider</span><span class="p">.</span><span class="nx">setColor</span><span class="p">(</span><span class="s1">&#39;Blue&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="s1">&#39;appColor&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">appColor</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Will log: &#39;Application color is Blue&#39;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Application color is &#39;</span> <span class="o">+</span> <span class="nx">appColor</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, service provider gave us access to the &#8220;provider&#8221; part, where we can set methods or variables and which can be accessed during configuration only. And this is what I was looking for when thinking about creating my Logger.</p>
+
+<h2>Creating the Logger!</h2>
+
+<p>I want to create a Logger service that will print my messages in the following formats (according to the supplied arguments):  <br/>
+<code>&lt;timestamp&gt; - &lt;context&gt;::&lt;method name&gt;('&lt;message&gt;')</code>
+<code>&lt;timestamp&gt; - &lt;context&gt;: &lt;message&gt;</code></p>
+
+<p>Before integrating with Angular, let&#8217;s create a Logger class that uses $log. First we will create a Logger constructor and a static helper method that will create new instances of Logger.</p>
+
+<figure class='code'><figcaption><span>Logger construction</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Logger</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">context</span> <span class="o">=</span> <span class="nx">context</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="nx">Logger</span><span class="p">.</span><span class="nx">getInstance</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">new</span> <span class="nx">Logger</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+The constructor gets a context as a parameter. <br/>
+I want it to be easy to interpolate variables into the message string. Therefore, let&#8217;s take Douglas Crockford&#8217;s <a href="http://javascript.crockford.com/remedial.html" target="_blank">supplant implementation</a> and put it as a helper in Logger:</p>
+
+<figure class='code'><figcaption><span>supplant support</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Logger</span><span class="p">.</span><span class="nx">supplant</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">str</span><span class="p">,</span> <span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span>
+</span><span class='line'>            <span class="sr">/\{([^{}]*)\}/g</span><span class="p">,</span>
+</span><span class='line'>            <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="nx">o</span><span class="p">[</span><span class="nx">b</span><span class="p">];</span>
+</span><span class='line'>                <span class="k">return</span> <span class="k">typeof</span> <span class="nx">r</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">r</span> <span class="o">===</span> <span class="s1">&#39;number&#39;</span> <span class="o">?</span> <span class="nx">r</span> <span class="o">:</span> <span class="nx">a</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now it is easy to add a method that returns a formatted timestamp:</p>
+
+<figure class='code'><figcaption><span>formatted timestamp on message</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Logger</span><span class="p">.</span><span class="nx">getFormattedTimestamp</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">date</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>   <span class="k">return</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">supplant</span><span class="p">(</span><span class="s1">&#39;{0}:{1}:{2}:{3}&#39;</span><span class="p">,</span> <span class="p">[</span>
+</span><span class='line'>        <span class="nx">date</span><span class="p">.</span><span class="nx">getHours</span><span class="p">(),</span>
+</span><span class='line'>        <span class="nx">date</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">(),</span>
+</span><span class='line'>        <span class="nx">date</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">(),</span>
+</span><span class='line'>        <span class="nx">date</span><span class="p">.</span><span class="nx">getMilliseconds</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">]);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that the last two methods are generic methods and you can take them out and put in your <code>utils</code> service for example. <br/>
+Now we want to write a generic <code>_log()</code> method that gets the original method of <code>$log</code> (log, info, warn, debug or error) and uses it to print a message according to the given arguments. First I&#8217;ll show my implementation and then explain:</p>
+
+<figure class='code'><figcaption><span>generic `_log()` method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Logger</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Supports the following arguments: fnName (optional), message (mandatory), supplantData (optional)</span>
+</span><span class='line'>    <span class="c1">// Length and types of arguments are checked in order to determine the usage</span>
+</span><span class='line'>    <span class="nx">_log</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">originalFn</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">now</span>  <span class="o">=</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">getFormattedTimestamp</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">());</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">supplantData</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>        <span class="k">switch</span> <span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+</span><span class='line'>                <span class="nx">message</span> <span class="o">=</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">supplant</span><span class="p">(</span><span class="s2">&quot;{0} - {1}: {2}&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">now</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">]);</span>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+</span><span class='line'>                <span class="nx">supplantData</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>                <span class="nx">message</span> <span class="o">=</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">supplant</span><span class="p">(</span><span class="s2">&quot;{0} - {1}::{2}(\&#39;{3}\&#39;)&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">now</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">]);</span>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">message</span> <span class="o">=</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">supplant</span><span class="p">(</span><span class="s2">&quot;{0} - {1}::{2}(\&#39;{3}\&#39;)&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">now</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">]);</span>
+</span><span class='line'>                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">supplantData</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>                    <span class="nx">message</span> <span class="o">=</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">supplant</span><span class="p">(</span><span class="s2">&quot;{0} - {1}: {2}&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">now</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">]);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nx">$log</span><span class="p">[</span><span class="nx">originalFn</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">supplant</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">supplantData</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>_log()</code> method first gets the formatted current date. Then it checks for the arguments length and types and determines which output the user wants to print:</p>
+
+<ol>
+<li>If the user supplied one argument, then the argument must be the message itself and <code>_log()</code> will print: <code>&lt;timestamp&gt; - &lt;context&gt;: &lt;message&gt;</code></li>
+<li>If the user supplied three arguments, then the first argument is a method name, the second is the message and the third is an object of variables to interpolate with the message. For this, <code>_log()</code> will print: <code>&lt;timestamp&gt; - &lt;context&gt;::&lt;method name&gt;('&lt;message&gt;')</code></li>
+<li>If the user provided two arguments, we need to find out whether he supplied a method name or an interpolation object. In order to figure that out, we&#8217;ll check the type of the last argument. If it is a string, then it has to be the message itself while the first argument is the method name. Otherwise consider the first argument as the message and the second as array of interpolation variables. The output print will be according to this check.</li>
+</ol>
+
+
+<p>At the end, <code>_log()</code> calls the required method on $log with the interpolated message. <br/>
+Now the last thing to do is to implement an overrides to <code>log()</code>, <code>info()</code>, <code>warn()</code>, <code>debug()</code> and <code>error()</code>:</p>
+
+<figure class='code'><figcaption><span>implement $log overrides</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Logger</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>    <span class="nx">log</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_log</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">info</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_log</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">warn</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_log</span><span class="p">(</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">debug</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_log</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_log</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally we have a Logger! This is how we can use it:</p>
+
+<figure class='code'><figcaption><span>Logger usage example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">logger</span> <span class="o">=</span> <span class="nx">Logger</span><span class="p">.</span><span class="nx">getInstance</span><span class="p">(</span><span class="s1">&#39;Example&#39;</span><span class="p">);</span> <span class="c1">// Name of this file / class / module</span>
+</span><span class='line'><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;This is a log&#39;</span><span class="p">);</span> <span class="c1">// Logs: &quot;19:24:1:263 - Example: This is a log&quot;</span>
+</span><span class='line'><span class="nx">logger</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;This is a warn&#39;</span><span class="p">);</span> <span class="c1">// Warns: &quot;19:24:1:263 - Example::warn(&#39;This is a warn&#39;)&quot;</span>
+</span><span class='line'><span class="nx">logger</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;This is a {0} error! {1}&#39;</span><span class="p">,</span> <span class="p">[</span> <span class="s1">&#39;big&#39;</span><span class="p">,</span> <span class="s1">&#39;just kidding&#39;</span> <span class="p">]);</span> <span class="c1">// Shouts: &quot;19:24:1:263 - Example: This is a big error! just kidding&quot;</span>
+</span><span class='line'><span class="nx">logger</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="s1">&#39;This is a debug for line {0}&#39;</span><span class="p">,</span> <span class="p">[</span> <span class="mi">8</span> <span class="p">]);</span> <span class="c1">// Logs: &quot;19:24:1:263 - Example::debug(&#39;This is a debug for line 8&#39;)&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+Now we can finally integrate our new Logger with AngularJS service provider!</p>
+
+<h2>Back To AngularJS Service Provider</h2>
+
+<p>I wanted to create Logger provider with the ability of disable all the logs. For that I&#8217;ve created a provider that wraps our Logger implementation and adds a method to LoggerProvider for enable or disable Logger:</p>
+
+<figure class='code'><figcaption><span>Logger service provider</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">provider</span><span class="p">(</span><span class="s1">&#39;Logger&#39;</span><span class="p">,</span> <span class="p">[</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">isEnabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_isEnabled</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">isEnabled</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">_isEnabled</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// $log injected as a dependency</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">$get</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$log&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$log</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">Logger</span> <span class="o">=</span> <span class="p">...</span>
+</span><span class='line'>        <span class="p">...</span> <span class="c1">// Logger implementation</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">Logger</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}];</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The last thing left to do is to change the <code>_log()</code> to do nothing if <code>isEnabled</code> equals to false:</p>
+
+<figure class='code'><figcaption><span>enable / disable `_log()`</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Logger</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">_log</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">originalFn</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isEnabled</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="p">....</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, Logger is enabled by default. In order to turn it off we just need to do:</p>
+
+<figure class='code'><figcaption><span>Turn off logger</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;Logger&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Logger</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">Logger</span><span class="p">.</span><span class="nx">enabled</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Thats all!</p>
+
+<h2>Summary</h2>
+
+<p>On this article I discussed the difference between AngularJS factory, service and provider. I showed the similarity and explained that service provider is a base method that all other ways of creating services are derived from. I also explained the options of service provider over other services and the most important thing, created a Logger provider with you!</p>
+
+<p>Here you can find <a href="https://github.com/naorye/angular-ny-logger" target="_blank">Logger GitHub Repository</a> with the source code and a demo.</p>
+
+<p>NaorYe</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">NaorYe</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-08T16:49:33+02:00" pubdate data-updated="true">Feb 8<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/angularjs/'>AngularJS</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/angularjs-data-model/" title="Previous Post: AngularJS Data Model">&laquo; AngularJS Data Model</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <div id="spot-im-root"></div>
+<script type="text/javascript">
+    (function (options, document, base, script) {
+        options.base = base;
+        //options.spotId = 'e9c642b7d400891990e8e6239e37f403';
+        options.spotName = 'angularjs';
+        options.type = 'FLOATING';
+        options.template = 'default';
+        options.position = 'BOTTOM_RIGHT';
+        options.size = 'SMALL';
+        options.containerId = 'spot-im-root';
+        var spt = document.createElement('script');
+        spt.type = 'text/javascript';
+        spt.async = true;
+        spt.src = base + '/scripts/' + script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(spt);
+    }(window.SPOTIM = {}, document, 'http://embed.spot.im', 'launcher.js'));
+</script>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/angularjs-logger-service-provider/">Service Providers in AngularJS and Logger Implementation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/angularjs-data-model/">AngularJS Data Model</a>
+      </li>
+    
+      <li class="post">
+        <a href="/flexbox-accordion/">Flexbox Accordion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/easy-select-plugin/">Easy Select Plugin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/single-page-application-authentication/">Single Page Application Authentication</a>
+      </li>
+    
+      <li class="post">
+        <a href="/pages-slider-with-javascript-and-css/">Pages Slider With JavaScript And CSS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-cleanup/">Backbone Cleanup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/optimize-requirejs-projects/">Optimize (Concatenate and Minify) RequireJS Projects</a>
+      </li>
+    
+      <li class="post">
+        <a href="/object-oriented-programming-with-javascript/">Object Oriented Programming with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-cache/">Backbone Cache</a>
+      </li>
+    
+      <li class="post">
+        <a href="/searcher-backbone-dot-js-application-demonstration/">Searcher - Backbone application demonstration</a>
+      </li>
+    
+      <li class="post">
+        <a href="/javascript-prototype/">JavaScript Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-singleton/">Backbone Singleton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/style-your-jquery-ui-tabs/">Style Your jQuery-UI Tabs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/cascading-autocompletes-using-jquery-ui/">Cascading Autocompletes using jQuery UI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+	<script type="text/javascript"><!--
+	google_ad_client = "ca-pub-6953090373480388";
+	google_ad_slot = "3682307157";
+	google_ad_width = "120";
+	google_ad_height = "600";
+	//-->
+	</script>
+	<script type="text/javascript"
+	src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - NaorYe -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'webdeveasy';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://webdeveasy.com/angularjs-logger-service-provider/';
+        var disqus_url = 'http://webdeveasy.com/angularjs-logger-service-provider/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
