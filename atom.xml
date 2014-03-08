@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-02-08T15:18:49+02:00</updated>
+  <updated>2014-03-08T20:48:17+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,483 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Interceptors in AngularJS and Useful Examples]]></title>
+    <link href="http://webdeveasy.com/interceptors-in-angularjs-and-useful-examples/"/>
+    <updated>2014-03-08T22:44:14+02:00</updated>
+    <id>http://webdeveasy.com/interceptors-in-angularjs-and-useful-examples</id>
+    <content type="html"><![CDATA[<p>The <code>$http</code> service of AngularJS allows us to communicate with a backend and make HTTP requests. There are cases where we want to capture every request and manipulate it before sending it to the server. Other times we would like to capture the response and process it before completing the call. Global http error handling can be also a good example of such need. Interceptors are created exactly for such cases. This article will introduce AngularJS interceptors and will provide some useful examples.</p>
+
+<!-- more -->
+
+
+<h2>What are Interceptors?</h2>
+
+<p>The <code>$httpProvider</code> provider contains an array of interceptors. An interceptor is simply a regular service factory that is registered to that array. This is how we create an interceptor:</p>
+
+<figure class='code'><figcaption><span>Interceptor declaration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;myInterceptor&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$log&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$log</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$log</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s1">&#39;$log is here to show you that this is a regular factory with injection&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">myInterceptor</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">....</span>
+</span><span class='line'>        <span class="p">....</span>
+</span><span class='line'>        <span class="p">....</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">myInterceptor</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then add it by it&#8217;s name to <code>$httpProvider.interceptors</code> array:</p>
+
+<figure class='code'><figcaption><span>add the interceptor to $httpProvider.interceptors</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$httpProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;myInterceptor&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Interceptors allow you to:</p>
+
+<ul>
+<li><p><strong>Intercept a request by implementing the <code>request</code> function:</strong> This method is called before <code>$http</code> sends the request to the backend, so you can modify the configurations and make other actions. This function receives the request configuration object as a parameter and has to return a configuration object or a promise. Returning an invalid configuration object or promise that will be rejected, will make the <code>$http</code> call to fail.</p></li>
+<li><p><strong>Intercept a response by implementing the <code>response</code> function:</strong> This method is called right after <code>$http</code> receives the response from the backend, so you can modify the response and make other actions. This function receives a response object as a parameter and has to return a response object or a promise. The response object includes the request configuration, headers, status and data that returned from the backend. Returning an invalid response object or promise that will be rejected, will make the <code>$http</code> call to fail.</p></li>
+<li><p><strong>Intercept request error by implementing the <code>requestError</code> function:</strong> Sometimes a request can&#8217;t be sent or it is rejected by an interceptor. Request error interceptor captures requests that have been canceled by a previous request interceptor. It can be used in order to recover the request and sometimes undo things that have been set up before a request, like removing overlays and loading indicators, enabling buttons and fields and so on.</p></li>
+<li><p><strong>Intercept response error by implementing the <code>responseError</code> function:</strong> Sometimes our backend call fails. Other times it might be rejected by a request interceptor or by a previous response interceptor. In those cases, response error interceptor can help us to recover the backend call.</p></li>
+</ul>
+
+
+<h2>Asynchronous Operations</h2>
+
+<p>Sometimes there is a need to make some asynchronous operations inside the interceptor. Luckily AngularJS allows us to return a promise that will be resolved later. This will defer the request sending in case of request interceptor and will defer the response resolving in case of response interceptor.</p>
+
+<figure class='code'><figcaption><span>Make asynchronous operations in request interceptor</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;myInterceptor&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="s1">&#39;someAsyncService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">someAsyncService</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">requestInterceptor</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">request</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>            <span class="nx">someAsyncService</span><span class="p">.</span><span class="nx">doAsyncOperation</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="c1">// Asynchronous operation succeeded, modify config accordingly</span>
+</span><span class='line'>                <span class="p">...</span>
+</span><span class='line'>                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="c1">// Asynchronous operation failed, modify config accordingly</span>
+</span><span class='line'>                <span class="p">...</span>
+</span><span class='line'>                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">requestInterceptor</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, the request interceptor makes an asynchronous operation and updates the config according to the results. Then it continues with the modified config. If <code>deferred</code> is rejected, the http request will fail. <br/>
+The same applies for response interceptor:</p>
+
+<figure class='code'><figcaption><span>Make asynchronous operations in response interceptor</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;myInterceptor&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="s1">&#39;someAsyncService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">someAsyncService</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">responseInterceptor</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">response</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>            <span class="nx">someAsyncService</span><span class="p">.</span><span class="nx">doAsyncOperation</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="c1">// Asynchronous operation succeeded, modify response accordingly</span>
+</span><span class='line'>                <span class="p">...</span>
+</span><span class='line'>                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="c1">// Asynchronous operation failed, modify response accordingly</span>
+</span><span class='line'>                <span class="p">...</span>
+</span><span class='line'>                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">responseInterceptor</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Only when <code>deferred</code> is resolved, the request will succeed. If <code>deferred</code> is rejected, the request will fail.</p>
+
+<h2>Examples</h2>
+
+<p>In this section I&#8217;ll provide some examples to AngularJS Interceptors in order to give a good understanding of how to use them and how they can help you. Keep in mind that the solutions I provide here are not necessarily the best or the most accurate solutions.</p>
+
+<h3>Session Injector (request interceptor)</h3>
+
+<p>There are two ways of implementing server side authentication. The first one is to use the traditional Cookie-Based Authentication that uses server side cookies to authenticate the user on each request. The other approach is Token-Based Authentication. When the user logs in, he gets <code>sessionToken</code> from the backend. This <code>sessionToken</code> identifies the user in the server and is sent to the server on each request. <br/>
+The following <code>sessionInjector</code> adds <code>x-session-token</code> header to each intercepted request (in case the current user is logged in):</p>
+
+<figure class='code'><figcaption><span>Session Injector</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;sessionInjector&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;SessionService&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">SessionService</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">sessionInjector</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">request</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">SessionService</span><span class="p">.</span><span class="nx">isAnonymus</span><span class="p">)</span>
+</span><span class='line'>                <span class="nx">config</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;x-session-token&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">SessionService</span><span class="p">.</span><span class="nx">token</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">config</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">sessionInjector</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$httpProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;sessionInjector&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And now creating a get request:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;https://api.github.com/users/naorye/repos&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The configuration object before intercepted by <code>sessionInjector</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;transformRequest&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="kc">null</span>
+</span><span class='line'>    <span class="p">],</span>
+</span><span class='line'>    <span class="s2">&quot;transformResponse&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="kc">null</span>
+</span><span class='line'>    <span class="p">],</span>
+</span><span class='line'>    <span class="s2">&quot;method&quot;</span><span class="o">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;https://api.github.com/users/naorye/repos&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;headers&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s2">&quot;Accept&quot;</span><span class="o">:</span> <span class="s2">&quot;application/json, text/plain, */*&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The configuration object after intercepted by <code>sessionInjector</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;transformRequest&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="kc">null</span>
+</span><span class='line'>    <span class="p">],</span>
+</span><span class='line'>    <span class="s2">&quot;transformResponse&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="kc">null</span>
+</span><span class='line'>    <span class="p">],</span>
+</span><span class='line'>    <span class="s2">&quot;method&quot;</span><span class="o">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;https://api.github.com/users/naorye/repos&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;headers&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s2">&quot;Accept&quot;</span><span class="o">:</span> <span class="s2">&quot;application/json, text/plain, */*&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;x-session-token&quot;</span><span class="o">:</span> <span class="mi">415954427904</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Timestamp Marker (request and response interceptors)</h3>
+
+<p>Let&#8217;s measure the time it takes to get a backend response using interceptors. It is done by adding a timestamp for each request and response:</p>
+
+<figure class='code'><figcaption><span>Timestamp Marker</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;timestampMarker&#39;</span><span class="p">,</span> <span class="p">[</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">timestampMarker</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">request</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">config</span><span class="p">.</span><span class="nx">requestTimestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">config</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="nx">response</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">responseTimestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">response</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">timestampMarker</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$httpProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;timestampMarker&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And now we can do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;https://api.github.com/users/naorye/repos&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">time</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">responseTimestamp</span> <span class="o">-</span> <span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">requestTimestamp</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The request took &#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">time</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; seconds.&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here you can find an <a href="http://webdeveasy.com/code/interceptors-in-angularjs-and-useful-examples/timestamp-marker.html" target="_blank">example for the Timestamp Marker</a>.</p>
+
+<h3>Request Recover (request error interceptor)</h3>
+
+<p>In order to demonstrate a request error interceptor we have to simulate a situation where a previous interceptor rejects the request. Our request error interceptor will get the rejection reason and will recover the request. <br/>
+Let&#8217;s create two interceptors: <code>requestRejector</code> and <code>requestRecoverer</code>.</p>
+
+<figure class='code'><figcaption><span>Request Recoverer</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;requestRejector&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">requestRejector</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">request</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="s1">&#39;requestRejector&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">requestRejector</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;requestRecoverer&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">requestRecoverer</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">requestError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rejectReason</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">rejectReason</span> <span class="o">===</span> <span class="s1">&#39;requestRejector&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="c1">// Recover the request</span>
+</span><span class='line'>                <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">transformRequest</span><span class="o">:</span> <span class="p">[],</span>
+</span><span class='line'>                    <span class="nx">transformResponse</span><span class="o">:</span> <span class="p">[],</span>
+</span><span class='line'>                    <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+</span><span class='line'>                    <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;https://api.github.com/users/naorye/repos&#39;</span><span class="p">,</span>
+</span><span class='line'>                    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>                        <span class="nx">Accept</span><span class="o">:</span> <span class="s1">&#39;application/json, text/plain, */*&#39;</span>
+</span><span class='line'>                    <span class="p">}</span>
+</span><span class='line'>                <span class="p">};</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">rejectReason</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">requestRecoverer</span><span class="p">;</span>
+</span><span class='line'><span class="p">}]);</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$httpProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;requestRejector&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">// Removing &#39;requestRecoverer&#39; will result to failed request</span>
+</span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;requestRecoverer&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And now, if we do the following, we will get the log <code>success</code> even though <code>requestRejector</code> rejected the request:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;https://api.github.com/users/naorye/repos&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rejectReason</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;failure&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here you can find an <a href="http://webdeveasy.com/code/interceptors-in-angularjs-and-useful-examples/request-recover.html" target="_blank">example for the Request Recover</a>.</p>
+
+<h3>Session Recoverer (response error interceptor)</h3>
+
+<p>There are times, in our single page application, where the session gets lost. Such situation might happen due to session expiration or a server error. Let&#8217;s create an interceptor that will recover the session and resend the original request again automatically (for situations where the session expired). <br/>
+For the example purposes, let&#8217;s assume that the http status code for session expiration is 419.</p>
+
+<figure class='code'><figcaption><span>Session Recoverer</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;sessionRecoverer&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="s1">&#39;$injector&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">$injector</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">responseError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Session has expired</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">419</span><span class="p">){</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">SessionService</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SessionService&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">$http</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;$http&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// Create a new session (recover the session)</span>
+</span><span class='line'>            <span class="c1">// We use login method that logs the user in using the current credentials and</span>
+</span><span class='line'>            <span class="c1">// returns a promise</span>
+</span><span class='line'>            <span class="nx">SessionService</span><span class="p">.</span><span class="nx">login</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// When the session recovered, make the same backend call again and chain the request</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">$http</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}]);</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$httpProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;sessionRecoverer&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This way, whenever a backend call fails due to session expiration, <code>sessionRecoverer</code> creates a new session and performs the backend call again.</p>
+
+<h2>Summary</h2>
+
+<p>In this article I explained about AngularJS interceptors. I presented <code>request</code>, <code>response</code>, <code>requestError</code> and <code>responseError</code> interceptors and described how and when to use them. I also provided real world useful examples that can help you in your development.</p>
+
+<p>I hope you enjoyed reading this article as much as I enjoyed writing it! <br/>
+Good Luck! <br/>
+NaorYe</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Service Providers in AngularJS and Logger Implementation]]></title>
