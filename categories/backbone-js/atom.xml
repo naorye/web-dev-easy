@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Backbone.js | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/backbone-js/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-03-14T04:43:05+02:00</updated>
+  <updated>2014-03-17T00:06:48+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -441,50 +441,7 @@ At the end of this article we will have Backbone searcher application which will
 
 <p>Let's begin with our application loading flow. After typing the url, the browser starts loading the index.html file:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>index.html</span> <a href='/code/searcher/index.html' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!doctype html&gt;</span>
-</span><span class='line'><span class="nt">&lt;html&gt;</span>
-</span><span class='line'>	<span class="nt">&lt;head&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;title&gt;&lt;/title&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;content-type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;css/style.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">/&gt;</span>		
-</span><span class='line'>		<span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;js/main&quot;</span> <span class="na">src=</span><span class="s">&quot;assets/js/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>	<span class="nt">&lt;/head&gt;</span>
-</span><span class='line'>	<span class="nt">&lt;body&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;header&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;search&quot;</span><span class="nt">&gt;&lt;/nav&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;/header&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;aside</span> <span class="na">class=</span><span class="s">&quot;side-bar&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>				<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;term-history&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;/aside&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;/section&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>	<span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:html index.html searcher/index.html %}</p>
 
 <p>The index.html file contains the layout of our application which include placeholders for the search section, the history section and the search results area. It also includes reference to css file and reference to the require.js script.
 When the browser loads this html file, right after loading style.css, the browser loads the require.js script. Look closely and you'll notice that require.js script tag has additional attribute called "data-main". This attribute tells require.js to load js/main.js after require.js loads.</p>
@@ -499,90 +456,7 @@ When the browser loads this html file, right after loading style.css, the browse
 </ul>
 
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/main.js</span> <a href='/code/Searcher/js/main.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
-</span><span class='line'>	<span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>		<span class="nx">jQuery</span><span class="o">:</span> <span class="s1">&#39;../assets/js/jquery-1.9.0.min&#39;</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">Underscore</span><span class="o">:</span> <span class="s1">&#39;../assets/js/underscore-min&#39;</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">Backbone</span><span class="o">:</span> <span class="s1">&#39;../assets/js/backbone-min&#39;</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">tooltipster</span><span class="o">:</span> <span class="s1">&#39;../assets/js/jquery.tooltipster&#39;</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;../assets/js/text&#39;</span>
-</span><span class='line'>	<span class="p">},</span>
-</span><span class='line'>	<span class="nx">shim</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>		<span class="s1">&#39;jQuery&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;$&#39;</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="s1">&#39;Underscore&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;_&#39;</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="s1">&#39;Backbone&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">deps</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>				<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>				<span class="s1">&#39;jQuery&#39;</span>
-</span><span class='line'>			<span class="p">],</span>
-</span><span class='line'>			<span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;Backbone&#39;</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="s1">&#39;tooltipster&#39;</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">deps</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>				<span class="s1">&#39;jQuery&#39;</span>
-</span><span class='line'>			<span class="p">]</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">require</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;router&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;app&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="nx">Router</span><span class="p">,</span> <span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">();</span>
-</span><span class='line'>	<span class="nx">app</span><span class="p">.</span><span class="nx">initialize</span><span class="p">(</span><span class="nx">router</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>	<span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/main.js Searcher/js/main.js %}</p>
 
 <p>require.js configuration allows us to map modules paths to names. For example, jQuery.js file is located in "libs/jquery-1.8.2.min". Whenever we wish mark jQuery as a dependency, we will have to write this long path. Since jQuery is basic module and we probably use it a lot, it is better to map its path. <br/>
 require.js works with <a href="http://requirejs.org/docs/whyamd.html" target="_blank">AMD modules</a>. The AMD structure tells require.js what are the dependencies and which object to return. The purpose of the shim configuration is to tell require.js for each un-AMD module what is its dependencies and which object to return. <br/>
@@ -590,124 +464,7 @@ After the configurations done, we ask require.js to load Backbone, router.js and
 
 <h3>app.js</h3>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/app.js</span> <a href='/code/searcher/js/app.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;models/query&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;views/search&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;views/history&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;sources/sources-manager&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;models/source&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;sources/library-of-congress/views/grid&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;sources/google-search-api-for-shopping/views/list&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">QueryModel</span><span class="p">,</span> <span class="nx">SearchView</span><span class="p">,</span> <span class="nx">HistoryView</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">SourcesManager</span><span class="p">,</span> <span class="nx">SourceModel</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">LocGridView</span><span class="p">,</span> <span class="nx">GoogleListView</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">Application</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'>	<span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Application</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="p">{</span>
-</span><span class='line'>		<span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">router</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">router</span> <span class="o">=</span> <span class="nx">router</span><span class="p">;</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">appQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">QueryModel</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">appQuery</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>				<span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">navigate</span><span class="p">(</span>
-</span><span class='line'>					<span class="s1">&#39;/search/&#39;</span> <span class="o">+</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;sourceId&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;term&#39;</span><span class="p">),</span>
-</span><span class='line'>					<span class="p">{</span><span class="nx">trigger</span><span class="o">:</span> <span class="kc">false</span> <span class="p">}</span> <span class="p">);</span>
-</span><span class='line'>			<span class="p">},</span> <span class="k">this</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">searchView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SearchView</span><span class="p">({</span>
-</span><span class='line'>				<span class="nx">model</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">appQuery</span>
-</span><span class='line'>			<span class="p">});</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">historyView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">HistoryView</span><span class="p">({</span>
-</span><span class='line'>				<span class="nx">model</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">appQuery</span>
-</span><span class='line'>			<span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">sourcesManager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SourcesManager</span><span class="p">(</span> <span class="p">{</span>
-</span><span class='line'>				<span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;.content&#39;</span><span class="p">,</span>
-</span><span class='line'>				<span class="nx">model</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">appQuery</span><span class="p">,</span>
-</span><span class='line'>				<span class="nx">sources</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>					<span class="k">new</span> <span class="nx">SourceModel</span><span class="p">({</span>
-</span><span class='line'>						<span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;library-of-congress&#39;</span><span class="p">,</span>
-</span><span class='line'>						<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Library Of Congress&#39;</span><span class="p">,</span>
-</span><span class='line'>						<span class="nx">view</span><span class="o">:</span> <span class="nx">LocGridView</span>
-</span><span class='line'>					<span class="p">}),</span>
-</span><span class='line'>					<span class="k">new</span> <span class="nx">SourceModel</span><span class="p">({</span>
-</span><span class='line'>						<span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;google-shopping&#39;</span><span class="p">,</span>
-</span><span class='line'>						<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Google Shopping&#39;</span><span class="p">,</span>
-</span><span class='line'>						<span class="nx">view</span><span class="o">:</span> <span class="nx">GoogleListView</span>
-</span><span class='line'>					<span class="p">})</span>
-</span><span class='line'>				<span class="p">]</span>
-</span><span class='line'>			<span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">searchView</span><span class="p">.</span><span class="nx">addSources</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sourcesManager</span><span class="p">.</span><span class="nx">sourcesPool</span><span class="p">);</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>	<span class="k">return</span> <span class="k">new</span> <span class="nx">Application</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/app.js searcher/js/app.js %}</p>
 
 <p>Lets see what app.js initialization function does:</p>
 
@@ -725,36 +482,7 @@ In order to understand completely how everything bonds together and works, we mu
 
 <h3>router.js</h3>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/router.js</span> <a href='/code/searcher/js/router.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;app&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">Router</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">routes</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="s1">&#39;search/:sourceId/:term&#39;</span><span class="o">:</span> <span class="s1">&#39;searchImages&#39;</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">searchImages</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sourceId</span><span class="p">,</span> <span class="nx">term</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">app</span><span class="p">.</span><span class="nx">appQuery</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span> <span class="p">{</span> <span class="nx">sourceId</span><span class="o">:</span> <span class="nx">sourceId</span><span class="p">,</span> <span class="nx">term</span><span class="o">:</span> <span class="nx">term</span> <span class="p">}</span> <span class="p">);</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">Router</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/router.js searcher/js/router.js %}</p>
 
 <p>The router depends on app.js. Whenever a route in form "search/&lt;sourceId&gt;/&lt;term&gt;" is entered to the url, the router trigger the searchImages() method which changes the appQuery singleton.</p>
 
@@ -766,137 +494,13 @@ In order to understand completely how everything bonds together and works, we mu
 
 <p>The main purpose of the application is to allow searching. The application makes searches among different search providers, therefore the input it gets from the user contains a search term and a search provider. So, we need a model to store this information. Actually, a single instance of this model will serve us during the entire use of the application. Each time the user makes a different search (change the search term or provider), the model instance changes. Later, those model changes will trigger the search.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/models/query.js</span> <a href='/code/searcher/js/models/query.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">QueryModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">term</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-</span><span class='line'>			<span class="nx">sourceId</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">QueryModel</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/models/query.js searcher/js/models/query.js %}</p>
 
 <p>QueryModel has two attributes. "term" for holding the search term and "sourceId" for holding the search provider. The default value for both attributes are the empty string.</p>
 
 <p>SearchView view creates the inputs and adds the behavior of the searching process.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/views/search.js</span> <a href='/code/searcher/js/views/search.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>    <span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;app&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;text!templates/search.html&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">searchTemplate</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">SearchView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>        <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;.search&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>            <span class="s1">&#39;click .search-button&#39;</span><span class="o">:</span> <span class="s1">&#39;setQuery&#39;</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>        <span class="nx">searchTemplate</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">searchTemplate</span><span class="p">),</span>
-</span><span class='line'>        <span class="nx">optionTemplate</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="s2">&quot;&lt;option value=&#39;&lt;%= id %&gt;&#39;&gt;&lt;%= name %&gt;&lt;/option&gt;&quot;</span><span class="p">),</span>
-</span><span class='line'>        <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">applyQuery</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>        <span class="nx">setQuery</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">term</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">searchInput</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">sourceId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">sourceSelect</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span> <span class="p">{</span> <span class="nx">term</span><span class="o">:</span> <span class="nx">term</span><span class="p">,</span> <span class="nx">sourceId</span><span class="o">:</span> <span class="nx">sourceId</span> <span class="p">}</span> <span class="p">);</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>		<span class="nx">applyQuery</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">term</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;term&#39;</span><span class="p">);</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;sourceId&#39;</span><span class="p">);</span>
-</span><span class='line'>			
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">searchInput</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">term</span><span class="p">);</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">sourceSelect</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">sourceId</span><span class="p">);</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>        <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">empty</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">searchTemplate</span><span class="p">());</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">searchInput</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.search-input&#39;</span><span class="p">);</span>
-</span><span class='line'>            <span class="k">this</span><span class="p">.</span><span class="nx">sourceSelect</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.source-select&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">applyQuery</span><span class="p">();</span>
-</span><span class='line'>            <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>        <span class="nx">addSources</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sourcesPool</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">id</span> <span class="k">in</span> <span class="nx">sourcesPool</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="k">this</span><span class="p">.</span><span class="nx">sourceSelect</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">optionTemplate</span><span class="p">({</span>
-</span><span class='line'>                    <span class="nx">id</span><span class="o">:</span> <span class="nx">id</span><span class="p">,</span>
-</span><span class='line'>                    <span class="nx">name</span><span class="o">:</span> <span class="nx">sourcesPool</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">}));</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">SearchView</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/views/search.js searcher/js/views/search.js %}</p>
 
 <p>SearchView renders itself on initialization, and every time appQuery changes it updates the input values. On render, the view draws itself using <a href="http://underscorejs.org/#template" target="_blank">underscore templates</a> and initializes the inputs according to the appQuery. Whenever the user clicks on the search button, the view set appQuery with the new values which causing the url to change (as we saw in app.js). Notice that SearchView uses the text plugin of require.js in order to load templates/search.html. In addition, the compiled version of templates are stored in searchTemplate and in optionTemplate in order to save compilations. SearchView contains the addSource() method which gets sourceModel instance as parameter (we will see it later) and adds the new source to the sources select list.</p>
 
@@ -904,100 +508,7 @@ In order to understand completely how everything bonds together and works, we mu
 
 <p>As I mentioned before, the application makes searches among different search providers. The sources mechanism is responsible for defining search providers, their models and their views. This feature includes the SourcesManager view which acts as a bridge and responsible for rendering the relevant search results according to appQuery.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/sources/sources-manager.js</span> <a href='/code/searcher/js/sources/sources-manager.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;jQuery&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;text!templates/loading.html&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">loadingTemplate</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">SourcesManager</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">loadingTemplate</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">loadingTemplate</span><span class="p">),</span>
-</span><span class='line'>		<span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">sourcesPool</span> <span class="o">=</span> <span class="p">{</span> <span class="p">};</span>
-</span><span class='line'>			<span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">sources</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>				<span class="k">for</span> <span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sources</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>					<span class="k">this</span><span class="p">.</span><span class="nx">addSource</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">sources</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-</span><span class='line'>				<span class="p">}</span>
-</span><span class='line'>			<span class="p">}</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">changes</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;sourceId&#39;</span><span class="p">);</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceModel</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">sourcesPool</span><span class="p">[</span><span class="nx">sourceId</span><span class="p">];</span>
-</span><span class='line'>			<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">sourceModel</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>				<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Source &#39;</span> <span class="o">+</span> <span class="nx">sourceId</span> <span class="o">+</span> <span class="s1">&#39; not found!&#39;</span><span class="p">);</span>
-</span><span class='line'>				<span class="k">return</span><span class="p">;</span>
-</span><span class='line'>			<span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">term</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;term&#39;</span><span class="p">);</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">viewType</span> <span class="o">=</span> <span class="nx">sourceModel</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;view&#39;</span><span class="p">);</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">viewType</span><span class="p">({</span>
-</span><span class='line'>				<span class="nx">el</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">el</span>
-</span><span class='line'>			<span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Rendering &#39;</span> <span class="o">+</span> <span class="nx">sourceId</span> <span class="o">+</span> <span class="s1">&#39; with term &quot;&#39;</span><span class="o">+</span> <span class="nx">term</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">empty</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">loadingTemplate</span><span class="p">());</span>
-</span><span class='line'>			<span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">({</span> <span class="nx">term</span><span class="o">:</span> <span class="nx">term</span> <span class="p">});</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">addSource</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sourceModel</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceId</span> <span class="o">=</span> <span class="nx">sourceModel</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">sourcesPool</span><span class="p">[</span><span class="nx">sourceId</span><span class="p">]</span> <span class="o">=</span> <span class="nx">sourceModel</span><span class="p">;</span>
-</span><span class='line'>			<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Adding source &#39;</span> <span class="o">+</span> <span class="nx">sourceId</span> <span class="o">+</span> <span class="s1">&#39; to the sources pool&#39;</span><span class="p">);</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">SourcesManager</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/sources/sources-manager.js searcher/js/sources/sources-manager.js %}</p>
 
 <p>When initialized with appQuery as model, SourcesManager renders itself on appQuery change. SourceManager has the ability to add sources using the addSource() function or using the initialization "sources" option. When it renders, it resolves the search provider's view according to appQuery and renders it.
 SourceManager initialization occurs inside the application initialization:
@@ -1024,251 +535,26 @@ SourceManager initialization occurs inside the application initialization:
 <p>```
 appQuery is the SourcesManager model and the search results are rendered inside ".content" element. The search providers are also defined here using the SourceModel. Each search provider should have id, name and main view which will be displayed when selected.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/models/source.js</span> <a href='/code/searcher/js/models/source.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">SourceModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-</span><span class='line'>			<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-</span><span class='line'>			<span class="nx">view</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">SourceModel</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/models/source.js searcher/js/models/source.js %}</p>
 
 <h4>Google Shopping search provider</h4>
 
 <p>Let's explore the Google Shopping search provider. It's files located under js/sources/google-search-api-for-shopping and it consist of ProductModel, ProductsCollection, products template and it's main view called ListView.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/sources/google-search-api-for-shopping/models/product.js</span> <a href='/code/searcher/js/sources/google-search-api-for-shopping/models/product.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span> <span class="s1">&#39;Backbone&#39;</span> <span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">ProductModel</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-</span><span class='line'>			<span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-</span><span class='line'>			<span class="nx">link</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-</span><span class='line'>			<span class="nx">thumbnail</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">parse</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="p">{</span> <span class="p">};</span>
-</span><span class='line'>			<span class="k">if</span> <span class="p">(</span><span class="nx">item</span> <span class="o">&amp;&amp;</span> <span class="nx">item</span><span class="p">.</span><span class="nx">product</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>				<span class="kd">var</span> <span class="nx">product</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">product</span><span class="p">;</span>
-</span><span class='line'>				<span class="nx">attrs</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">product</span><span class="p">.</span><span class="nx">title</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-</span><span class='line'>				<span class="nx">attrs</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="nx">product</span><span class="p">.</span><span class="nx">description</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-</span><span class='line'>				<span class="nx">attrs</span><span class="p">.</span><span class="nx">link</span> <span class="o">=</span> <span class="nx">product</span><span class="p">.</span><span class="nx">link</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-</span><span class='line'>				
-</span><span class='line'>				<span class="k">if</span> <span class="p">(</span><span class="nx">product</span><span class="p">.</span><span class="nx">images</span> <span class="o">&amp;&amp;</span> <span class="nx">product</span><span class="p">.</span><span class="nx">images</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>					<span class="nx">product</span><span class="p">.</span><span class="nx">images</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">status</span> <span class="o">==</span> <span class="s1">&#39;available&#39;</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>					<span class="nx">product</span><span class="p">.</span><span class="nx">images</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">thumbnails</span> <span class="o">&amp;&amp;</span> <span class="nx">product</span><span class="p">.</span><span class="nx">images</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">thumbnails</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>					<span class="nx">attrs</span><span class="p">.</span><span class="nx">thumbnail</span> <span class="o">=</span> <span class="nx">product</span><span class="p">.</span><span class="nx">images</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">thumbnails</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">link</span><span class="p">;</span>
-</span><span class='line'>				<span class="p">}</span>
-</span><span class='line'>			<span class="p">}</span>
-</span><span class='line'>			<span class="k">return</span> <span class="nx">attrs</span><span class="p">;</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">ProductModel</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/sources/google-search-api-for-shopping/models/product.js searcher/js/sources/google-search-api-for-shopping/models/product.js %}</p>
 
 <p>Each product contains title, description, link for the product and a small thumbnail. The parse method is used by Backbone in order to parse the response  of single product, when fetching the data from Google.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/sources/google-search-api-for-shopping/collections/products.js</span> <a href='/code/searcher/js/sources/google-search-api-for-shopping/collections/products.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;sources/google-search-api-for-shopping/models/product&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="nx">ProductModel</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">ProductsCollection</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">model</span><span class="o">:</span> <span class="nx">ProductModel</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;https://www.googleapis.com/shopping/search/v1/public/products&#39;</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">parse</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">items</span><span class="p">;</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">ProductsCollection</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/sources/google-search-api-for-shopping/collections/products.js searcher/js/sources/google-search-api-for-shopping/collections/products.js %}</p>
 
 <p>The products collection consist of ProductModel models and the url attribute is used by Backbone fetch method.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/sources/google-search-api-for-shopping/templates/products.html</span> <a href='/code/searcher/js/sources/google-search-api-for-shopping/templates/products.html' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;list-table&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>	<span class="nt">&lt;thead&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;tr&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;th&gt;</span>Image<span class="nt">&lt;/th&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;th&gt;</span>Description<span class="nt">&lt;/th&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;/tr&gt;</span>
-</span><span class='line'>	<span class="nt">&lt;/thead&gt;</span>
-</span><span class='line'>	<span class="nt">&lt;tbody&gt;</span>
-</span><span class='line'>	<span class="err">&lt;</span>% _.each(products, function(product) { %&gt;
-</span><span class='line'>		<span class="nt">&lt;tr&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;td&gt;&lt;img</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span> <span class="na">src=</span><span class="s">&quot;&lt;%= product.thumbnail %&gt;&quot;</span> <span class="na">class=</span><span class="s">&quot;img-polaroid&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;td&gt;</span>
-</span><span class='line'>				<span class="nt">&lt;h4&gt;&lt;a</span> <span class="na">target=</span><span class="s">&quot;_blank&quot;</span> <span class="na">href=</span><span class="s">&quot;&lt;%= product.link %&gt;&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= product.title %&gt;<span class="nt">&lt;/a&gt;&lt;/h4&gt;</span>
-</span><span class='line'>				<span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= product.description %&gt;<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>			<span class="nt">&lt;/td&gt;</span>
-</span><span class='line'>		<span class="nt">&lt;/tr&gt;</span>
-</span><span class='line'>	<span class="err">&lt;</span>% }); %&gt;
-</span><span class='line'>	<span class="nt">&lt;/tbody&gt;</span>
-</span><span class='line'><span class="nt">&lt;/table&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:html js/sources/google-search-api-for-shopping/templates/products.html searcher/js/sources/google-search-api-for-shopping/templates/products.html %}</p>
 
 <p>The search results structure defined inside the products.html as a table that contains all the products. For each product, a new product row with thumbnail, title and description is created.
 Search providers can contain many views. When defining the search provider in SourcesManager, we must tell which view is the main view to display. ListView is the main view of the Google Shopping search provider.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/sources/google-search-api-for-shopping/views/list.js</span> <a href='/code/searcher/js/sources/google-search-api-for-shopping/views/list.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;jQuery&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;sources/google-search-api-for-shopping/collections/products&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;sources/google-search-api-for-shopping/models/product&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;text!sources/google-search-api-for-shopping/templates/products.html&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">ProductsCollection</span><span class="p">,</span> <span class="nx">ProductModel</span><span class="p">,</span> <span class="nx">productsTemplate</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">ListView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">template</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">productsTemplate</span><span class="p">),</span>
-</span><span class='line'>		<span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">products</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ProductsCollection</span><span class="p">();</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">products</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span>
-</span><span class='line'>				<span class="nx">data</span><span class="o">:</span><span class="p">{</span>
-</span><span class='line'>					<span class="nx">key</span><span class="o">:</span> <span class="s1">&#39;AIzaSyDEMpzAwWS40E6TBjIA_XH76QfO0YSsvDc&#39;</span><span class="p">,</span>
-</span><span class='line'>					<span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;US&#39;</span><span class="p">,</span>
-</span><span class='line'>					<span class="nx">fields</span><span class="o">:</span> <span class="s1">&#39;items(product(title,description,link,images(status,thumbnails(link))))&#39;</span><span class="p">,</span>
-</span><span class='line'>					<span class="nx">q</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">term</span><span class="p">,</span>
-</span><span class='line'>					<span class="nx">alt</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
-</span><span class='line'>					<span class="nx">thumbnails</span><span class="o">:</span> <span class="s1">&#39;128:128&#39;</span>
-</span><span class='line'>				<span class="p">},</span>
-</span><span class='line'>				<span class="nx">success</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">collection</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>					<span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-</span><span class='line'>					<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">products</span><span class="p">.</span><span class="nx">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>						<span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">({</span><span class="nx">products</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">products</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()}));</span>
-</span><span class='line'>					<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>						<span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="s1">&#39;No result found!&#39;</span><span class="p">);</span>
-</span><span class='line'>					<span class="p">}</span>
-</span><span class='line'>				<span class="p">},</span> <span class="k">this</span><span class="p">),</span>
-</span><span class='line'>				<span class="nx">error</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">collection</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>					<span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">empty</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="s1">&#39;Error get result!!&#39;</span><span class="p">);</span>
-</span><span class='line'>				<span class="p">},</span> <span class="k">this</span><span class="p">)</span>
-</span><span class='line'>			<span class="p">});</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">ListView</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/sources/google-search-api-for-shopping/views/list.js searcher/js/sources/google-search-api-for-shopping/views/list.js %}</p>
 
 <p>ListView initializes ProductsCollection and on render fetch it and append the results to el. In case of an error or empty results, a relevant text message appears. Behind the scenes, the fetch method uses the jQuery.ajax function and the data option is passed to it. The data option contains needed properties for the Google Shopping api. Keep in mind that in your application you will need to use yours Google api key.
 Now, whenever the user chooses Google Shopping as a search provider, SourcesManager initializes ListView which fetches the results and display them inside ".content" element.</p>
@@ -1277,99 +563,11 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
 
 <p>Another feature of this application is history. The application stores queries history and enables us to make searches from history. In order to store the queries history we need a collection of QueryModel:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/collections/queries.js</span> <a href='/code/searcher/js/collections/queries.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;models/query&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">QueryModel</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">QueriesCollection</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">model</span><span class="o">:</span> <span class="nx">QueryModel</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">QueriesCollection</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/collections/queries.js searcher/js/collections/queries.js %}</p>
 
 <p>Now, in order to display the history and make each history entry clickable, There is the HistoryView:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>js/views/history.js</span> <a href='/code/searcher/js/views/history.js' target='_blank'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">﻿</span><span class="nx">define</span><span class="p">([</span>
-</span><span class='line'>	<span class="s1">&#39;jQuery&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Underscore&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;Backbone&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;app&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;collections/queries&#39;</span><span class="p">,</span>
-</span><span class='line'>	<span class="s1">&#39;text!templates/queries-list.html&#39;</span>
-</span><span class='line'><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">app</span><span class="p">,</span> <span class="nx">QueriesCollection</span><span class="p">,</span> <span class="nx">queriesListTemplate</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>	<span class="kd">var</span> <span class="nx">HistoryView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>		<span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#term-history&#39;</span><span class="p">,</span>
-</span><span class='line'>		<span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>			<span class="s1">&#39;click a&#39;</span><span class="o">:</span> <span class="s1">&#39;setModel&#39;</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">queriesCollection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">QueriesCollection</span><span class="p">();</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">addQuery</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">addQuery</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">queriesCollection</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">clone</span><span class="p">());</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">setModel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">term</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;term&#39;</span><span class="p">);</span>
-</span><span class='line'>			<span class="kd">var</span> <span class="nx">sourceId</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">);</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span> <span class="p">{</span> <span class="nx">term</span><span class="o">:</span> <span class="nx">term</span><span class="p">,</span> <span class="nx">sourceId</span><span class="o">:</span> <span class="nx">sourceId</span> <span class="p">}</span> <span class="p">);</span>
-</span><span class='line'>		<span class="p">},</span>
-</span><span class='line'>		<span class="nx">template</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">queriesListTemplate</span><span class="p">),</span>
-</span><span class='line'>		<span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>			<span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">({</span><span class="s1">&#39;queries&#39;</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">queriesCollection</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()}));</span>
-</span><span class='line'>		<span class="p">}</span>
-</span><span class='line'>	<span class="p">});</span>
-</span><span class='line'>	<span class="k">return</span> <span class="nx">HistoryView</span><span class="p">;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% include_code lang:javascript js/views/history.js searcher/js/views/history.js %}</p>
 
 <p>HistoryView gets appQuery as a model, and on initialization it creates QueriesCollection instance. Whenever the appQuery changes, the view adds it to queries collection and renders itself. Render takes the queries collection and generates the markup from the queriesListTemplate dependency. Whenever the user click on history entry, the setModel() function triggered and set appQuery with the history values. As a result of appQuery change, SourcesManager's render occurred.</p>
 ]]></content>
