@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AngularJS | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/angularjs/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-04-07T00:25:20+03:00</updated>
+  <updated>2014-04-07T19:01:35+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -129,7 +129,7 @@ module.factory('sessionInjector', ['SessionService', function(SessionService) {<
 
 <pre><code>var sessionInjector = {
     request: function(config) {
-        if (!SessionService.isAnonymus)
+        if (!SessionService.isAnonymus) {
             config.headers['x-session-token'] = SessionService.token;
         }
         return config;
