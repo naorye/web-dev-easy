@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-04-11T17:04:34+03:00</updated>
+  <updated>2014-05-28T00:54:32+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,70 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Back Button Behavior on a Page With an iframe]]></title>
+    <link href="http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/"/>
+    <updated>2014-05-29T01:45:45+03:00</updated>
+    <id>http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe</id>
+    <content type="html"><![CDATA[<p>I am developing a widget for websites. This widget lays inside an iframe in a website&#8217;s page. One of my users (which is a site owner) complained about a weird behavior of my widget. On pages where the widget was implemented, the browser&#8217;s back button didn&#8217;t work properly. Instead of navigating the user to the previous page on the website, the back button navigated the user to the previous page inside the iframe.</p>
+
+<!-- more -->
+
+
+<p>Let me show you an example. This <a target="_blank" href="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/problem/page1.html">demo page</a> includes two pages. The first page contains nothing but a link to the second page. When clicking on the link, we are redirected to the second page that contains an iframe. At this point, looking on the browser&#8217;s history will show us only the first page as expected:</p>
+
+<p><img src="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/problem/images/page2.png" /></p>
+
+<p>In order to demonstrate navigation inside an iframe, the iframe in the second page contains a page with an anchor. This anchor refers to a different page. A click on the anchor causes navigation inside the iframe, but also adds a new history entry of the second page:</p>
+
+<p><img src="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/problem/images/iframe2.png" /></p>
+
+<p>Pressing back will not return us back to the first page. Instead, it will change the iframe&#8217;s page and this is not the desired behavior. <br/>
+What we really want is the iframe&#8217;s navigation not to interfere the browser&#8217;s navigation. Pressing the back button should take us back to the first page and not to the previous iframe&#8217;s page.</p>
+
+<p><strong><em>It appears that any location change in the iframe is stored in the browser&#8217;s history.</em></strong></p>
+
+<p>Once the problem is understood, the solution is pretty simple. Whenever the user navigates inside the iframe, we don&#8217;t want to add a new entry to the history. In order to do that, I&#8217;d like to explain a bit about anchors.</p>
+
+<h2>How anchors work?</h2>
+
+<p>When an anchor is clicked, it navigates to the new page and the new location is added to the browser&#8217;s hitory. But, if the url is the same as the current url, no history entry is added and the anchor only performs a page refresh. It is easy to verify what I am saying here by creating a page that contains a link to itself. Clicking on this anchor only refreshes the page and no history entry is added.</p>
+
+<h2>history.replaceState() To The Rescue</h2>
+
+<p>Luckily HTML5 gave us <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history" target="_blank">a great API for controlling the history</a>. <code>window.history</code> exposes useful methods that let us manipulate the contents of the history stack. Among these methods we can find the <code>replaceState()</code> method. <code>history.replaceState()</code> can modify the current history entry and associate it with the current document. <br/>
+Assuming we have the following anchor inside an iframe&#8217;s page: <code>&lt;a href="iframe2.html"&gt;iframe page 2&lt;/a&gt;</code>. Clicking on it redirects us to <code>page2.html</code> and adds a new history entry for that page. If the current location, prior to the anchor&#8217;s action, is the same as the anchor&#8217;s url, then no new history entry will be added. <br/>
+Let&#8217;s manipulate the history and set the current location to the anchor&#8217;s url before the anchor performs it&#8217;s action:</p>
+
+<figure class='code'><figcaption><span>Prevent anchors to add history entry</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">anchors</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">anchors</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">anchor</span> <span class="o">=</span> <span class="nx">anchors</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="nx">anchor</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">history</span><span class="p">.</span><span class="nx">replaceState</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">anchor</span><span class="p">.</span><span class="nx">href</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This script runs through all the page&#8217;s anchors and attaches a click event. Whenever the user clicks on an anchor, the current location is replaced with the anchor&#8217;s href. And here we prevented from another history entry to be added. <br/>
+Keep in mind that this script has to run at the end of the page, after the DOM has loaded. <br/>
+Here You can see the <a target="_blank" href="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/solution/page1.html">solution</a>. Navigating inside the iframe doesn&#8217;t create history entry:</p>
+
+<p><img src="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/solution/images/iframe2.png" /></p>
+
+<p>I spent a lot of time trying to understand the behavior of anchors and history and finding a solution for the back button issue. I hope you&#8217;ll find this explanation interesting and useful. <br/>
+Thanks for reading,
+NaorYe</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Interceptors in AngularJS and Useful Examples]]></title>
@@ -451,26 +515,32 @@ For the example purposes, let&#8217;s assume that the http status code for sessi
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
 <span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;sessionRecoverer&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="s1">&#39;$injector&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">$injector</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">responseError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Session has expired</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">419</span><span class="p">){</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">SessionService</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SessionService&#39;</span><span class="p">);</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">$http</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;$http&#39;</span><span class="p">);</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">sessionRecoverer</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">responseError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// Session has expired</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">419</span><span class="p">){</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">SessionService</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SessionService&#39;</span><span class="p">);</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">$http</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;$http&#39;</span><span class="p">);</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
 </span><span class='line'>
-</span><span class='line'>            <span class="c1">// Create a new session (recover the session)</span>
-</span><span class='line'>            <span class="c1">// We use login method that logs the user in using the current credentials and</span>
-</span><span class='line'>            <span class="c1">// returns a promise</span>
-</span><span class='line'>            <span class="nx">SessionService</span><span class="p">.</span><span class="nx">login</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">);</span>
+</span><span class='line'>                <span class="c1">// Create a new session (recover the session)</span>
+</span><span class='line'>                <span class="c1">// We use login method that logs the user in using the current credentials and</span>
+</span><span class='line'>                <span class="c1">// returns a promise</span>
+</span><span class='line'>                <span class="nx">SessionService</span><span class="p">.</span><span class="nx">login</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>            <span class="c1">// When the session recovered, make the same backend call again and chain the request</span>
-</span><span class='line'>            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="nx">$http</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">);</span>
-</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>                <span class="c1">// When the session recovered, make the same backend call again and chain the request</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="nx">$http</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">});</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
 </span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">sessionRecoverer</span><span class="p">;</span>
 </span><span class='line'><span class="p">}]);</span>
 </span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$httpProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;sessionRecoverer&#39;</span><span class="p">);</span>

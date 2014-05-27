@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Back Button Behavior on a Page With an iframe - Web Development is Easy!</title>
+  
+  <meta name="author" content="NaorYe">
+
+  
+  <meta name="description" content="Back Button Behavior on a Page With an Iframe May 29th, 2014 I am developing a widget for websites. This widget lays inside an iframe in a website&# &hellip;">
+  
+
+  
+
+  
+
+
+
+
+
+<meta property="og:url" content="http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Back Button Behavior on a Page With an iframe - Web Development is Easy!" />
+<meta property="og:description" content="Back Button Behavior on a Page With an Iframe May 29th, 2014 I am developing a widget for websites. This widget lays inside an iframe in a website&# &hellip;" />
+
+
+	<meta property="og:image" content="http://webdeveasy.com/assets/logo.png" />
+
+
+
+
+
+	<meta property="fb:admins" content="787248988" />
+
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@naorye" />
+<meta name="twitter:creator" content="@naorye" />
+<meta name="twitter:title" content="Back Button Behavior on a Page With an iframe - Web Development is Easy!" />
+<meta name="twitter:description" content="Back Button Behavior on a Page With an Iframe May 29th, 2014 I am developing a widget for websites. This widget lays inside an iframe in a website&# &hellip;" />
+	
+
+	<meta name="twitter:image:src" content="http://webdeveasy.com/assets/logo.png" />
+
+
+<meta name="twitter:domain" content="http://webdeveasy.com" />
+
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="canonical" href="http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  
+
+  <link href="/atom.xml" rel="alternate" title="Web Development is Easy!" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+
+  
+
+  
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Web Development is Easy!</a></h1>
+  
+    <h2>frameworks, tools and tips for web developers.</h2>
+  
+</hgroup>
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss email">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="Subscribe via RSS"></a></li>
+  
+    <li><a href="mailto:naorye@gmail.com" rel="subscribe-email" title="Email Me"></a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:webdeveasy.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+  
+<ul class="main-navigation">
+    <!--<li><a href="/">Home</a></li>-->
+    <li><a href="/">Posts</a></li>
+    <!--<li><a href="/blog/ask-a-question">Ask a Question</a></li>-->
+    <li><a href="/blog/about-me">About Me</a></li>
+    <li><a href="/blog/contact-me">Contact Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article itemscope itemtype="http://schema.org/Article" class="hentry" role="article">
+  
+  <header>
+    
+      <h1 itemprop="name" class="entry-title">Back Button Behavior on a Page With an Iframe</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+
+<time itemprop="datePublished" content="2014-05-29T01:45:45+03:00" datetime="2014-05-29T01:45:45+03:00" pubdate data-updated="true">May 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  
+    <!-- google_ad_under_post_title -->
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6953090373480388" data-ad-slot="3659905550" data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <div itemprop="articleBody" class="entry-content after-ad"><p>I am developing a widget for websites. This widget lays inside an iframe in a website&#8217;s page. One of my users (which is a site owner) complained about a weird behavior of my widget. On pages where the widget was implemented, the browser&#8217;s back button didn&#8217;t work properly. Instead of navigating the user to the previous page on the website, the back button navigated the user to the previous page inside the iframe.</p>
+
+<!-- more -->
+
+
+<p>Let me show you an example. This <a target="_blank" href="/code/back-button-behavior-on-a-page-with-an-iframe/problem/page1.html">demo page</a> includes two pages. The first page contains nothing but a link to the second page. When clicking on the link, we are redirected to the second page that contains an iframe. At this point, looking on the browser&#8217;s history will show us only the first page as expected:</p>
+
+<p><img src="/code/back-button-behavior-on-a-page-with-an-iframe/problem/images/page2.png" /></p>
+
+<p>In order to demonstrate navigation inside an iframe, the iframe in the second page contains a page with an anchor. This anchor refers to a different page. A click on the anchor causes navigation inside the iframe, but also adds a new history entry of the second page:</p>
+
+<p><img src="/code/back-button-behavior-on-a-page-with-an-iframe/problem/images/iframe2.png" /></p>
+
+<p>Pressing back will not return us back to the first page. Instead, it will change the iframe&#8217;s page and this is not the desired behavior. <br/>
+What we really want is the iframe&#8217;s navigation not to interfere the browser&#8217;s navigation. Pressing the back button should take us back to the first page and not to the previous iframe&#8217;s page.</p>
+
+<p><strong><em>It appears that any location change in the iframe is stored in the browser&#8217;s history.</em></strong></p>
+
+<p>Once the problem is understood, the solution is pretty simple. Whenever the user navigates inside the iframe, we don&#8217;t want to add a new entry to the history. In order to do that, I&#8217;d like to explain a bit about anchors.</p>
+
+<h2>How anchors work?</h2>
+
+<p>When an anchor is clicked, it navigates to the new page and the new location is added to the browser&#8217;s hitory. But, if the url is the same as the current url, no history entry is added and the anchor only performs a page refresh. It is easy to verify what I am saying here by creating a page that contains a link to itself. Clicking on this anchor only refreshes the page and no history entry is added.</p>
+
+<h2>history.replaceState() To The Rescue</h2>
+
+<p>Luckily HTML5 gave us <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history" target="_blank">a great API for controlling the history</a>. <code>window.history</code> exposes useful methods that let us manipulate the contents of the history stack. Among these methods we can find the <code>replaceState()</code> method. <code>history.replaceState()</code> can modify the current history entry and associate it with the current document. <br/>
+Assuming we have the following anchor inside an iframe&#8217;s page: <code>&lt;a href="iframe2.html"&gt;iframe page 2&lt;/a&gt;</code>. Clicking on it redirects us to <code>page2.html</code> and adds a new history entry for that page. If the current location, prior to the anchor&#8217;s action, is the same as the anchor&#8217;s url, then no new history entry will be added. <br/>
+Let&#8217;s manipulate the history and set the current location to the anchor&#8217;s url before the anchor performs it&#8217;s action:</p>
+
+<figure class='code'><figcaption><span>Prevent anchors to add history entry</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">anchors</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">anchors</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">anchor</span> <span class="o">=</span> <span class="nx">anchors</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="nx">anchor</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">history</span><span class="p">.</span><span class="nx">replaceState</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">anchor</span><span class="p">.</span><span class="nx">href</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This script runs through all the page&#8217;s anchors and attaches a click event. Whenever the user clicks on an anchor, the current location is replaced with the anchor&#8217;s href. And here we prevented from another history entry to be added. <br/>
+Keep in mind that this script has to run at the end of the page, after the DOM has loaded. <br/>
+Here You can see the <a target="_blank" href="/code/back-button-behavior-on-a-page-with-an-iframe/solution/page1.html">solution</a>. Navigating inside the iframe doesn&#8217;t create history entry:</p>
+
+<p><img src="/code/back-button-behavior-on-a-page-with-an-iframe/solution/images/iframe2.png" /></p>
+
+<p>I spent a lot of time trying to understand the behavior of anchors and history and finding a solution for the back button issue. I hope you&#8217;ll find this explanation interesting and useful. <br/>
+Thanks for reading,
+NaorYe</p>
+</div>
+  
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name" class="fn">NaorYe</span></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+<time itemprop="datePublished" content="2014-05-29T01:45:45+03:00" datetime="2014-05-29T01:45:45+03:00" pubdate data-updated="true">May 29<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/angularjs/'>AngularJS</a>, <a class='category' href='/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+      Included file 'post/tags.html' not found in _includes directory
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/interceptors-in-angularjs-and-useful-examples/" title="Previous Post: Interceptors in AngularJS and Useful Examples">&laquo; Interceptors in AngularJS and Useful Examples</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <div id="spot-im-root"></div>
+<script type="text/javascript">
+    (function (options, document, base, script) {
+        options.base = base;
+        //options.spotId = 'e9c642b7d400891990e8e6239e37f403';
+        options.spotName = 'angularjs';
+        options.type = 'FLOATING';
+        options.template = 'default';
+        options.position = 'BOTTOM_RIGHT';
+        options.size = 'SMALL';
+        options.containerId = 'spot-im-root';
+        var spt = document.createElement('script');
+        spt.type = 'text/javascript';
+        spt.async = true;
+        spt.src = base + '/scripts/' + script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(spt);
+    }(window.SPOTIM = {}, document, 'http://embed.spot.im', 'launcher.js'));
+</script>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/back-button-behavior-on-a-page-with-an-iframe/">Back Button Behavior on a Page With an iframe</a>
+      </li>
+    
+      <li class="post">
+        <a href="/interceptors-in-angularjs-and-useful-examples/">Interceptors in AngularJS and Useful Examples</a>
+      </li>
+    
+      <li class="post">
+        <a href="/service-providers-in-angularjs-and-logger-implementation/">Service Providers in AngularJS and Logger Implementation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/angularjs-data-model/">AngularJS Data Model</a>
+      </li>
+    
+      <li class="post">
+        <a href="/flexbox-accordion/">Flexbox Accordion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/easy-select-plugin/">Easy Select Plugin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/single-page-application-authentication/">Single Page Application Authentication</a>
+      </li>
+    
+      <li class="post">
+        <a href="/pages-slider-with-javascript-and-css/">Pages Slider With JavaScript And CSS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-cleanup/">Backbone Cleanup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/optimize-requirejs-projects/">Optimize (Concatenate and Minify) RequireJS Projects</a>
+      </li>
+    
+      <li class="post">
+        <a href="/object-oriented-programming-with-javascript/">Object Oriented Programming with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-cache/">Backbone Cache</a>
+      </li>
+    
+      <li class="post">
+        <a href="/searcher-backbone-dot-js-application-demonstration/">Searcher - Backbone application demonstration</a>
+      </li>
+    
+      <li class="post">
+        <a href="/javascript-prototype/">JavaScript Prototype</a>
+      </li>
+    
+      <li class="post">
+        <a href="/backbone-singleton/">Backbone Singleton</a>
+      </li>
+    
+      <li class="post">
+        <a href="/jquery-plugin-pattern/">jQuery Plugin Pattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/style-your-jquery-ui-tabs/">Style Your jQuery-UI Tabs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/cascading-autocompletes-using-jquery-ui/">Cascading Autocompletes using jQuery UI</a>
+      </li>
+    
+  </ul>
+</section>
+
+    <section>
+        <h1>GitHub Repos</h1>
+        <ul id="gh_repos">
+            <li class="loading">Status updating...</li>
+        </ul>
+        <a href="https://github.com/naorye">@naorye</a> on GitHub
+        <script src="/javascripts/github.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function(){
+                github.showRepos({
+                    user: 'naorye',
+                    skip_forks: true,
+                    list: 'angular-ny-logger, easy-select, spa-auth, BackboneCache, BackboneCleanup',
+                    target: '#gh_repos'
+                });
+            });
+        </script>
+    </section>
+
+
+    <section>
+		<!-- google_ad_side_bar -->
+		<ins class="adsbygoogle"
+		     style="display:inline-block;width:120px;height:600px"
+		     data-ad-client="ca-pub-6953090373480388"
+		     data-ad-slot="3682307157"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	<section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - NaorYe -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+</footer>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34683362-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'webdeveasy';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/';
+        var disqus_url = 'http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

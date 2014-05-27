@@ -580,26 +580,32 @@ For the example purposes, let&#8217;s assume that the http status code for sessi
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
 <span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;sessionRecoverer&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="s1">&#39;$injector&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">$injector</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">responseError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Session has expired</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">419</span><span class="p">){</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">SessionService</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SessionService&#39;</span><span class="p">);</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">$http</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;$http&#39;</span><span class="p">);</span>
-</span><span class='line'>            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">sessionRecoverer</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">responseError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// Session has expired</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">419</span><span class="p">){</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">SessionService</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;SessionService&#39;</span><span class="p">);</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">$http</span> <span class="o">=</span> <span class="nx">$injector</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;$http&#39;</span><span class="p">);</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
 </span><span class='line'>
-</span><span class='line'>            <span class="c1">// Create a new session (recover the session)</span>
-</span><span class='line'>            <span class="c1">// We use login method that logs the user in using the current credentials and</span>
-</span><span class='line'>            <span class="c1">// returns a promise</span>
-</span><span class='line'>            <span class="nx">SessionService</span><span class="p">.</span><span class="nx">login</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">);</span>
+</span><span class='line'>                <span class="c1">// Create a new session (recover the session)</span>
+</span><span class='line'>                <span class="c1">// We use login method that logs the user in using the current credentials and</span>
+</span><span class='line'>                <span class="c1">// returns a promise</span>
+</span><span class='line'>                <span class="nx">SessionService</span><span class="p">.</span><span class="nx">login</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>            <span class="c1">// When the session recovered, make the same backend call again and chain the request</span>
-</span><span class='line'>            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="nx">$http</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">);</span>
-</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>                <span class="c1">// When the session recovered, make the same backend call again and chain the request</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="nx">$http</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">config</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">});</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
 </span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">sessionRecoverer</span><span class="p">;</span>
 </span><span class='line'><span class="p">}]);</span>
 </span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;$httpProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">interceptors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;sessionRecoverer&#39;</span><span class="p">);</span>
@@ -665,6 +671,8 @@ NaorYe</p>
         <a class="basic-alignment left" href="/service-providers-in-angularjs-and-logger-implementation/" title="Previous Post: Service Providers in AngularJS and Logger Implementation">&laquo; Service Providers in AngularJS and Logger Implementation</a>
       
       
+        <a class="basic-alignment right" href="/back-button-behavior-on-a-page-with-an-iframe/" title="Next Post: Back Button Behavior on a Page With an iframe">Back Button Behavior on a Page With an iframe &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -702,6 +710,10 @@ NaorYe</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/back-button-behavior-on-a-page-with-an-iframe/">Back Button Behavior on a Page With an iframe</a>
+      </li>
     
       <li class="post">
         <a href="/interceptors-in-angularjs-and-useful-examples/">Interceptors in AngularJS and Useful Examples</a>

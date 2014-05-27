@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-04-11T17:04:34+03:00</updated>
+  <updated>2014-05-28T00:54:32+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Back Button Behavior on a Page With an iframe]]></title>
+    <link href="http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/"/>
+    <updated>2014-05-29T01:45:45+03:00</updated>
+    <id>http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe</id>
+    <content type="html"><![CDATA[<p>I am developing a widget for websites. This widget lays inside an iframe in a website's page. One of my users (which is a site owner) complained about a weird behavior of my widget. On pages where the widget was implemented, the browser's back button didn't work properly. Instead of navigating the user to the previous page on the website, the back button navigated the user to the previous page inside the iframe.</p>
+
+<!-- more -->
+
+
+<p>Let me show you an example. This <a target="_blank" href="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/problem/page1.html">demo page</a> includes two pages. The first page contains nothing but a link to the second page. When clicking on the link, we are redirected to the second page that contains an iframe. At this point, looking on the browser's history will show us only the first page as expected:</p>
+
+<p><img src="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/problem/images/page2.png" /></p>
+
+<p>In order to demonstrate navigation inside an iframe, the iframe in the second page contains a page with an anchor. This anchor refers to a different page. A click on the anchor causes navigation inside the iframe, but also adds a new history entry of the second page:</p>
+
+<p><img src="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/problem/images/iframe2.png" /></p>
+
+<p>Pressing back will not return us back to the first page. Instead, it will change the iframe's page and this is not the desired behavior. <br/>
+What we really want is the iframe's navigation not to interfere the browser's navigation. Pressing the back button should take us back to the first page and not to the previous iframe's page.</p>
+
+<p><strong><em>It appears that any location change in the iframe is stored in the browser's history.</em></strong></p>
+
+<p>Once the problem is understood, the solution is pretty simple. Whenever the user navigates inside the iframe, we don't want to add a new entry to the history. In order to do that, I'd like to explain a bit about anchors.</p>
+
+<h2>How anchors work?</h2>
+
+<p>When an anchor is clicked, it navigates to the new page and the new location is added to the browser's hitory. But, if the url is the same as the current url, no history entry is added and the anchor only performs a page refresh. It is easy to verify what I am saying here by creating a page that contains a link to itself. Clicking on this anchor only refreshes the page and no history entry is added.</p>
+
+<h2>history.replaceState() To The Rescue</h2>
+
+<p>Luckily HTML5 gave us <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history" target="_blank">a great API for controlling the history</a>. <code>window.history</code> exposes useful methods that let us manipulate the contents of the history stack. Among these methods we can find the <code>replaceState()</code> method. <code>history.replaceState()</code> can modify the current history entry and associate it with the current document. <br/>
+Assuming we have the following anchor inside an iframe's page: <code>&lt;a href="iframe2.html"&gt;iframe page 2&lt;/a&gt;</code>. Clicking on it redirects us to <code>page2.html</code> and adds a new history entry for that page. If the current location, prior to the anchor's action, is the same as the anchor's url, then no new history entry will be added. <br/>
+Let's manipulate the history and set the current location to the anchor's url before the anchor performs it's action:
+```javascript Prevent anchors to add history entry</p>
+
+<pre><code>var anchors = document.getElementsByTagName('a');
+for (var i = 0; i &lt; anchors.length; i++) {
+    var anchor = anchors[i];
+    anchor.addEventListener('click', function(event) {
+        history.replaceState(null, null, anchor.href);
+    }, false);
+}
+</code></pre>
+
+<p>```
+This script runs through all the page's anchors and attaches a click event. Whenever the user clicks on an anchor, the current location is replaced with the anchor's href. And here we prevented from another history entry to be added. <br/>
+Keep in mind that this script has to run at the end of the page, after the DOM has loaded. <br/>
+Here You can see the <a target="_blank" href="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/solution/page1.html">solution</a>. Navigating inside the iframe doesn't create history entry:</p>
+
+<p><img src="http://webdeveasy.com/code/back-button-behavior-on-a-page-with-an-iframe/solution/images/iframe2.png" /></p>
+
+<p>I spent a lot of time trying to understand the behavior of anchors and history and finding a solution for the back button issue. I hope you'll find this explanation interesting and useful. <br/>
+Thanks for reading,
+NaorYe</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Interceptors in AngularJS and Useful Examples]]></title>
@@ -301,25 +359,28 @@ For the example purposes, let's assume that the http status code for session exp
 ```javascript Session Recoverer
 module.factory('sessionRecoverer', ['$q', '$injector', function($q, $injector) {</p>
 
-<pre><code>responseError: function(response) {
-    // Session has expired
-    if (response.status == 419){
-        var SessionService = $injector.get('SessionService');
-        var $http = $injector.get('$http');
-        var deferred = $q.defer();
+<pre><code>var sessionRecoverer = {
+    responseError: function(response) {
+        // Session has expired
+        if (response.status == 419){
+            var SessionService = $injector.get('SessionService');
+            var $http = $injector.get('$http');
+            var deferred = $q.defer();
 
-        // Create a new session (recover the session)
-        // We use login method that logs the user in using the current credentials and
-        // returns a promise
-        SessionService.login().then(deferred.resolve, deferred.reject);
+            // Create a new session (recover the session)
+            // We use login method that logs the user in using the current credentials and
+            // returns a promise
+            SessionService.login().then(deferred.resolve, deferred.reject);
 
-        // When the session recovered, make the same backend call again and chain the request
-        return deferred.promise.then(function() {
-            return $http(response.config);
-        });
+            // When the session recovered, make the same backend call again and chain the request
+            return deferred.promise.then(function() {
+                return $http(response.config);
+            });
+        }
+        return $q.reject(response);
     }
-    return $q.reject(response);
-}
+};
+return sessionRecoverer;
 </code></pre>
 
 <p>}]);
@@ -1129,573 +1190,6 @@ $('.my-input').data('easySelect').destroy();
 
 
 <p>I hope some of you will find a good use for it.</p>
-
-<p>NaorYe</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Single Page Application Authentication]]></title>
-    <link href="http://webdeveasy.com/single-page-application-authentication/"/>
-    <updated>2013-09-25T23:27:44+03:00</updated>
-    <id>http://webdeveasy.com/single-page-application-authentication</id>
-    <content type="html"><![CDATA[<p>This article will guide you how to add user authentication to your single page application. On the back end side I will use Node.js and on the front end side I will use AngularJS. Although I used specific frameworks, you may apply the same technique for different back end and frond end frameworks (rails, Backbone, etc...). <br/>
-The final application will look like this (without the horrible styling):<!--
---><iframe src="http://spa-auth.herokuapp.com/" width="580px" height="150px" scrolling="no" style="overflow:hidden;margin:0 45px;"></iframe></p>
-
-<!-- more -->
-
-
-<p>At the beginning of this article I will build an application based on <a target="_blank" href="http://nodejs.org">Node.js</a>, <a target="_blank" href="http://expressjs.com/">express</a>, <a target="_blank" href="http://mongoosejs.com/">mongoose</a> and <a target="_blank" href="http://angularjs.org/">AngularJS</a> and then I will add authentication support. At the end we will have single page application that allows users to login and logout from our system. For this article I chose to implement facebook authentication, but changing this later to other 3rd party or local authentication will be trivial. <br/>
-One thing important to mention is that the final application will contain the minimum code required for this guide so don't use it as a boilerplate code, the best thing is to learn from it and implement it yourself in your application.</p>
-
-<h2>Create an application</h2>
-
-<p>At the beginning, let's create a single page application.</p>
-
-<h3>Node.js server: app.js</h3>
-
-<p>First thing we do is loading required modules:
-```javascript Load required modules and configurations
-var fs = require('fs')</p>
-
-<pre><code>mongoose = require('mongoose'),
-http = require('http');
-</code></pre>
-
-<p><code>
-Then we connect to our mongo database (you should define your own) and load some mongoose models (right now we don't have any model):
-</code>javascript Connect to mongo db and load mongoose models
-mongoose.connect('<mongodb uri>');</p>
-
-<p>var models_path = __dirname + '/app/models';
-fs.readdirSync(models_path).forEach(function(file) {</p>
-
-<pre><code>if (file.substring(-3) === '.js') {
-    require(models_path + '/' + file);
-}
-</code></pre>
-
-<p>});
-<code>
-Last things to do is to configure express application, define its routes and start it. Express configurations and routes definitions are made in different files in order to keep the application easy to maintain.
-</code>javascript Configure express, define routes and start
-var app = require('./config/express')(config);
-require('./config/routes')(app, config);
-http.createServer(app).listen(app.get('port'), function(){</p>
-
-<pre><code>console.log('Express server listening on port ' + app.get('port'));
-</code></pre>
-
-<p>});</p>
-
-<p>exports = module.exports = app;
-```</p>
-
-<h3>Express configuration: config/express.js</h3>
-
-<p>There is nothing special in this express configurations file. Amongst all the configurations, we:</p>
-
-<ul>
-<li>Set our views path to be /app/views</li>
-<li>Set our view engine to <a target="_blank" href="https://github.com/visionmedia/ejs">ejs</a></li>
-<li>Use <a target="_blank" href="http://kcbanner.github.io/connect-mongo/">connect-mongo</a> as a session store (you need to define your &lt;mongodb uri&gt;)</li>
-<li>Define /public as a static folder (this folder will contain our front end application)</li>
-</ul>
-
-
-<p>```javascript express configurations
-var express = require('express'),</p>
-
-<pre><code>mongoStore = require('connect-mongo')(express),
-path = require('path');
-</code></pre>
-
-<p>module.exports = function (config) {</p>
-
-<pre><code>var app = express();
-
-var root = path.normalize(__dirname + '/..');
-
-app.set('showStackError', true);
-
-app.set('port', process.env.PORT || 3000);
-app.set('views', root + '/app/views');
-app.set('view engine', 'ejs');
-app.use(express.favicon());
-
-app.use(express.logger('dev'));
-
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(express.cookieParser());
-
-app.use(express.session({
-    secret: 'my-session-store',
-    store: new mongoStore({
-        url: '&lt;mongodb uri&gt;',
-        collection : 'sessions'
-    })
-}));
-
-app.use(express.static(root + '/public'));
-
-app.use(app.router);
-
-if ('development' == app.get('env')) {
-    app.use(express.errorHandler());
-
-    app.use(function(req, res, next) {
-         console.log(req.url);
-         next();
-    });
-}
-
-return app;
-</code></pre>
-
-<p>};
-```</p>
-
-<h3>Routes definition: config/routes.js</h3>
-
-<p>Our routes definitions are very simple. We need to be able to serve secured data only for our members as well as unsecured data for all users. Therefore the router handles the following endpoints:</p>
-
-<ul>
-<li>GET request on api/secured/* for secured data</li>
-<li>GET request on api/* for unsecured data</li>
-<li>All other GET requests return the index view (except for static content that was defined on express configurations)</li>
-</ul>
-
-
-<p>```javascript Routes definition
-module.exports = function (app, passport, config) {</p>
-
-<pre><code>app.get('api/secured/*',
-    function (req, res, next) {
-        // Need to filter anonymous users somehow 
-        /*if (not logged in) {
-            return res.json({ error: 'This is a secret message, login to see it.' });
-        }*/
-        next();
-    },
-    function (req, res) {
-        res.json({ message: 'This message is only for authenticated users' });
-    });
-
-
-app.get('api/*', function (req, res) {
-    res.json({ message: 'This message is known by all' });
-});
-
-
-app.get('/*', function (req, res) {
-    res.render('index');
-});
-</code></pre>
-
-<p>};
-```
-Notice that GET request on api/secured/* should return error JSON for anonymous users.</p>
-
-<h3>Front end</h3>
-
-<p>Our front end, which consists of AngularJS, has an html markup that contains a secured message and an unsecured message:
-```html Markup</p>
-
-<div ng-controller="MessageController">
-    Unsecured message: <span ng-bind="messages.unsecured"></span>
-    <br/>
-    Secured message: <span ng-bind="messages.secured"></span>
-</div>
-
-
-<p>```
-At the end we would like the secured message to be displayed only to authenticated users.</p>
-
-<p>This is our MessageController:
-```javascript MessageController
-app.controller('MessageController', ['$scope', '$http', function($scope, $http) {</p>
-
-<pre><code>$scope.messages = {};
-
-$http.get('/api/secured/message').success(function(data) {
-    $scope.messages.secured = data.message || data.error;
-});
-
-$http.get('/api/message').success(function(data) {
-    $scope.messages.unsecured = data.message || data.error;
-});
-</code></pre>
-
-<p>}]);
-```</p>
-
-<p>You can download the application we have so far, without authentication, <a target="_blank" href="../code/single-page-application-authentication/single-page-application-without-authentication.zip">here</a>. In order to run the application, fill in your &lt;mongodb uri&gt; in config/express.js, execute 'npm install' and then execute 'npm start'. <br/>
-Now is the time to add authentication.</p>
-
-<h2>Authentication support</h2>
-
-<p>For supporting authentication, we will use <a target="_blank" href="http://passportjs.org/">Passport</a> which is a really simple authentication middleware for Node.js. There are other good authentication middlewares like <a target="_blank" href="http://everyauth.com/">everyauth</a> or <a target="_blank" href="https://github.com/ciaranj/connect-auth">connect-auth</a>, but I find Passport more modular and easy to use. <br/>
-Supporting facebook authentication with Passport requires to add "passport" and "passport-facebook" packages to package.json.</p>
-
-<p>Before I continue, I'd like to describe how the whole authentication process is going to be:</p>
-
-<ol>
-<li>The first time the user enters the application, he is not authenticated.</li>
-<li>The user presses the "Login" button and a new window is opened. Because the authentication process includes redirection to facebook, I decided to open a new window in order to keep the current state of the application window.</li>
-<li>This new window leads to an endpoint that triggers Passport and the authentication process begins.</li>
-<li>During the authentication process, Passport redirects the user to facebook for authentication. When facebook authentication is completed, facebook redirects the user back to the application which will attempt to obtain an access token. If access was granted, the user will be logged in. Otherwise, authentication has failed.</li>
-<li>If authentication succeeds, Passport creates a new user (or loads the user in case of returning user) and establishes a new session. This session will be maintained via a cookie set in the user's browser.</li>
-<li>After authentication is completed, Passport redirects the new window to an "after-auth" view that informs the parent opener window about the authentication state and the user data.</li>
-<li>The next time the user enters to the application, the cookie will identify the session and the user will become logged in.</li>
-</ol>
-
-
-<p>Therefore, our to do list is:</p>
-
-<ul>
-<li>Create User model for representing users</li>
-<li>Tell Passport how to create or load user instances according to facebook response</li>
-<li>Create an after-auth view for completing the authentication</li>
-<li>Create endpoints that triggers the authentication process and renders the after-auth view</li>
-</ul>
-
-
-<p>Now stop talking and let's create the User mongoose model.</p>
-
-<h3>User mongoose model</h3>
-
-<p>```javascript User mongoose model
-var mongoose = require('mongoose'),</p>
-
-<pre><code>Schema = mongoose.Schema;
-</code></pre>
-
-<p>var UserSchema = new Schema({</p>
-
-<pre><code>name: String,
-email: String,
-username: String,
-user_image: String,
-facebook_id: String,
-facebook: { },
-createdAt: { type: Date, 'default': Date.now }
-</code></pre>
-
-<p>});</p>
-
-<p>module.exports = mongoose.model('User', UserSchema);
-```
-As you can see, the User model is very simple. Except the usual user details, we also want to store the user's facebook id and the whole JSON returned from facebook.</p>
-
-<h3>Fetching the current user</h3>
-
-<p>In order to be able to login using facebook, Passport requires an authentication mechanism (called Strategy). "passport-facebook" package gives us FacebookStrategy class which implements such mechanism. All we have to do is to tell Passport to use FacebookStrategy and implement a method that creates or loads a user according to facebook profile id. <br/>
-(Note that in order to use this code, you have to supply your facebook app id and facebook app secret)
-```javascript FacebookStrategy for Passport
-passport.use(new FacebookStrategy({</p>
-
-<pre><code>    clientID: '&lt;Your facebook app id&gt;',
-    clientSecret: '&lt;Your facebook app secret&gt;',
-    callbackURL: '/auth/facebook/callback'
-}, function(accessToken, refreshToken, profile, done) {
-    User.findOne({ 'facebook.id': profile.id }, function (err, user) {
-        if (err) { return done(err); }
-        if (!user) {
-            user = new User({
-                name: profile.displayName,
-                email: profile.emails[0].value,
-                username: profile.username,
-                provider_id: profile.id,
-                provider: 'facebook',
-                facebook: profile._json
-            });
-            user.save(function (err) {
-                if (err) {
-                    console.log(err);
-                }
-                return done(err, user);
-            });
-        } else {
-            return done(err, user);
-        }
-    });
-}));
-</code></pre>
-
-<p><code>
-When Passport gives us the user's facebook profile, we perform mongodb search for the user according to his facebook profile id. If the user is not found, we create a new user model and save it. Eventually we return the user instance.   
-In addition to constructing the user from his facebook profile, we also have to tell Passport how to serialize and deserialize user instance to and from a session:
-</code>javascript Serialize and deserialize user instance<br/>
-passport.serializeUser(function(user, done) {</p>
-
-<pre><code>done(null, user.id);
-</code></pre>
-
-<p>});</p>
-
-<p>passport.deserializeUser(function(id, done) {</p>
-
-<pre><code>User.findOne({ _id: id }, function (err, user) {
-    done(err, user);
-});
-</code></pre>
-
-<p>});
-```
-When user is authenticated, passport serializes the user and stores the result in a session cookie. When a user with session cookie arrives to the system, Passport deserialize the user instance.</p>
-
-<h3>After-authentication view</h3>
-
-<p>After facebook approves or disapproves the user, Passport tries to obtain access token and renders after-auth view. This view contains a script that passes the login state along with the user data (in case of success login) to the parent window. This is done by defining an accessible method on the application window that knows to handle logins results. Let's take a look on the after-auth view:
-```html after-auth view
-&lt;!DOCTYPE html>
-<html lang="en">
-<head></p>
-
-<pre><code>&lt;title&gt;Single Page Application Authentication - Auth Success&lt;/title&gt;
-&lt;meta charset="utf-8" /&gt;
-&lt;meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /&gt;
-</code></pre>
-
-<p></head>
-<body></p>
-
-<script type="text/javascript">
-    if (window.opener) {
-        window.opener.focus();
-
-        var state = '<%= state %>';
-        var user = <%- JSON.stringify(user) %>;
-        if (window.opener.app &&
-            window.opener.app.authState) {
-            
-            window.opener.app.authState(state, user);
-        }
-    }
-    window.close();
-</script>
-
-
-<p></body>
-</html>
-```
-As you can see, this view contains only script code that notifies the application about the authentication state and the user data. Later we will define the authState() method that handles the result. At the end, the pop-up window is closed.</p>
-
-<p>Now is the time to connect all the actions. Let's see our new endpoints.</p>
-
-<h3>New routes definition</h3>
-
-<p>First, let's take a look on the endpoints that handles the login:
-```javascript Login endpoints</p>
-
-<pre><code>app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/auth/success', failureRedirect: '/auth/failure' }));
-app.get('/auth/success', function(req, res) {
-    res.render('after-auth', { state: 'success', user: req.user ? req.user : null });
-});
-app.get('/auth/failure', function(req, res) {
-    res.render('after-auth', { state: 'failure', user: null });
-});
-</code></pre>
-
-<p><code>
-When the user asks for /auth/facebook, Passport redirects the user to facebook which in turn redirects the user back to /auth/facebook/callback (accoring to FacebookStrategy implementation). Then, Passport tries to get access token and redirects to /auth/success or /auth/failure according to the result.   
-Both /auth/success and /auth/failure render our after-auth view with different parameters.   
-Another endpoint for logout will be DELETE request on /auth:
-</code>javascript Logout endpoint
-app.delete('/auth', function(req, res) {</p>
-
-<pre><code>req.logout();
-res.writeHead(200);
-res.end();
-</code></pre>
-
-<p>});<br/>
-<code>
-The last thing to do is to fix our secured data endpoint:
-</code>javascript Secured data endpoint
-app.get('/api/secured/*',</p>
-
-<pre><code>function (req, res, next) {
-    if (!req.user) {
-        return res.json({ error: 'This is a secret message, login to see it.' });
-    }
-    next();
-},
-function (req, res) {
-    res.json({ message: 'This message is only for authenticated users' });
-});
-</code></pre>
-
-<p>```
-First we check whether req.user exists. In case it doesn't, we return an error JSON.</p>
-
-<p>After all our hard work, now is the time to see our authentication in action!</p>
-
-<h2>Authentication in action</h2>
-
-<p>In order to demonstrate our authentication implementation, we have to complete our front end application. Let's create AngularJS service that will be responsible to the user session. The purposes of such service are:</p>
-
-<ul>
-<li>Initiate the authentication process</li>
-<li>Allow logout</li>
-<li>Supply handlers for authentication success / failure and maintain session state
-```javascript Session service
-app.factory('sessionService', ['$rootScope', '$window', '$http',
-  function ($rootScope, $window, $http) {
-  var session = {
-
-<pre><code>  init: function () {
-      this.resetSession();
-  },
-  resetSession: function() {
-      this.currentUser = null;
-      this.isLoggedIn = false;
-  },
-  facebookLogin: function() {
-      var url = '/auth/facebook',
-          width = 1000,
-          height = 650,
-          top = (window.outerHeight - height) / 2,
-          left = (window.outerWidth - width) / 2;
-      $window.open(url, 'facebook_login', 'width=' + width + ',height=' + height + ',scrollbars=0,top=' + top + ',left=' + left);
-  },
-  logout: function() {
-      var scope = this;
-      $http.delete('/auth').success(function() {
-          scope.resetSession();
-          $rootScope.$emit('session-changed');
-      });
-  },
-  authSuccess: function(userData) {
-      this.currentUser = userData;
-      this.isLoggedIn = true;
-      $rootScope.$emit('session-changed');
-  },
-  authFailed: function() {
-      this.resetSession();
-      alert('Authentication failed');
-  }
-</code></pre>
-
-<p>  };
-  session.init();
-  return session;
-}]);
-```
-Calling sessionService.facebookLogin() and sessionService.logout() will log us in and out from the application. sessionService.authSuccess() and sessionService.authFailed() are methods that get called whenever the application gets notified about the authentication state. From now on, whenever we like, we can use sessionService.isLoggedIn and sessionService.currentUser in order to know the authentication state and get the current logged in user. Our service also triggers a 'session-changed' event each time the session changed.</p></li>
-</ul>
-
-
-<p>Lt's see now the changes in MessageController
-```javascript MessageController
-app.controller('MessageController', ['$scope', '$rootScope', '$http',</p>
-
-<pre><code>function($scope, $rootScope, $http) {
-    $scope.messages = {};
-
-    function loadMessages() {
-        $http.get('/api/secured/message').success(function(data) {
-            $scope.messages.secured = data.message || data.error;
-        });
-
-        $http.get('/api/message').success(function(data) {
-            $scope.messages.unsecured = data.message || data.error;
-        });
-    }
-
-    var deregistration = $rootScope.$on('session-changed', loadMessages);
-    $scope.$on('$destroy', deregistration);
-
-    loadMessages();
-}]);
-</code></pre>
-
-<p>```
-MessageController basically remains the same, except that each time 'session-changed' event is triggered, the controller reloads the messages.</p>
-
-<p>Now is the time to add Login and Logout buttons and bind them to actions. Those buttons will be visible only when necessary.
-<code>html Login and logout buttons
-&lt;button ng-hide="session.isLoggedIn" ng-click="session.facebookLogin()"&gt;Login&lt;/button&gt;
-&lt;span ng-show="session.isLoggedIn" ng-bind="'Hello ' + session.currentUser.name"&gt;&lt;/span&gt;
-&lt;button ng-show="session.isLoggedIn" ng-click="session.logout()"&gt;Logout&lt;/button&gt;
-</code>
-In order the variable "session" to be recognized in the template, we will make the following assignment:
-```javascript session assignment to $rootScope
-app.run(['$rootScope', 'sessionService', function ($rootScope, sessionService) {</p>
-
-<pre><code>$rootScope.session = sessionService;
-</code></pre>
-
-<p>}]);
-<code>
-Now we have to define the authState() method that handles the result from the authentication pop-up window:
-</code>javascript app.authState() definition
-app.run(['$rootScope', '$window', 'sessionService', function ($rootScope, $window, sessionService) {</p>
-
-<pre><code>$window.app = {
-    authState: function(state, user) {
-        $rootScope.$apply(function() {
-            switch (state) {
-                case 'success':
-                    sessionService.authSuccess(user);
-                    break;
-                case 'failure':
-                    sessionService.authFailed();
-                    break;
-            }
-
-        });
-    }
-};
-</code></pre>
-
-<p>}]);
-<code>  
-One last thing to do is to determine the authentication state when the application loads. On our template we add a script that assigns the current user (or null) to window.user:
-</code>html Assigning the current user to window.user</p>
-
-<script type="text/javascript">
-    window.user = <%- JSON.stringify(user) %>;
-</script>
-
-
-<p><code>
-Where the "user" variable comes from our endpoint:
-</code>javascript Injecting the current user to the view</p>
-
-<pre><code>app.get('/*', function (req, res) {
-    res.render('index', { user: req.user ? req.user : null });
-});
-</code></pre>
-
-<p><code>
-And when the front end application loads, we initialize the session according to window.user:
-</code>javascript Initiate the front end session state
-app.run(['sessionService', '$window', function (sessionService, $window) {</p>
-
-<pre><code>if ($window.user !== null) {
-    sessionService.authSuccess($window.user);
-}
-</code></pre>
-
-<p>}]);
-```</p>
-
-<p>Congratulations! Now we have a secured application with facebook authentication!</p>
-
-<h2>Download &amp; GitHub &amp; Demo</h2>
-
-<ul>
-<li>Download the application with authentication support <a target="_blank" href="../code/single-page-application-authentication/single-page-application-with-authentication.zip">here</a> (don't forget to run 'npm install' before starting the application with 'npm start')</li>
-<li>See a demonstration of the application <a target="_blank" href="http://spa-auth.herokuapp.com/">here</a></li>
-<li>Visit the <a href="https://github.com/naorye/spa-auth" target="_blank">GitHub repository</a></li>
-</ul>
-
-
-<p>I hope this article helped you understanding how to add authentication support for your single page application. Feel free to leave comments and questions!</p>
 
 <p>NaorYe</p>
 ]]></content>
