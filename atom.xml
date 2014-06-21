@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-05-28T00:54:32+03:00</updated>
+  <updated>2014-06-22T02:30:40+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -1230,7 +1230,7 @@ Later on we would like to do something with this data. For example, update the b
 </span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 </span><span class='line'>        <span class="p">},</span>
 </span><span class='line'>        <span class="nx">getImageUrl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="s1">&#39;our/image/service/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;/width/height&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s1">&#39;our/image/service/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">width</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">height</span><span class="p">;</span>
 </span><span class='line'>        <span class="p">},</span>
 </span><span class='line'>        <span class="nx">isAvailable</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>

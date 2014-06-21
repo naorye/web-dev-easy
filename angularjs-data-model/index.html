@@ -11,7 +11,7 @@
   <meta name="author" content="NaorYe">
 
   
-  <meta name="description" content="AngularJS Data Model Nov 23rd, 2013 As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most &hellip;">
+  <meta name="description" content="AngularJS Data Model Nov 23rd, 2013 --> As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the &hellip;">
   
 
   
@@ -25,7 +25,7 @@
 <meta property="og:url" content="http://webdeveasy.com/angularjs-data-model/" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="AngularJS Data Model - Web Development is Easy!" />
-<meta property="og:description" content="AngularJS Data Model Nov 23rd, 2013 As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most &hellip;" />
+<meta property="og:description" content="AngularJS Data Model Nov 23rd, 2013 --> As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the &hellip;" />
 
 
 	<meta property="og:image" content="http://webdeveasy.com/assets/logo.png" />
@@ -43,7 +43,7 @@
 <meta name="twitter:site" content="@naorye" />
 <meta name="twitter:creator" content="@naorye" />
 <meta name="twitter:title" content="AngularJS Data Model - Web Development is Easy!" />
-<meta name="twitter:description" content="AngularJS Data Model Nov 23rd, 2013 As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most &hellip;" />
+<meta name="twitter:description" content="AngularJS Data Model Nov 23rd, 2013 --> As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the &hellip;" />
 	
 
 	<meta name="twitter:image:src" content="http://webdeveasy.com/assets/logo.png" />
@@ -144,9 +144,11 @@
 
 
   
+    <iframe src="http://rcm-na.amazon-adsystem.com/e/cm?t=web08c-20&o=1&p=48&l=ur1&category=electronicsrot&f=ifr&linkID=HBGO7KDGS4HRV6ST" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+
     <!-- google_ad_under_post_title -->
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6953090373480388" data-ad-slot="3659905550" data-ad-format="auto"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6953090373480388" data-ad-slot="3659905550" data-ad-format="auto"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
     <div itemprop="articleBody" class="entry-content after-ad"><p>As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use JSON data as a model in the controller. As the time passed and my application grew, I realized that this modeling method isn&#8217;t powerful enough to fit my application&#8217;s needs. In this article I will present the way I dealt with data modeling in my AngularJS application.</p>
 
 <!-- more -->
@@ -381,7 +383,7 @@ Later on we would like to do something with this data. For example, update the b
 </span><span class='line'>            <span class="nx">$http</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;ourserver/books/&#39;</span> <span class="o">+</span> <span class="nx">bookId</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 </span><span class='line'>        <span class="p">},</span>
 </span><span class='line'>        <span class="nx">getImageUrl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="s1">&#39;our/image/service/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;/width/height&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s1">&#39;our/image/service/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">width</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">height</span><span class="p">;</span>
 </span><span class='line'>        <span class="p">},</span>
 </span><span class='line'>        <span class="nx">isAvailable</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">stores</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
