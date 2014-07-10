@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-06-22T02:30:40+03:00</updated>
+  <updated>2014-07-11T00:16:34+04:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Back Button Behavior on a Page With an iframe]]></title>
     <link href="http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/"/>
-    <updated>2014-05-29T01:45:45+03:00</updated>
+    <updated>2014-05-29T02:45:45+04:00</updated>
     <id>http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe</id>
     <content type="html"><![CDATA[<p>I am developing a widget for websites. This widget lays inside an iframe in a website&#8217;s page. One of my users (which is a site owner) complained about a weird behavior of my widget. On pages where the widget was implemented, the browser&#8217;s back button didn&#8217;t work properly. Instead of navigating the user to the previous page on the website, the back button navigated the user to the previous page inside the iframe.</p>
 
@@ -80,7 +80,7 @@ NaorYe</p>
   <entry>
     <title type="html"><![CDATA[Interceptors in AngularJS and Useful Examples]]></title>
     <link href="http://webdeveasy.com/interceptors-in-angularjs-and-useful-examples/"/>
-    <updated>2014-03-08T22:44:14+02:00</updated>
+    <updated>2014-03-09T00:44:14+04:00</updated>
     <id>http://webdeveasy.com/interceptors-in-angularjs-and-useful-examples</id>
     <content type="html"><![CDATA[<p>The <code>$http</code> service of AngularJS allows us to communicate with a backend and make HTTP requests. There are cases where we want to capture every request and manipulate it before sending it to the server. Other times we would like to capture the response and process it before completing the call. Global http error handling can be also a good example of such need. Interceptors are created exactly for such cases. This article will introduce AngularJS interceptors and will provide some useful examples.</p>
 
@@ -563,7 +563,7 @@ NaorYe</p>
   <entry>
     <title type="html"><![CDATA[Service Providers in AngularJS and Logger Implementation]]></title>
     <link href="http://webdeveasy.com/service-providers-in-angularjs-and-logger-implementation/"/>
-    <updated>2014-02-08T16:49:33+02:00</updated>
+    <updated>2014-02-08T18:49:33+04:00</updated>
     <id>http://webdeveasy.com/service-providers-in-angularjs-and-logger-implementation</id>
     <content type="html"><![CDATA[<p>In this article I&#8217;ll explain what a provider is and what is the difference between a provider and other services declaration in AngularJS. Through this article I&#8217;ll also create a tidy Logger for your AngularJS application.</p>
 
@@ -994,7 +994,7 @@ Now we can finally integrate our new Logger with AngularJS service provider!</p>
   <entry>
     <title type="html"><![CDATA[AngularJS Data Model]]></title>
     <link href="http://webdeveasy.com/angularjs-data-model/"/>
-    <updated>2013-11-23T20:51:33+02:00</updated>
+    <updated>2013-11-23T22:51:33+04:00</updated>
     <id>http://webdeveasy.com/angularjs-data-model</id>
     <content type="html"><![CDATA[<p>As we already know, AngularJS doesn&#8217;t come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use JSON data as a model in the controller. As the time passed and my application grew, I realized that this modeling method isn&#8217;t powerful enough to fit my application&#8217;s needs. In this article I will present the way I dealt with data modeling in my AngularJS application.</p>
 
@@ -1565,7 +1565,7 @@ The solution for this problem is to share the same books instances with any cont
   <entry>
     <title type="html"><![CDATA[Flexbox Accordion]]></title>
     <link href="http://webdeveasy.com/flexbox-accordion/"/>
-    <updated>2013-10-26T15:45:02+02:00</updated>
+    <updated>2013-10-26T17:45:02+04:00</updated>
     <id>http://webdeveasy.com/flexbox-accordion</id>
     <content type="html"><![CDATA[<p>I have made a css accordion using flexbox and I like to share it. This is how it looks like:</p>
 
@@ -1807,7 +1807,7 @@ Here is the code:</p>
   <entry>
     <title type="html"><![CDATA[Easy Select Plugin]]></title>
     <link href="http://webdeveasy.com/easy-select-plugin/"/>
-    <updated>2013-10-07T19:12:43+02:00</updated>
+    <updated>2013-10-07T21:12:43+04:00</updated>
     <id>http://webdeveasy.com/easy-select-plugin</id>
     <content type="html"><![CDATA[<p>One day I was asked to add a text input component with an ability to choose a value from fixed list. After searching the web, I found several jQuery plugins that was able to solve my needs and much more. But, those components required many dependencies and weighed so much for my simple need. So I decided to write my own plugin. Easy Select requires jQuery only and takes 3kb minified (before gzip):</p>
 
@@ -1966,7 +1966,7 @@ A callback function that triggered every time a new item gets selected.</p>
   <entry>
     <title type="html"><![CDATA[Single Page Application Authentication]]></title>
     <link href="http://webdeveasy.com/single-page-application-authentication/"/>
-    <updated>2013-09-25T23:27:44+03:00</updated>
+    <updated>2013-09-26T00:27:44+04:00</updated>
     <id>http://webdeveasy.com/single-page-application-authentication</id>
     <content type="html"><![CDATA[<p>This article will guide you how to add user authentication to your single page application. On the back end side I will use Node.js and on the front end side I will use AngularJS. Although I used specific frameworks, you may apply the same technique for different back end and frond end frameworks (rails, Backbone, etc&#8230;). <br/>
 The final application will look like this (without the horrible styling):<!--
@@ -2788,7 +2788,7 @@ One last thing to do is to determine the authentication state when the applicati
   <entry>
     <title type="html"><![CDATA[Pages Slider With JavaScript And CSS]]></title>
     <link href="http://webdeveasy.com/pages-slider-with-javascript-and-css/"/>
-    <updated>2013-08-06T02:37:31+03:00</updated>
+    <updated>2013-08-06T03:37:31+04:00</updated>
     <id>http://webdeveasy.com/pages-slider-with-javascript-and-css</id>
     <content type="html"><![CDATA[<p>In this article I will show you how to build a pages slider that looks like those on our smartphones. At the end we will get this:</p>
 
@@ -3237,7 +3237,7 @@ Let&#8217;s download Hammer.js jQuery plugin and initialize Hammer in the scope 
   <entry>
     <title type="html"><![CDATA[Backbone Cleanup]]></title>
     <link href="http://webdeveasy.com/backbone-cleanup/"/>
-    <updated>2013-04-30T21:09:00+03:00</updated>
+    <updated>2013-04-30T21:09:00+04:00</updated>
     <id>http://webdeveasy.com/backbone-cleanup</id>
     <content type="html"><![CDATA[<p>Backbone allows our users to browse our website without refreshing the page. Each page the user visits consists of several Backbone views which are replaced whenever the user navigates. Views reflect our data models and interact with each other. This can be done by listening and triggering events which add functionality to the page. Whenever the view is replaced, there is a need to clean up the removed view, unbind events and remove unmanaged structure. <br/>
 This article suggests a solution to the views cleanup problem.<!-- more --> <br/>
@@ -3630,7 +3630,7 @@ In order to let instances of such a router to mark the current view, let&#8217;s
   <entry>
     <title type="html"><![CDATA[Optimize (Concatenate and Minify) RequireJS Projects]]></title>
     <link href="http://webdeveasy.com/optimize-requirejs-projects/"/>
-    <updated>2013-04-19T07:32:00+03:00</updated>
+    <updated>2013-04-19T07:32:00+04:00</updated>
     <id>http://webdeveasy.com/optimize-requirejs-projects</id>
     <content type="html"><![CDATA[<p>This article will demonstrate you how to concatenate and minify projects that are based on RequireJS. In this article I&#8217;ll use several tools that require Node.js. So, if you don&#8217;t have Node.js yet, install it <a target="_blank" href="http://nodejs.org/">here</a>.</p>
 
@@ -3877,7 +3877,7 @@ NaorYe</p>
   <entry>
     <title type="html"><![CDATA[Object Oriented Programming with JavaScript]]></title>
     <link href="http://webdeveasy.com/object-oriented-programming-with-javascript/"/>
-    <updated>2013-03-18T23:01:00+02:00</updated>
+    <updated>2013-03-18T23:01:00+04:00</updated>
     <id>http://webdeveasy.com/object-oriented-programming-with-javascript</id>
     <content type="html"><![CDATA[<p>As we already know, JavaScript is an object oriented language. In this article we will see JavaScript example to <a href="http://en.wikipedia.org/wiki/Inheritance_%28object-oriented_programming%29" target="_blank">inheritance</a> and <a href="http://en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming" target="_blank">subtype polymorphism</a>.<!-- more -->
 For solid base, I really recommend to read first about <a href="../javascript-prototype">JavaScript Prototype</a>.</p>
@@ -4309,7 +4309,7 @@ Any questions -> to me :)</p>
   <entry>
     <title type="html"><![CDATA[Backbone Cache]]></title>
     <link href="http://webdeveasy.com/backbone-cache/"/>
-    <updated>2013-03-12T22:37:00+02:00</updated>
+    <updated>2013-03-12T22:37:00+04:00</updated>
     <id>http://webdeveasy.com/backbone-cache</id>
     <content type="html"><![CDATA[<p>Caching collections and models in Backbone allows to save server calls and return the result faster to the user. This means happier server and happier users. This article will guide you how to implement Backbone caching.</p>
 
@@ -4528,7 +4528,7 @@ Lets create Backbone.CachedModel and override it&#8217;s fetch method. Backbone.
   <entry>
     <title type="html"><![CDATA[Searcher - Backbone application demonstration]]></title>
     <link href="http://webdeveasy.com/searcher-backbone-dot-js-application-demonstration/"/>
-    <updated>2013-01-23T19:03:00+02:00</updated>
+    <updated>2013-01-23T19:03:00+04:00</updated>
     <id>http://webdeveasy.com/searcher-backbone-dot-js-application-demonstration</id>
     <content type="html"><![CDATA[<p>In this article we will build Backbone.js application along with jQuery, underscore.js and require.js. The aim of this article is to demonstrate the use of Backbone components. As we all probably know, there are more then one way to build Backbone applications so feel comfortable to adopt what you like. <br/>
 At the end of this article we will have Backbone searcher application which will know to make searches using different search providers. You can see our final application in action <a href="../code/searcher/index.html" target="_blank">here</a> and can download the code <a href="../code/searcher/searcher.zip" target="_blank">here</a>.</p>
@@ -5508,7 +5508,7 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
   <entry>
     <title type="html"><![CDATA[JavaScript Prototype]]></title>
     <link href="http://webdeveasy.com/javascript-prototype/"/>
-    <updated>2012-11-13T10:49:17+02:00</updated>
+    <updated>2012-11-13T12:49:17+04:00</updated>
     <id>http://webdeveasy.com/javascript-prototype</id>
     <content type="html"><![CDATA[<p>I bet you have seen the prototype keyword before. This prototype thing is very important to know and understand especially if you want to be an expert web developer. This article will explain you about it.</p>
 
@@ -5737,7 +5737,7 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
   <entry>
     <title type="html"><![CDATA[Backbone Singleton]]></title>
     <link href="http://webdeveasy.com/backbone-singleton/"/>
-    <updated>2012-11-05T19:13:36+02:00</updated>
+    <updated>2012-11-05T21:13:36+04:00</updated>
     <id>http://webdeveasy.com/backbone-singleton</id>
     <content type="html"><![CDATA[<p>Using Backbone.js, sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone.js and require.js. While the first way is simpler and more intuitive, the second allows us more flexibility</p>
 
@@ -5924,7 +5924,7 @@ In order to solve this issue we have to remember that <a href="http://backbonejs
   <entry>
     <title type="html"><![CDATA[jQuery Plugin Pattern]]></title>
     <link href="http://webdeveasy.com/jquery-plugin-pattern/"/>
-    <updated>2012-10-02T22:07:46+02:00</updated>
+    <updated>2012-10-03T00:07:46+04:00</updated>
     <id>http://webdeveasy.com/jquery-plugin-pattern</id>
     <content type="html"><![CDATA[<p>jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts in a web application. This article will explain the basics of jQuery plugin and guide you how to create a simple jQuery plugin.</p>
 
@@ -6715,7 +6715,7 @@ Live example for the compose plugin you can find <a href="../code/jquery-plugin-
   <entry>
     <title type="html"><![CDATA[Style Your jQuery-UI Tabs]]></title>
     <link href="http://webdeveasy.com/style-your-jquery-ui-tabs/"/>
-    <updated>2012-09-22T19:11:31+02:00</updated>
+    <updated>2012-09-22T21:11:31+04:00</updated>
     <id>http://webdeveasy.com/style-your-jquery-ui-tabs</id>
     <content type="html"><![CDATA[<p>This article will explain and guide you step by step how to style your jQuery-UI tabs and make them look like this:</p>
 
@@ -7184,7 +7184,7 @@ Live example for the compose plugin you can find <a href="../code/jquery-plugin-
   <entry>
     <title type="html"><![CDATA[Cascading Autocompletes using jQuery UI]]></title>
     <link href="http://webdeveasy.com/cascading-autocompletes-using-jquery-ui/"/>
-    <updated>2012-09-14T18:34:42+03:00</updated>
+    <updated>2012-09-14T19:34:42+04:00</updated>
     <id>http://webdeveasy.com/cascading-autocompletes-using-jquery-ui</id>
     <content type="html"><![CDATA[<p>Yesterday I got a new requirement for the application I am working on.
 I had several <a href="http://jqueryui.com/demos/autocomplete" target="_blank">jQuery UI autocompletes</a> and I needed to add cascading functionality. This means that each autocomplete in the group affects the following autocomple&#8217;s possible values. If there is no value selected in the first autocomplete - the next autocomplete must be disabled. When the user selects a value on the first autocomplete - the next autocomplete becomes enabled.</p>

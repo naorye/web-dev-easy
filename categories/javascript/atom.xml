@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-06-22T02:30:40+03:00</updated>
+  <updated>2014-07-11T00:16:34+04:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Back Button Behavior on a Page With an iframe]]></title>
     <link href="http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe/"/>
-    <updated>2014-05-29T01:45:45+03:00</updated>
+    <updated>2014-05-29T02:45:45+04:00</updated>
     <id>http://webdeveasy.com/back-button-behavior-on-a-page-with-an-iframe</id>
     <content type="html"><![CDATA[<p>I am developing a widget for websites. This widget lays inside an iframe in a website's page. One of my users (which is a site owner) complained about a weird behavior of my widget. On pages where the widget was implemented, the browser's back button didn't work properly. Instead of navigating the user to the previous page on the website, the back button navigated the user to the previous page inside the iframe.</p>
 
@@ -74,7 +74,7 @@ NaorYe</p>
   <entry>
     <title type="html"><![CDATA[Interceptors in AngularJS and Useful Examples]]></title>
     <link href="http://webdeveasy.com/interceptors-in-angularjs-and-useful-examples/"/>
-    <updated>2014-03-08T22:44:14+02:00</updated>
+    <updated>2014-03-09T00:44:14+04:00</updated>
     <id>http://webdeveasy.com/interceptors-in-angularjs-and-useful-examples</id>
     <content type="html"><![CDATA[<p>The <code>$http</code> service of AngularJS allows us to communicate with a backend and make HTTP requests. There are cases where we want to capture every request and manipulate it before sending it to the server. Other times we would like to capture the response and process it before completing the call. Global http error handling can be also a good example of such need. Interceptors are created exactly for such cases. This article will introduce AngularJS interceptors and will provide some useful examples.</p>
 
@@ -406,7 +406,7 @@ NaorYe</p>
   <entry>
     <title type="html"><![CDATA[Service Providers in AngularJS and Logger Implementation]]></title>
     <link href="http://webdeveasy.com/service-providers-in-angularjs-and-logger-implementation/"/>
-    <updated>2014-02-08T16:49:33+02:00</updated>
+    <updated>2014-02-08T18:49:33+04:00</updated>
     <id>http://webdeveasy.com/service-providers-in-angularjs-and-logger-implementation</id>
     <content type="html"><![CDATA[<p>In this article I'll explain what a provider is and what is the difference between a provider and other services declaration in AngularJS. Through this article I'll also create a tidy Logger for your AngularJS application.</p>
 
@@ -713,7 +713,7 @@ Thats all!</p>
   <entry>
     <title type="html"><![CDATA[AngularJS Data Model]]></title>
     <link href="http://webdeveasy.com/angularjs-data-model/"/>
-    <updated>2013-11-23T20:51:33+02:00</updated>
+    <updated>2013-11-23T22:51:33+04:00</updated>
     <id>http://webdeveasy.com/angularjs-data-model</id>
     <content type="html"><![CDATA[<p>As we already know, AngularJS doesn't come with an out of the box solution for data modeling. In the most abstract way, AngularJS lets us use JSON data as a model in the controller. As the time passed and my application grew, I realized that this modeling method isn't powerful enough to fit my application's needs. In this article I will present the way I dealt with data modeling in my AngularJS application.</p>
 
@@ -1055,7 +1055,7 @@ Notice that the templates remain the same as they still use instances. Now the a
   <entry>
     <title type="html"><![CDATA[Easy Select Plugin]]></title>
     <link href="http://webdeveasy.com/easy-select-plugin/"/>
-    <updated>2013-10-07T19:12:43+02:00</updated>
+    <updated>2013-10-07T21:12:43+04:00</updated>
     <id>http://webdeveasy.com/easy-select-plugin</id>
     <content type="html"><![CDATA[<p>One day I was asked to add a text input component with an ability to choose a value from fixed list. After searching the web, I found several jQuery plugins that was able to solve my needs and much more. But, those components required many dependencies and weighed so much for my simple need. So I decided to write my own plugin. Easy Select requires jQuery only and takes 3kb minified (before gzip):</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Backbone.js | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/backbone-js/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-06-22T02:30:40+03:00</updated>
+  <updated>2014-07-11T00:16:34+04:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Backbone Cleanup]]></title>
     <link href="http://webdeveasy.com/backbone-cleanup/"/>
-    <updated>2013-04-30T21:09:00+03:00</updated>
+    <updated>2013-04-30T21:09:00+04:00</updated>
     <id>http://webdeveasy.com/backbone-cleanup</id>
     <content type="html"><![CDATA[<p>Backbone allows our users to browse our website without refreshing the page. Each page the user visits consists of several Backbone views which are replaced whenever the user navigates. Views reflect our data models and interact with each other. This can be done by listening and triggering events which add functionality to the page. Whenever the view is replaced, there is a need to clean up the removed view, unbind events and remove unmanaged structure. <br/>
 This article suggests a solution to the views cleanup problem.<!-- more --> <br/>
@@ -277,7 +277,7 @@ NestedView's template contains a title and a button. Each time this button is pr
   <entry>
     <title type="html"><![CDATA[Backbone Cache]]></title>
     <link href="http://webdeveasy.com/backbone-cache/"/>
-    <updated>2013-03-12T22:37:00+02:00</updated>
+    <updated>2013-03-12T22:37:00+04:00</updated>
     <id>http://webdeveasy.com/backbone-cache</id>
     <content type="html"><![CDATA[<p>Caching collections and models in Backbone allows to save server calls and return the result faster to the user. This means happier server and happier users. This article will guide you how to implement Backbone caching.</p>
 
@@ -427,7 +427,7 @@ permissions.fetch();
   <entry>
     <title type="html"><![CDATA[Searcher - Backbone application demonstration]]></title>
     <link href="http://webdeveasy.com/searcher-backbone-dot-js-application-demonstration/"/>
-    <updated>2013-01-23T19:03:00+02:00</updated>
+    <updated>2013-01-23T19:03:00+04:00</updated>
     <id>http://webdeveasy.com/searcher-backbone-dot-js-application-demonstration</id>
     <content type="html"><![CDATA[<p>In this article we will build Backbone.js application along with jQuery, underscore.js and require.js. The aim of this article is to demonstrate the use of Backbone components. As we all probably know, there are more then one way to build Backbone applications so feel comfortable to adopt what you like. <br/>
 At the end of this article we will have Backbone searcher application which will know to make searches using different search providers. You can see our final application in action <a href="../code/searcher/index.html" target="_blank">here</a> and can download the code <a href="../code/searcher/searcher.zip" target="_blank">here</a>.</p>
@@ -1378,7 +1378,7 @@ Now, whenever the user chooses Google Shopping as a search provider, SourcesMana
   <entry>
     <title type="html"><![CDATA[Backbone Singleton]]></title>
     <link href="http://webdeveasy.com/backbone-singleton/"/>
-    <updated>2012-11-05T19:13:36+02:00</updated>
+    <updated>2012-11-05T21:13:36+04:00</updated>
     <id>http://webdeveasy.com/backbone-singleton</id>
     <content type="html"><![CDATA[<p>Using Backbone.js, sometimes we need a model that will act like a singleton. Other times we want to reuse the type of that singleton. This article will present two different ways of creating a singleton using Backbone.js and require.js. While the first way is simpler and more intuitive, the second allows us more flexibility</p>
 

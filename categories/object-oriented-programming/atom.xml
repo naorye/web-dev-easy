@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Object Oriented Programming | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/object-oriented-programming/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-06-22T02:30:40+03:00</updated>
+  <updated>2014-07-11T00:16:34+04:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Object Oriented Programming with JavaScript]]></title>
     <link href="http://webdeveasy.com/object-oriented-programming-with-javascript/"/>
-    <updated>2013-03-18T23:01:00+02:00</updated>
+    <updated>2013-03-18T23:01:00+04:00</updated>
     <id>http://webdeveasy.com/object-oriented-programming-with-javascript</id>
     <content type="html"><![CDATA[<p>As we already know, JavaScript is an object oriented language. In this article we will see JavaScript example to <a href="http://en.wikipedia.org/wiki/Inheritance_%28object-oriented_programming%29" target="_blank">inheritance</a> and <a href="http://en.wikipedia.org/wiki/Polymorphism_in_object-oriented_programming" target="_blank">subtype polymorphism</a>.<!-- more -->
 For solid base, I really recommend to read first about <a href="../javascript-prototype">JavaScript Prototype</a>.</p>

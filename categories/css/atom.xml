@@ -4,7 +4,7 @@
   <title><![CDATA[Category: CSS | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/css/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-06-22T02:30:40+03:00</updated>
+  <updated>2014-07-11T00:16:34+04:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Flexbox Accordion]]></title>
     <link href="http://webdeveasy.com/flexbox-accordion/"/>
-    <updated>2013-10-26T15:45:02+02:00</updated>
+    <updated>2013-10-26T17:45:02+04:00</updated>
     <id>http://webdeveasy.com/flexbox-accordion</id>
     <content type="html"><![CDATA[<p>I have made a css accordion using flexbox and I like to share it. This is how it looks like:</p>
 
@@ -200,7 +200,7 @@ padding-right: 10px;
   <entry>
     <title type="html"><![CDATA[Pages Slider With JavaScript And CSS]]></title>
     <link href="http://webdeveasy.com/pages-slider-with-javascript-and-css/"/>
-    <updated>2013-08-06T02:37:31+03:00</updated>
+    <updated>2013-08-06T03:37:31+04:00</updated>
     <id>http://webdeveasy.com/pages-slider-with-javascript-and-css</id>
     <content type="html"><![CDATA[<p>In this article I will show you how to build a pages slider that looks like those on our smartphones. At the end we will get this:</p>
 
