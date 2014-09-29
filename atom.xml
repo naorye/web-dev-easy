@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-09-30T00:33:08+03:00</updated>
+  <updated>2014-09-30T00:39:16+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -780,7 +780,7 @@ Keep in mind that if any of the promises is rejected, the resulting promise will
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>readFile()</code> gets a file blob (the output of <code>&lt;input type="file"&gt;</code> field) and uses <a href="#" target="_blank">FileReader</a> to read it&#8217;s content. Before reading the data and returning a promise, <code>readFile()</code> assigned <code>onload</code> and <code>onerror</code> callbacks that resolve and reject the deferred accordingly with the result. Notice that I decided to wrap <code>reader.readAsDataURL(fileBlob);</code> with <code>try {} catch() {}</code> block in order to handle run time exceptions. In case of an exception, the deferred is rejected.</p>
+<p><code>readFile()</code> gets a file blob (the output of <code>&lt;input type="file"&gt;</code> field) and uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader" target="_blank">FileReader</a> to read it&#8217;s content. Before reading the data and returning a promise, <code>readFile()</code> assigned <code>onload</code> and <code>onerror</code> callbacks that resolve and reject the deferred accordingly with the result. Notice that I decided to wrap <code>reader.readAsDataURL(fileBlob);</code> with <code>try {} catch() {}</code> block in order to handle run time exceptions. In case of an exception, the deferred is rejected.</p>
 
 <h3>Function that gets file content and uploads it to files storage</h3>
 
@@ -1575,7 +1575,7 @@ Now we can proceed with the controller implementation.</p>
 <ul>
     <li><a target="_blank" href="http://webdeveasy.com/code/javascript-promises-and-angularjs-q-service/index.html">The tutorial application in action</a></li>
     <li><a target="_blank" href="https://github.com/naorye/angulajs-q-service-tutorial">The tutorial source on GitHub</a></li>
-    <li><a target="_blank" href="https://github.com/naorye/angulajs-q-service-tutorial/archive/master.zip">The tutorial source zip file</a></li>
+    <li><a href="https://github.com/naorye/angulajs-q-service-tutorial/archive/master.zip">The tutorial source zip file</a></li>
 </ul>
 
 
