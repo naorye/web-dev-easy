@@ -555,8 +555,8 @@ Now we can finally integrate our new Logger with AngularJS service provider!</p>
 <figure class='code'><figcaption><span>Turn off logger</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;Logger&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Logger</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">Logger</span><span class="p">.</span><span class="nx">enabled</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="s1">&#39;LoggerProvider&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">LoggerProvider</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">LoggerProvider</span><span class="p">.</span><span class="nx">enabled</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 

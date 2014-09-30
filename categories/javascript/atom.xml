@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-09-30T00:51:11+03:00</updated>
+  <updated>2014-09-30T09:50:27+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -1744,9 +1744,9 @@ Logger.prototype = {</p>
 <p><code>
 As you can see, Logger is enabled by default. In order to turn it off we just need to do:
 </code>javascript Turn off logger
-module.config(['Logger', function(Logger) {</p>
+module.config(['LoggerProvider', function(LoggerProvider) {</p>
 
-<pre><code>Logger.enabled(false);
+<pre><code>LoggerProvider.enabled(false);
 </code></pre>
 
 <p>});
