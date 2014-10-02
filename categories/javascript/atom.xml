@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/javascript/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-09-30T09:50:27+03:00</updated>
+  <updated>2014-10-02T10:34:38+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -598,12 +598,12 @@ function reserveUsername(username) {</p>
 
 <pre><code>return $http.post('&lt;endpoint for username reservation action&gt;', {
     username: username
-}).$promise;
+});
 </code></pre>
 
 <p>}
 <code>``
-Here I used &lt;a href="#" target="_blank"&gt;</code>$http<code>&lt;/a&gt; service of AngularJS.</code>$http.post()<code>returns an object that contains a reference to a promise which indicates the post status. This promise is created by</code>$q<code>service inside</code>$http.post()` and this will be the return value.</p>
+Here I used &lt;a href="#" target="_blank"&gt;</code>$http<code>&lt;/a&gt; service of AngularJS.</code>$http.post()<code>returns a promise which indicates the post status. This promise is created by</code>$q<code>service inside</code>$http.post()` and this will be the return value.</p>
 
 <p>Now that we have all the methods needed for registration, let's wrap them in a service called <code>appService</code> (you can see the complete <code>app-service.js</code> at the end of this tutorial).</p>
 
@@ -662,7 +662,7 @@ $scope.reserveUsername = function() {</p>
 
 <pre><code>var newUsername = $scope.username;
 reservationPromise = appService.reserveUsername(newUsername)
-    .then(function setUsernameReservation() {
+    .then(function setUsernameReservation(reservation) {
         $scope.reservation = reservation;
     })
     .catch(function setUsernameError() {
@@ -794,7 +794,7 @@ var reserveCount = 0;
 function reserveUsername(username) {
     // return $http.post('&lt;endpoint for username reservation action&gt;', {
     //     username: username
-    // }).$promise;
+    // });
     var deferred = $q.defer();
     setTimeout(function() {
         if (reserveCount &gt; 0 &amp;&amp; reserveCount % 3 === 0) {
@@ -934,7 +934,7 @@ $scope.register = function() {
 
 &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript"&gt;
-    window.angular || document.write('&lt;script src="http://webdeveasy.com/scripts/libs/jquery.js"&gt;&lt;\/script&gt;');
+    window.jQuery || document.write('&lt;script src="http://webdeveasy.com/scripts/libs/jquery.js"&gt;&lt;\/script&gt;');
 &lt;/script&gt;
 
 &lt;script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"&gt;&lt;/script&gt;
@@ -1051,7 +1051,7 @@ window.module.directive('filePathChanged', function() {</p>
 </ul>
 
 
-<p>Here are two additional links:</p>
+<p>Here are three additional links:</p>
 
 <ul>
     <li><a target="_blank" href="http://webdeveasy.com/code/javascript-promises-and-angularjs-q-service/index.html">The tutorial application in action</a></li>

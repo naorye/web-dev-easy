@@ -4,7 +4,7 @@
   <title><![CDATA[Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-09-30T09:50:27+03:00</updated>
+  <updated>2014-10-02T10:34:38+03:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -817,12 +817,12 @@ Keep in mind that if any of the promises is rejected, the resulting promise will
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">reserveUsername</span><span class="p">(</span><span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="k">return</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;&lt;endpoint for username reservation action&gt;&#39;</span><span class="p">,</span> <span class="p">{</span>
 </span><span class='line'>        <span class="nx">username</span><span class="o">:</span> <span class="nx">username</span>
-</span><span class='line'>    <span class="p">}).</span><span class="nx">$promise</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Here I used <a href="#" target="_blank"><code>$http</code></a> service of AngularJS. <code>$http.post()</code> returns an object that contains a reference to a promise which indicates the post status. This promise is created by <code>$q</code> service inside <code>$http.post()</code> and this will be the return value.</p>
+<p>Here I used <a href="#" target="_blank"><code>$http</code></a> service of AngularJS. <code>$http.post()</code> returns a promise which indicates the post status. This promise is created by <code>$q</code> service inside <code>$http.post()</code> and this will be the return value.</p>
 
 <p>Now that we have all the methods needed for registration, let&#8217;s wrap them in a service called <code>appService</code> (you can see the complete <code>app-service.js</code> at the end of this tutorial).</p>
 
@@ -905,7 +905,7 @@ Keep in mind that if any of the promises is rejected, the resulting promise will
 </span><span class='line'><span class="nx">$scope</span><span class="p">.</span><span class="nx">reserveUsername</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>    <span class="kd">var</span> <span class="nx">newUsername</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">username</span><span class="p">;</span>
 </span><span class='line'>    <span class="nx">reservationPromise</span> <span class="o">=</span> <span class="nx">appService</span><span class="p">.</span><span class="nx">reserveUsername</span><span class="p">(</span><span class="nx">newUsername</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">setUsernameReservation</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">setUsernameReservation</span><span class="p">(</span><span class="nx">reservation</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>            <span class="nx">$scope</span><span class="p">.</span><span class="nx">reservation</span> <span class="o">=</span> <span class="nx">reservation</span><span class="p">;</span>
 </span><span class='line'>        <span class="p">})</span>
 </span><span class='line'>        <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="nx">setUsernameError</span><span class="p">()</span> <span class="p">{</span>
@@ -1142,7 +1142,7 @@ Here is the full source of our small application.</p>
 </span><span class='line'>    <span class="kd">function</span> <span class="nx">reserveUsername</span><span class="p">(</span><span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// return $http.post(&#39;&lt;endpoint for username reservation action&gt;&#39;, {</span>
 </span><span class='line'>        <span class="c1">//     username: username</span>
-</span><span class='line'>        <span class="c1">// }).$promise;</span>
+</span><span class='line'>        <span class="c1">// });</span>
 </span><span class='line'>        <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
 </span><span class='line'>        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">reserveCount</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">reserveCount</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
@@ -1445,7 +1445,7 @@ Now we can proceed with the controller implementation.</p>
 </span><span class='line'>
 </span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="nb">window</span><span class="p">.</span><span class="nx">angular</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;&lt;script src=&quot;/scripts/libs/jquery.js&quot;&gt;&lt;\/script&gt;&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">window</span><span class="p">.</span><span class="nx">jQuery</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;&lt;script src=&quot;/scripts/libs/jquery.js&quot;&gt;&lt;\/script&gt;&#39;</span><span class="p">);</span>
 </span><span class='line'>    <span class="nt">&lt;/script&gt;</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
@@ -1570,7 +1570,7 @@ Now we can proceed with the controller implementation.</p>
 </ul>
 
 
-<p>Here are two additional links:</p>
+<p>Here are three additional links:</p>
 
 <ul>
     <li><a target="_blank" href="http://webdeveasy.com/code/javascript-promises-and-angularjs-q-service/index.html">The tutorial application in action</a></li>
