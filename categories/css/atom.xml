@@ -4,7 +4,7 @@
   <title><![CDATA[Category: CSS | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/css/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-10-02T10:34:38+03:00</updated>
+  <updated>2014-11-06T10:05:43+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -236,7 +236,7 @@ padding-right: 10px;
 
 <p>Our slider consist of div contained in another div. The parent div has limited width with overflow set to "hidden". The child div contains the pages and therefore has their total width. This way only one page is visible and in order to move between pages all we have to do is change the child div's position relative to its parent. Important thing to mention is that we won't really change the child div's position property but will use CSS transform property to simulate this. Here is a sketch of the slider markup structure:</p>
 
-<p><img class="center" src="/code/pages-slider-with-javascript-and-css/images/markup.png" title="'Slider Markup Structure'" ></p>
+<p>{% img center /code/pages-slider-with-javascript-and-css/images/markup.png 'Slider Markup Structure' %}</p>
 
 <p>According to this plan, let's write a markup for four pages with relevant CSS properties:
 ```html Pages slider plugin markup</p>
