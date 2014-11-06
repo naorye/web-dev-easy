@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AngularJS | Web Development is Easy!]]></title>
   <link href="http://webdeveasy.com/categories/angularjs/atom.xml" rel="self"/>
   <link href="http://webdeveasy.com/"/>
-  <updated>2014-11-06T10:05:43+02:00</updated>
+  <updated>2014-11-06T10:35:58+02:00</updated>
   <id>http://webdeveasy.com/</id>
   <author>
     <name><![CDATA[NaorYe]]></name>
@@ -686,7 +686,7 @@ When</code>$scope.reserveUsername()<code>happened, a backend reservation occurs.
     <input type="file" file-path-changed="fileSelected(files)">
     <span ng-bind="photoError"></span>
     <span ng-if="photoUrl" ng-bind="photoUrl"></span>
-    <img ng-if="photoData" ng-src="{{ photoData }}" />
+    <img ng-if="photoData" ng-src="" />
 </div>
 
 
@@ -982,7 +982,7 @@ $scope.register = function() {
         &lt;span class="ui red label" ng-bind="data.errors.photo"&gt;&lt;/span&gt;
         &lt;span class="ui green label" ng-if="data.photoUrl" ng-bind="data.photoUrl"&gt;&lt;/span&gt;
         &lt;div class="ui segment" ng-if="data.photoData"&gt;
-            &lt;img class="rounded ui image" ng-src="{{ data.photoData }}" /&gt;
+            &lt;img class="rounded ui image" ng-src="" /&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
@@ -993,9 +993,9 @@ $scope.register = function() {
     &lt;div class="field"&gt;
         &lt;span class="ui red label" ng-if="data.errors.submit" ng-bind="data.errors.submit"&gt;&lt;/span&gt;
         &lt;span class="ui green label" ng-if="data.success"&gt;
-            Registration Seccess with {{data.coords.longitude ? 'longitude =' + data.coords.longitude : 'no longitude' }},
-            {{data.coords.latitude ? 'latitude =' + data.coords.latitude : 'no latitude' }},
-            username = {{data.username}}, photo url = {{data.photoUrl}}
+            Registration Seccess with ,
+            ,
+            username = , photo url = 
         &lt;/span&gt;
     &lt;/div&gt;
 &lt;/form&gt;
